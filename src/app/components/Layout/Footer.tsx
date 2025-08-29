@@ -82,28 +82,28 @@ export default function Footer() {
                                 
                                 {/* VISA CARD LOGO */}
                                 <div className="bg-transparent p-2 rounded-md hover:scale-105 transition-transform shadow-sm">
-                                    <img src='/visa.jpg' alt="Visa" className="h-6 w-auto" />
+                                    <img src='/images/payments/visa.jpg' alt="Visa" className="h-6 w-auto" />
                                 </div>
                                 
                                 {/* MASTERCARD LOGO */}
                                 <div className="bg-transparent p-2 rounded-md hover:scale-105 transition-transform shadow-sm">
-                                    <img src='/mastercard.jpg' alt="Mastercard" className="h-6 w-auto" />
+                                    <img src='/images/payments/mastercard.jpg' alt="Mastercard" className="h-6 w-auto" />
                                 </div>
                                 
                                 {/* AMERICAN EXPRESS LOGO */}
                                 <div className="bg-transparent p-2 rounded-md hover:scale-105 transition-transform shadow-sm">
-                                    <img src='/amex.jpg' alt="American Express" className="h-6 w-auto" />
+                                    <img src='/images/payments/amex.jpg' alt="American Express" className="h-6 w-auto" />
                                 </div>
                                 
                                 {/* DISCOVER CARD LOGO */}
                                 <div className="bg-transparent p-2 rounded-md hover:scale-105 transition-transform shadow-sm">
-                                    <img src='/discover.jpg' alt="Discover" className="h-6 w-auto" />
+                                    <img src='/images/payments/discover.jpg' alt="Discover" className="h-6 w-auto" />
                                 </div>
                                 
                                 {/* PAYPAL LOGO */}
                                 {/* PayPal often increases conversion rates due to customer trust */}
                                 <div className="bg-transparent p-2 rounded-md hover:scale-105 transition-transform shadow-sm">
-                                    <img src='/paypal.jpg' alt="PayPal" className="h-6 w-auto" />
+                                    <img src='/images/payments/paypal.jpg' alt="PayPal" className="h-6 w-auto" />
                                 </div>
                             </div>
                         </div>

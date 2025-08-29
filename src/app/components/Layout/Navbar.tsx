@@ -9,7 +9,7 @@ export default function Header() {
             <header className="flex justify-between items-center px-6 py-4 max-w-7xl mx-auto text-white">
                 <div className="flex-shrink-0">
                     <Link href='/' className="block hover:opacity-80 hover:text-purple-200 transition-opacity">
-                        <img src="/logo.svg" alt="Robos Wishlist Logo" className="w-40 h-40"/>
+                        <img src="/images/logo/logo.svg" alt="Robos Wishlist Logo" className="w-40 h-40"/>
                     </Link>
                 </div>
                 <nav className="hidden md:block">
