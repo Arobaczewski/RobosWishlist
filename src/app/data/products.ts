@@ -17,7 +17,6 @@ export const products: Product[] = [
                       editing, coding, designing, or running complex 
                       simulations.`,
         basePrice: 3099,
-        originalPrice: 3499,
         images: [
 
         ],
@@ -74,38 +73,42 @@ export const products: Product[] = [
                 required: true,
                 variants: [
                     {
-                        id: '',
-                        name: '',
-                        value: '',
+                        id: 'apple-macbook-pro-36gb',
+                        name: '36GB',
+                        value: '36gb',
                         type: 'storage',
-                        price: 500,
-                        images: [
-                            '',
-                            '',
-                            '',
-                            '',
-                            '',
-                            ''
-                        ],
+                        price: 0,
                         inStock: true,
                         stockQuanity: 25,
-                        sku: ''
+                    },
+                    {
+                        id: 'apple-macbook-pro-48gb',
+                        name: '48GB',
+                        value: '48gb',
+                        type: 'storage',
+                        price: 500,
+                        inStock: true,
+                        stockQuanity: 25,
                     }
                 ]
             }
         ], 
+        defaultVariants: {
+            color: 'space-black',
+            storage: '36gb'
+        },
         inStock: true,
         stockQuanity: 100,
         rating: 4.9,
         reviewCount: 100,
-        tags: [],
+        tags: ['apple', 'laptop', 'technology', ],
         featured: false,
         onSale: false
     },
     {
         id: '2',
         name: '',
-        description: '',
+        description: ``,
         basePrice: ,
         originalPrice: ,
         images: [
@@ -124,7 +127,7 @@ export const products: Product[] = [
     {
         id: '3',
         name: '',
-        description: '',
+        description: ``,
         basePrice: ,
         originalPrice: ,
         images: [
@@ -143,7 +146,7 @@ export const products: Product[] = [
     {
         id: '4',
         name: '',
-        description: '',
+        description: ``,
         basePrice: ,
         originalPrice: ,
         images: [
@@ -162,7 +165,7 @@ export const products: Product[] = [
     {
         id: '5',
         name: '',
-        description: '',
+        description: ``,
         basePrice: ,
         originalPrice: ,
         images: [
@@ -181,7 +184,7 @@ export const products: Product[] = [
     {
         id: '6',
         name: '',
-        description: '',
+        description: ``,
         basePrice: ,
         originalPrice: ,
         images: [
@@ -200,7 +203,7 @@ export const products: Product[] = [
     {
         id: '7',
         name: '',
-        description: '',
+        description: ``,
         basePrice: ,
         originalPrice: ,
         images: [
@@ -219,7 +222,7 @@ export const products: Product[] = [
     {
         id: '8',
         name: '',
-        description: '',
+        description: ``,
         basePrice: ,
         originalPrice: ,
         images: [
@@ -238,7 +241,7 @@ export const products: Product[] = [
     {
         id: '9',
         name: '',
-        description: '',
+        description: ``,
         basePrice: ,
         originalPrice: ,
         images: [
@@ -257,7 +260,7 @@ export const products: Product[] = [
     {
         id: '10',
         name: '',
-        description: '',
+        description: ``,
         basePrice: ,
         originalPrice: ,
         images: [
@@ -276,7 +279,7 @@ export const products: Product[] = [
     {
         id: '11',
         name: '',
-        description: '',
+        description: ``,
         basePrice: ,
         originalPrice: ,
         images: [
@@ -295,7 +298,7 @@ export const products: Product[] = [
     {
         id: '12',
         name: '',
-        description: '',
+        description: ``,
         basePrice: ,
         originalPrice: ,
         images: [
@@ -314,7 +317,7 @@ export const products: Product[] = [
     {
         id: '13',
         name: '',
-        description: '',
+        description: ``,
         basePrice: ,
         originalPrice: ,
         images: [
@@ -333,7 +336,7 @@ export const products: Product[] = [
     {
         id: '14',
         name: '',
-        description: '',
+        description: ``,
         basePrice: ,
         originalPrice: ,
         images: [
@@ -352,7 +355,7 @@ export const products: Product[] = [
     {
         id: '15',
         name: '',
-        description: '',
+        description: ``,
         basePrice: ,
         originalPrice: ,
         images: [
@@ -371,7 +374,7 @@ export const products: Product[] = [
     {
         id: '16',
         name: '',
-        description: '',
+        description: ``,
         basePrice: ,
         originalPrice: ,
         images: [
@@ -390,7 +393,7 @@ export const products: Product[] = [
     {
         id: '17',
         name: '',
-        description: '',
+        description: ``,
         basePrice: ,
         originalPrice: ,
         images: [
@@ -409,7 +412,7 @@ export const products: Product[] = [
     {
         id: '18',
         name: '',
-        description: '',
+        description: ``,
         basePrice: ,
         originalPrice: ,
         images: [
@@ -428,7 +431,7 @@ export const products: Product[] = [
     {
         id: '19',
         name: '',
-        description: '',
+        description: ``,
         basePrice: ,
         originalPrice: ,
         images: [
@@ -447,7 +450,7 @@ export const products: Product[] = [
     {
         id: '20',
         name: '',
-        description: '',
+        description: ``,
         basePrice: ,
         originalPrice: ,
         images: [
@@ -466,7 +469,7 @@ export const products: Product[] = [
     {
         id: '21',
         name: '',
-        description: '',
+        description: ``,
         basePrice: ,
         originalPrice: ,
         images: [
@@ -485,7 +488,7 @@ export const products: Product[] = [
     {
         id: '22',
         name: '',
-        description: '',
+        description: ``,
         basePrice: ,
         originalPrice: ,
         images: [
@@ -504,7 +507,7 @@ export const products: Product[] = [
     {
         id: '23',
         name: '',
-        description: '',
+        description: ``,
         basePrice: ,
         originalPrice: ,
         images: [
@@ -523,7 +526,7 @@ export const products: Product[] = [
     {
         id: '24',
         name: '',
-        description: '',
+        description: ``,
         basePrice: ,
         originalPrice: ,
         images: [
@@ -542,7 +545,7 @@ export const products: Product[] = [
     {
         id: '25',
         name: '',
-        description: '',
+        description: ``,
         basePrice: ,
         originalPrice: ,
         images: [
@@ -561,7 +564,7 @@ export const products: Product[] = [
     {
         id: '26',
         name: '',
-        description: '',
+        description: ``,
         basePrice: ,
         originalPrice: ,
         images: [
@@ -580,7 +583,7 @@ export const products: Product[] = [
     {
         id: '27',
         name: '',
-        description: '',
+        description: ``,
         basePrice: ,
         originalPrice: ,
         images: [
@@ -599,7 +602,7 @@ export const products: Product[] = [
     {
         id: '28',
         name: '',
-        description: '',
+        description: ``,
         basePrice: ,
         originalPrice: ,
         images: [
@@ -618,7 +621,7 @@ export const products: Product[] = [
     {
         id: '29',
         name: '',
-        description: '',
+        description: ``,
         basePrice: ,
         originalPrice: ,
         images: [
@@ -637,7 +640,7 @@ export const products: Product[] = [
     {
         id: '30',
         name: '',
-        description: '',
+        description: ``,
         basePrice: ,
         originalPrice: ,
         images: [

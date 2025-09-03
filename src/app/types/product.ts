@@ -13,7 +13,7 @@ export interface ProductVariant {
 export interface ProductVariantOption {
     type: 'color' | 'size' | 'storage';
     name: string;
-    require: boolean;
+    required: boolean;
     variants: ProductVariant[];
 }
 
