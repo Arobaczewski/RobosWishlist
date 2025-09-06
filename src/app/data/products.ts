@@ -1,3 +1,4 @@
+import { color } from "framer-motion";
 import { Product, ProductVariantOption, ProductVariant } from "../types/product";
 
 export const products: Product[] = [
@@ -383,8 +384,8 @@ export const products: Product[] = [
                 variants: [
                     {
                         id: 'apple-ipad-pro-13-space-black',
-                        name: 'space-black',
-                        value: 'Space Black',
+                        name: 'Space-black',
+                        value: 'space Black',
                         type: 'color',
                         price: 0,
                         images: [
@@ -399,8 +400,8 @@ export const products: Product[] = [
                     },
                     {
                         id: 'apple-ipad-pro-13-silver',
-                        name: 'silver',
-                        value: 'Silver',
+                        name: 'Silver',
+                        value: 'silver',
                         type: 'color',
                         price: 0,
                         images: [
@@ -421,8 +422,8 @@ export const products: Product[] = [
                 variants: [
                     { 
                         id: 'apple-ipad-pro-256gb',
-                        name: '256gb',
-                        value: '256GB',
+                        name: '256GB',
+                        value: '256gb',
                         type: 'storage',
                         price: 0,
                         inStock: true,
@@ -430,8 +431,8 @@ export const products: Product[] = [
                     },
                     { 
                         id: 'apple-ipad-pro-500gb',
-                        name: '500gb',
-                        value: '500GB',
+                        name: '500GB',
+                        value: '500gb',
                         type: 'storage',
                         price: 200,
                         inStock: true,
@@ -439,8 +440,8 @@ export const products: Product[] = [
                     },
                     { 
                         id: 'apple-ipad-pro-1000gb',
-                        name: '1000gb',
-                        value: '1000GB',
+                        name: '1000GB',
+                        value: '1000gb',
                         type: 'storage',
                         price: 600,
                         inStock: true,
@@ -448,8 +449,8 @@ export const products: Product[] = [
                     },
                     { 
                         id: 'apple-ipad-pro-2000gb',
-                        name: '2000gb',
-                        value: '2000GB',
+                        name: '2000GB',
+                        value: '2000gb',
                         type: 'storage',
                         price: 1000,
                         inStock: true,
@@ -581,15 +582,87 @@ export const products: Product[] = [
                       seamlessly into living rooms, studies, or bedrooms.`,
         basePrice: 179.99,
         images: [
-            '/images/products/home/desk/desk1.png',
-            '/images/products/home/desk/desk2.png',
-            '/images/products/home/desk/desk3.png',
-            '/images/products/home/desk/desk4.png',
-            '/images/products/home/desk/desk5.png'
+            '/images/products/home/desk/black/blackdesk1.png',
+            '/images/products/home/desk/black/blackdesk2.png',
+            '/images/products/home/desk/black/blackdesk3.png',
+            '/images/products/home/desk/black/blackdesk4.png',
+            '/images/products/home/desk/black/blackdesk5.png'
         ],
         category: 'home',
         brand: 'Bestier',
-        hasVariants: false,
+        hasVariants: true,
+        variantOptions: [
+            {
+                type: 'color',
+                name: 'Color',
+                required: true,
+                variants: [
+                    {
+                        id: 'standing-desk-black',
+                        name: 'Black',
+                        value: 'black',
+                        type: 'color',
+                        images: [
+                            '/images/products/home/desk/black/deskblack1.png',
+                            '/images/products/home/desk/black/deskblack2.png',
+                            '/images/products/home/desk/black/deskblack3.png',
+                            '/images/products/home/desk/black/deskblack4.png',
+                            '/images/products/home/desk/black/deskblack5.png',
+                        ],
+                        inStock: true,
+                        stockQuanity: 25,
+                    },
+                    {
+                        id: 'standing-desk-brown',
+                        name: 'Brown',
+                        value: 'brown',
+                        type: 'color',
+                        images: [
+                            '/images/products/home/desk/brown/deskbrown1.png',
+                            '/images/products/home/desk/brown/deskbrown2.png',
+                            '/images/products/home/desk/brown/deskbrown3.png',
+                            '/images/products/home/desk/brown/deskbrown4.png',
+                            '/images/products/home/desk/brown/deskbrown5.png',
+                        ],
+                        inStock: true,
+                        stockQuanity: 25,
+                    },
+                    {
+                        id: 'standing-desk-natural',
+                        name: 'Natural',
+                        value: 'natural',
+                        type: 'color',
+                        images: [
+                            '/images/products/home/desk/natural/desknatural1.png',
+                            '/images/products/home/desk/natural/desknatural2.png',
+                            '/images/products/home/desk/natural/desknatural3.png',
+                            '/images/products/home/desk/natural/desknatural4.png',
+                            '/images/products/home/desk/natural/desknatural5.png',
+                        ],
+                        inStock: true,
+                        stockQuanity: 25,
+                    },
+                    {
+                        id: 'standing-desk-white',
+                        name: 'White',
+                        value: 'white',
+                        type: 'color',
+                        images: [
+                            '/images/products/home/desk/white/deskwhite1.png',
+                            '/images/products/home/desk/white/deskwhite2.png',
+                            '/images/products/home/desk/white/deskwhite3.png',
+                            '/images/products/home/desk/white/deskwhite4.png',
+                            '/images/products/home/desk/white/deskwhite5.png',
+                        ],
+                        inStock: true,
+                        stockQuanity: 25,
+                    }
+                ]
+            }
+        ],
+        defaultVariants: {
+            color: 'black'
+        },
         inStock: true,
         stockQuanity: 100,
         rating: 0,
@@ -634,222 +707,678 @@ export const products: Product[] = [
     },
     {
         id: '13',
-        name: '',
-        description: ``,
-        basePrice: ,
-        originalPrice: ,
+        name: `Roborock - Saros 10 Ultra Thin, Self-Lifting Robot Vacuum 
+               and Mop , 22,000 Pa Suction Hyper Force and Multi-Fuction 
+               Dock`,
+        description: `The Roborock Saros 10 is not just a robot vacuum—it’s 
+                      designed to redefine home cleaning. Packed with 
+                      advanced features and thoughtful design, it delivers 
+                      an exceptional balance of power, precision, and 
+                      convenience. Whether you're navigating a busy 
+                      household, managing pet hair, or maintaining pristine 
+                      floors, the Saros 10 is built to handle it all with 
+                      ease.  At just 3.14 inches, the Saros 10 boasts the 
+                      thinnest profile ever in a Roborock vacuum. Its 
+                      ultra-slim design allows it to clean where 
+                      other vacuums can’t, effortlessly gliding under low 
+                      furniture and hard-to-reach spaces. The magic 
+                      continues with the RetractSense Navigation System, 
+                      an intelligent guidance system that adapts to your 
+                      home’s unique layout. This technology dynamically 
+                      adjusts to obstacles and ensures thorough coverage 
+                      of every room, no matter how complex the furniture 
+                      arrangement. For even more versatility, the 
+                      Industry-First AdaptiLift Chassis enables the Saros 
+                      10 to cross obstacles up to 1.57 inches (4cm) high, 
+                      seamlessly transitioning from hard floors to rugs 
+                      and thresholds. It’s more than just obstacle-crossing; 
+                      it’s a hassle-free cleaning experience tailored to 
+                      your home. Hair tangles are a thing of the past, 
+                      thanks to the Certified Dual Anti-Tangle System. 
+                      Whether you have pets, long hair, or both, the 
+                      Saros 10 ensures 0% tangling, so you can enjoy 
+                      uninterrupted cleaning and spend less time on 
+                      maintenance. Paired with its powerful 22,000 
+                      Pa suction, this vacuum provides deep-cleaning 
+                      performance to lift dust, debris, and allergens 
+                      from carpets, hard floors, and every surface in 
+                      between.`,
+        basePrice: 1599.99,
         images: [
-
+            '/images/products/home/vacuum/vacuum1.png',
+            '/images/products/home/vacuum/vacuum2.png',
+            '/images/products/home/vacuum/vacuum3.png',
+            '/images/products/home/vacuum/vacuum4.png',
+            '/images/products/home/vacuum/vacuum5.png',
+            '/images/products/home/vacuum/vacuum6.png',
+            '/images/products/home/vacuum/vacuum7.png'
         ],
-        category: '',
-        brand: '',
-        hasVariants: ,
+        category: 'home',
+        brand: 'Roborock',
+        hasVariants: false,
         inStock: true,
         stockQuanity: 100,
-        rating: 5,
-        reviewCount: 100,
+        rating: 0,
+        reviewCount: 0,
         tags: [],
-        featured: ,
+        featured: false,
         onSale: false
     },
     {
         id: '14',
-        name: '',
-        description: ``,
-        basePrice: ,
-        originalPrice: ,
+        name: 'Renegade Gray 125inch Power Reclining 6 Piece Sectional with USB Port',
+        description: `The Renegade sectional is designed to provide the 
+        coziest seat in the house with plush accent pillows, padded pillow 
+        top arms, and power recline capabilities. Plus, built-in USB ports 
+        and two consoles with cupholders and hidden storage make this piece 
+        as functional as it is comfortable—sure to be a focal point of 
+        memories to come.`,
+        basePrice: 1799,
         images: [
-
+            '/images/products/home/couch/couch1.png',
+            '/images/products/home/couch/couch2.png',
+            '/images/products/home/couch/couch3.png',
+            '/images/products/home/couch/couch4.png',
+            '/images/products/home/couch/couch5.png'
         ],
-        category: '',
-        brand: '',
-        hasVariants: ,
+        category: 'home',
+        brand: 'Bobs',
+        hasVariants: false,
         inStock: true,
-        stockQuanity: 100,
-        rating: 5,
-        reviewCount: 100,
+        stockQuanity: 5,
+        rating: 0,
+        reviewCount: 0,
         tags: [],
-        featured: ,
+        featured: true,
         onSale: false
     },
     {
         id: '15',
-        name: '',
-        description: ``,
-        basePrice: ,
-        originalPrice: ,
+        name: 'Branch Verve Chair',
+        description: `The Verve Chair offers soft, breathable, 
+                      customizable support so you can settle in for a 
+                      full day's work. It's made with 3D knit to keep you 
+                      cool and comfortable. Six adjustment points create a 
+                      perfect fit that you'll feel the moment you sit back. 
+                      It's even certified Greenguard Gold for low emissions. 
+                      Whether working from home or at a small office, the 
+                      high-style, high-performance Verve Chair can be a 
+                      breath of fresh air.`,
+        basePrice: 599,
         images: [
-
+            '/images/products/home/chair/chairblack.png'
         ],
-        category: '',
-        brand: '',
-        hasVariants: ,
+        category: 'home',
+        brand: 'Branch',
+        hasVariants: true,
+        variantOptions: [
+            {
+                type: 'color',
+                name: 'Color',
+                required: true,
+                variants: [
+                    {
+                        id: 'branch-verve-chair-galaxy',
+                        name: 'Galaxy',
+                        value: 'galaxy',
+                        type: 'color',
+                        images: [
+                            '/images/products/home/chair/chairgalaxy.png'
+                        ],
+                        inStock: true,
+                        stockQuanity: 10,
+                    },
+                    {
+                        id: 'branch-verve-chair-wheat',
+                        name: 'Wheat',
+                        value: 'wheat',
+                        type: 'color',
+                        images: [
+                            '/images/products/home/chair/chairwheat.png'
+                        ],
+                        inStock: true,
+                        stockQuanity: 10,
+                    },
+                    {
+                        id: 'branch-verve-chair-coral',
+                        name: 'Coral',
+                        value: 'coral',
+                        type: 'color',
+                        images: [
+                            '/images/products/home/chair/chaircoral.png'
+                        ],
+                        inStock: true,
+                        stockQuanity: 10,
+                    },
+                    {
+                        id: 'branch-verve-chair-lunar',
+                        name: 'Lunar',
+                        value: 'lunar',
+                        type: 'color',
+                        images: [
+                            '/images/products/home/chair/chairlunar.png'
+                        ],
+                        inStock: true,
+                        stockQuanity: 10,
+                    }
+                    ,{
+                        id: 'branch-verve-chair-mint',
+                        name: 'Mint',
+                        value: 'mint',
+                        type: 'color',
+                        images: [
+                            '/images/products/home/chair/chairmint.png'
+                        ],
+                        inStock: true,
+                        stockQuanity: 10,
+                    }
+                    ,{
+                        id: 'branch-verve-chair-cobalt',
+                        name: 'Cobalt',
+                        value: 'cobalt',
+                        type: 'color',
+                        images: [
+                            '/images/products/home/chair/chaircobalt.png'
+                        ],
+                        inStock: true,
+                        stockQuanity: 10,
+                    }
+                    ,{
+                        id: 'branch-verve-chair-mist',
+                        name: 'Mist',
+                        value: 'mist',
+                        type: 'color',
+                        images: [
+                            '/images/products/home/chair/chairmist.png'
+                        ],
+                        inStock: true,
+                        stockQuanity: 10,
+                    }
+                ]
+            }
+        ], 
+        defaultVariants: {
+            color: 'galaxy'
+        },
         inStock: true,
-        stockQuanity: 100,
-        rating: 5,
-        reviewCount: 100,
+        stockQuanity: 70,
+        rating: 0,
+        reviewCount: 0,
         tags: [],
-        featured: ,
+        featured: false,
         onSale: false
     },
     {
         id: '16',
-        name: '',
+        name: 'Solaire Adjustable Firmness Mattress',
         description: ``,
-        basePrice: ,
-        originalPrice: ,
+        basePrice: 5399,
         images: [
+            '/images/products/home/mattress/mattress1.png',
+            '/images/products/home/mattress/mattress2.png',
+            '/images/products/home/mattress/mattress3.png'
 
         ],
-        category: '',
-        brand: '',
-        hasVariants: ,
+        category: 'home',
+        brand: 'Saatva',
+        hasVariants: false,
         inStock: true,
-        stockQuanity: 100,
-        rating: 5,
-        reviewCount: 100,
+        stockQuanity: 25,
+        rating: 0,
+        reviewCount: 0,
         tags: [],
-        featured: ,
+        featured: false,
         onSale: false
     },
     {
         id: '17',
-        name: '',
-        description: ``,
-        basePrice: ,
-        originalPrice: ,
+        name: `LG - 5.0 Cu. Ft. HE Smart Mega Capacity All-in-One 
+               Electric Washer/Dryer WashCombo with Steam and Ventless 
+               Inverter Heat Pump - Black Steel`,
+        description: `Let LG’s 2-in-1 WashCombo do the heavy lifting. Run 
+                      a complete wash and dry cycle in as fast as 2 hours, 
+                      without having to transfer clothes from washer to 
+                      dryer.¹ One appliance does it all—with a space-saving, 
+                      go-anywhere ventless design. Among the largest capacity 
+                      combo models available, it can fit your larger loads 
+                      including a king-size comforter.² As this machine is 
+                      among the industry’s most energy efficient combos, 
+                      you’ll use up to 60% less energy with every load.³ 
+                      Plus, our built-in intelligence and intuitive LCD dial 
+                      make it easy to get laundry day dialed in so you can 
+                      load, set and go.`,
+        basePrice: 3299.99,
         images: [
-
+            '/images/products/home/washerdryer/washerdryer1.png',
+            '/images/products/home/washerdryer/washerdryer2.png',
+            '/images/products/home/washerdryer/washerdryer3.png',
+            '/images/products/home/washerdryer/washerdryer4.png',
+            '/images/products/home/washerdryer/washerdryer5.png',
+            '/images/products/home/washerdryer/washerdryer6.png',
+            '/images/products/home/washerdryer/washerdryer7.png',
+            '/images/products/home/washerdryer/washerdryer8.png',
         ],
-        category: '',
-        brand: '',
-        hasVariants: ,
+        category: 'home',
+        brand: 'LG',
+        hasVariants: false,
         inStock: true,
-        stockQuanity: 100,
-        rating: 5,
-        reviewCount: 100,
+        stockQuanity: 30,
+        rating: 0,
+        reviewCount: 0,
         tags: [],
-        featured: ,
+        featured: false,
         onSale: false
     },
     {
         id: '18',
-        name: '',
-        description: ``,
-        basePrice: ,
-        originalPrice: ,
+        name: 'Chicago White Sox Nike Home Limited Paul Konerko Jersey - White',
+        description: `Rep your favorite Chicago White Sox legend with 
+                      this Home Limited Konerko Roster Jersey. This Nike 
+                      jersey was crafted by using the lightweight comfort 
+                      of stretch mesh fabric and features an authentic 
+                      look with twill details. The innovative Vapor 
+                      Premier chassis allows for more flexible movement 
+                      and teams up with Dri-FIT technology to deliver 
+                      exceptional sweat-wicking power.`,
+        basePrice: 199.99,
         images: [
-
+            '/images/products/clothing/whitesox/whitesox1.png',
+            '/images/products/clothing/whitesox/whitesox2.png',
+            '/images/products/clothing/whitesox/whitesox3.png',
         ],
-        category: '',
-        brand: '',
-        hasVariants: ,
+        category: 'clothing',
+        brand: 'Nike',
+        hasVariants: true,
+        variantOptions: [
+            {
+                type: 'size',
+                name: 'Size',
+                required: true,
+                variants: [
+                    {
+                        id: 'paul-konerko-jersey-extra-small',
+                        name: 'XS',
+                        value: 'extra-small',
+                        type: 'size',
+                        inStock: true,
+                        stockQuanity: 20
+                    },
+                    {
+                        id: 'paul-konerko-jersey-small',
+                        name: 'S',
+                        value: 'small',
+                        type: 'size',
+                        inStock: true,
+                        stockQuanity: 20
+                    },
+                    {
+                        id: 'paul-konerko-jersey-medium',
+                        name: 'M',
+                        value: 'medium',
+                        type: 'size',
+                        inStock: true,
+                        stockQuanity: 20
+                    },
+                    {
+                        id: 'paul-konerko-jersey-large',
+                        name: 'L',
+                        value: 'large',
+                        type: 'size',
+                        inStock: true,
+                        stockQuanity: 20
+                    },
+                    {
+                        id: 'paul-konerko-jersey-extra-large',
+                        name: 'XL',
+                        value: 'extra-large',
+                        type: 'size',
+                        inStock: true,
+                        stockQuanity: 20
+                    }
+                ]
+            }
+        ],
+        defaultVariants: {
+            size: 'small'
+        },
         inStock: true,
         stockQuanity: 100,
-        rating: 5,
-        reviewCount: 100,
+        rating: 0,
+        reviewCount: 0,
         tags: [],
-        featured: ,
+        featured: false,
         onSale: false
     },
     {
         id: '19',
-        name: '',
-        description: ``,
-        basePrice: ,
-        originalPrice: ,
+        name: `Chelsea Cup Nike Dri-FIT ADV Home Match Shirt 2025-26 with 
+               World Champions 25 chest badge`,
+        description: `Celebrate the storied history of the club and the 
+                      ever-evolving, vibrant spirit of London with 
+                      Chelsea FC's 2025-26 Home kit. This authentic 
+                      jersey features classic Chelsea blue and a subtle 
+                      print inspired by the city's architecture. Our 
+                      Match collection lets you wear exactly what the 
+                      pros wear. We paired authentic design details with 
+                      lightweight, quick-drying technology to help keep 
+                      you cool and comfortable on the field. Nike Dri-FIT 
+                      ADV levels up our sweat-wicking technology with 
+                      advanced cooling and zones of breathability to help 
+                      you stay dry and comfortable.`,
+        basePrice: 203,
         images: [
-
+            '/images/products/clothing/chelsea/chelsea1.png',
+            '/images/products/clothing/chelsea/chelsea2.png',
+            '/images/products/clothing/chelsea/chelsea3.png'
         ],
-        category: '',
-        brand: '',
-        hasVariants: ,
+        category: 'clothing',
+        brand: 'Nike',
+        hasVariants: true,
+        variantOptions:[
+            {
+                type: 'size',
+                name: 'Size',
+                required: true,
+                variants: [
+                    {
+                        id: 'chelsea-jersey-extra-small',
+                        name: 'XS',
+                        value: 'extra-small',
+                        type: 'size',
+                        inStock: true,
+                        stockQuanity: 20
+                    },
+                    {
+                        id: 'chelsea-jersey-small',
+                        name: 'S',
+                        value: 'small',
+                        type: 'size',
+                        inStock: true,
+                        stockQuanity: 20
+                    },
+                    {
+                        id: 'chelsea-jersey-medium',
+                        name: 'M',
+                        value: 'medium',
+                        type: 'size',
+                        inStock: true,
+                        stockQuanity: 20
+                    },
+                    {
+                        id: 'chelsea-jersey-large',
+                        name: 'L',
+                        value: 'large',
+                        type: 'size',
+                        inStock: true,
+                        stockQuanity: 20
+                    },
+                    {
+                        id: 'chelsea-jersey-extra-large',
+                        name: 'XL',
+                        value: 'extra-large',
+                        type: 'size',
+                        inStock: true,
+                        stockQuanity: 20
+                    }
+                ]
+            }
+        ],
+        defaultVariants: {
+            size: 'small'
+        },
         inStock: true,
         stockQuanity: 100,
         rating: 5,
         reviewCount: 100,
         tags: [],
-        featured: ,
+        featured: false,
         onSale: false
     },
     {
         id: '20',
-        name: '',
-        description: ``,
-        basePrice: ,
-        originalPrice: ,
+        name: 'Connor Bedard Chicago Blackhawks Fanatics Breakaway Jersey - White',
+        description: `You can experience the same excitement you feel 
+                      while watching the Chicago Blackhawks play every 
+                      time you put on this Connor Bedard Premier Breakaway 
+                      Player jersey from Fanatics. This exclusive piece of 
+                      gear features bold colors and graphics, modeled after 
+                      the jersey your favorite player wears, that let 
+                      everyone know you're a devout fan. The fabric 
+                      technologies built into this Chicago Blackhawks 
+                      jersey also ensure you stay comfortable through every 
+                      game this season.`,
+        basePrice: 174.99,
         images: [
-
+            '/images/products/clothing/blackhawks/blackhawks1.png',
+            '/images/products/clothing/blackhawks/blackhawks2.png',
+            '/images/products/clothing/blackhawks/blackhawks3.png',
         ],
-        category: '',
-        brand: '',
-        hasVariants: ,
+        category: 'clothing',
+        brand: 'Fanatics',
+        hasVariants: true,
+        variantOptions: [
+            {
+                type: 'size',
+                name: 'Size',
+                required: true,
+                variants: [
+                    {
+                        id: 'bedard-jersey-extra-small',
+                        name: 'XS',
+                        value: 'extra-small',
+                        type: 'size',
+                        inStock: true,
+                        stockQuanity: 20
+                    },
+                    {
+                        id: 'bedard-jersey-small',
+                        name: 'S',
+                        value: 'small',
+                        type: 'size',
+                        inStock: true,
+                        stockQuanity: 20
+                    },
+                    {
+                        id: 'bedard-jersey-medium',
+                        name: 'M',
+                        value: 'medium',
+                        type: 'size',
+                        inStock: true,
+                        stockQuanity: 20
+                    },
+                    {
+                        id: 'bedard-jersey-large',
+                        name: 'L',
+                        value: 'large',
+                        type: 'size',
+                        inStock: true,
+                        stockQuanity: 20
+                    },
+                    {
+                        id: 'bedard-jersey-extra-large',
+                        name: 'XL',
+                        value: 'extra-large',
+                        type: 'size',
+                        inStock: true,
+                        stockQuanity: 20
+                    }
+                ]
+            }
+        ],
         inStock: true,
         stockQuanity: 100,
-        rating: 5,
-        reviewCount: 100,
+        rating: 0,
+        reviewCount: 0,
         tags: [],
-        featured: ,
+        featured: false,
         onSale: false
     },
     {
         id: '21',
-        name: '',
-        description: ``,
-        basePrice: ,
-        originalPrice: ,
+        name: '#10 Jordan Love Nike Black Fashion Game Jersey',
+        description: `Stay true to your team all day, every day, gameday. 
+                      Green Bay Packers Nike black fashion game jersey 
+                      is inspired by what the players are wearing on 
+                      the field, with a fashionable twist.`,
+        basePrice: 129.99,
         images: [
-
+            '/images/products/clothing/packers/packers1.png',
+            '/images/products/clothing/packers/packers2.png', 
         ],
-        category: '',
-        brand: '',
-        hasVariants: ,
+        category: 'clothing',
+        brand: 'Nike',
+        hasVariants: true,
+        variantOptions: [
+            {
+                type: 'size',
+                name: 'Size',
+                required: true,
+                variants: [
+                    {
+                        id: 'jordan-love-jersey-extra-small',
+                        name: 'XS',
+                        value: 'extra-small',
+                        type: 'size',
+                        inStock: true,
+                        stockQuanity: 20
+                    },
+                    {
+                        id: 'jordan-love-jersey-small',
+                        name: 'S',
+                        value: 'small',
+                        type: 'size',
+                        inStock: true,
+                        stockQuanity: 20
+                    },
+                    {
+                        id: 'jordan-love-jersey-medium',
+                        name: 'M',
+                        value: 'medium',
+                        type: 'size',
+                        inStock: true,
+                        stockQuanity: 20
+                    },
+                    {
+                        id: 'jordan-love-jersey-large',
+                        name: 'L',
+                        value: 'large',
+                        type: 'size',
+                        inStock: true,
+                        stockQuanity: 20
+                    },
+                    {
+                        id: 'jordan-love-jersey-extra-large',
+                        name: 'XL',
+                        value: 'extra-large',
+                        type: 'size',
+                        inStock: true,
+                        stockQuanity: 20
+                    }
+                ]
+            }
+        ],
         inStock: true,
         stockQuanity: 100,
-        rating: 5,
-        reviewCount: 100,
+        rating: 0,
+        reviewCount: 0,
         tags: [],
-        featured: ,
+        featured: false,
         onSale: false
     },
     {
         id: '22',
-        name: '',
-        description: ``,
-        basePrice: ,
-        originalPrice: ,
+        name: `Men's Chicago Bulls Nike Red Authentic Derrick Rose Jersey - Icon Edition`,
+        description: `Grab this Authentic Custom Jersey from Nike to 
+                      capture the distinct identity of your Chicago Bulls 
+                      in a new and innovative design.`,
+        basePrice: 249.99,
         images: [
-
+            '/images/products/clothing/bulls/bulls1.png',
+            '/images/products/clothing/bulls/bulls2.png',
+            '/images/products/clothing/bulls/bulls3.png',
         ],
-        category: '',
-        brand: '',
-        hasVariants: ,
+        category: 'clothing',
+        brand: 'Nike',
+        hasVariants: true,
+        variantOptions: [
+            {
+                type: 'size',
+                name: 'Size',
+                required: true,
+                variants: [
+                    {
+                        id: 'derrick-rose-jersey-extra-small',
+                        name: 'XS',
+                        value: 'extra-small',
+                        type: 'size',
+                        inStock: true,
+                        stockQuanity: 20
+                    },
+                    {
+                        id: 'derrick-rose-jersey-small',
+                        name: 'S',
+                        value: 'small',
+                        type: 'size',
+                        inStock: true,
+                        stockQuanity: 20
+                    },
+                    {
+                        id: 'derrick-rose-jersey-medium',
+                        name: 'M',
+                        value: 'medium',
+                        type: 'size',
+                        inStock: true,
+                        stockQuanity: 20
+                    },
+                    {
+                        id: 'derrick-rose-jersey-large',
+                        name: 'L',
+                        value: 'large',
+                        type: 'size',
+                        inStock: true,
+                        stockQuanity: 20
+                    },
+                    {
+                        id: 'derrick-rose-jersey-extra-large',
+                        name: 'XL',
+                        value: 'extra-large',
+                        type: 'size',
+                        inStock: true,
+                        stockQuanity: 20
+                    }
+                ]
+            }
+        ],
         inStock: true,
         stockQuanity: 100,
-        rating: 5,
-        reviewCount: 100,
+        rating: 0,
+        reviewCount: 0,
         tags: [],
-        featured: ,
+        featured: false,
         onSale: false
     },
     {
         id: '23',
-        name: '',
-        description: ``,
-        basePrice: ,
-        originalPrice: ,
+        name: 'WWE Championship Spinner Replica Title Belt',
+        description: `Introduced by John Cena in 2005, this replica title 
+                      belt perfectly embodies the Word Life aesthetic, 
+                      sporting an eye-catching design and bling to the 
+                      nines. This isn't just a collectible—it's a piece 
+                      of WWE history that defined an era.`,
+        basePrice: 599.99,
         images: [
-
+            '/images/products/clothing/belt/belt1.png',
+            '/images/products/clothing/belt/belt2.png'
         ],
-        category: '',
-        brand: '',
-        hasVariants: ,
+        category: 'clothing',
+        brand: 'WWE',
+        hasVariants: false,
         inStock: true,
         stockQuanity: 100,
-        rating: 5,
-        reviewCount: 100,
+        rating: 0,
+        reviewCount: 0,
         tags: [],
-        featured: ,
+        featured: true,
         onSale: false
     },
     {
