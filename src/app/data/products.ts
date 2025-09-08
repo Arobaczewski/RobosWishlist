@@ -111,8 +111,8 @@ export const products: Product[] = [
         },
         inStock: true,
         stockQuanity: 100,
-        rating: 4.9,
-        reviewCount: 100,
+        rating: 0,
+        reviewCount: 0,
         tags: [
             "laptop", "apple", "macbook", "macbook-pro",
             "m4-max", "16-inch", "retina-display",
@@ -120,7 +120,7 @@ export const products: Product[] = [
         ],
         featured: false,
         onSale: false,
-        externalLink: ''
+        externalLink: 'https://www.bestbuy.com/product/apple-macbook-pro-16-inch-laptop-apple-m4-max-chip-built-for-apple-intelligence-48gb-memory-1tb-ssd-space-black/JJGCQ8HW6L'
     },
     {
         id: '2',
@@ -247,7 +247,7 @@ export const products: Product[] = [
         ],
         featured: false,
         onSale: false,
-        externalLink: ''
+        externalLink: 'https://www.bestbuy.com/product/apple-airpods-max-usb-c-midnight/JJGCQ3ZZ3Q'
     },
     {
         id: '3',
@@ -288,7 +288,7 @@ export const products: Product[] = [
         ],
         featured: false,
         onSale: false,
-        externalLink: ''
+        externalLink: 'https://www.bestbuy.com/product/apple-airpods-pro-2-wireless-active-noise-cancelling-earbuds-with-hearing-aid-feature-white/JJGCQ88C8X'
     },
     {
         id: '4',
@@ -338,7 +338,7 @@ export const products: Product[] = [
         ],
         featured: false,
         onSale: false,
-        externalLink: ''
+        externalLink: 'https://www.bestbuy.com/product/msi-18-gaming-laptop-2560-x-1600-qhd--amd-ryzen-9-9955hx-with-32gb-memory-geforce-rtx-5070-ti-2-tb-ssd-cosmo-gray-gray/J3P7TXR2CS/sku/6621167?ref=212&loc=GamingLaptops&gclsrc=aw.ds&gad_source=1&gad_campaignid=19976416269&gbraid=0AAAAAD-ORIgVJgV-ngExgbmWP9MKPqrKC&gclid=CjwKCAjwiNXFBhBKEiwAPSaPCYPMELO8ONE-Re3CkUi3E7g-vCfYtNWom--zbst60WXKVdIhWfaIYRoCOwsQAvD_BwE'
     },
     {
         id: '5',
@@ -374,8 +374,8 @@ export const products: Product[] = [
         hasVariants: false,
         inStock: true,
         stockQuanity: 100,
-        rating: 4.6,
-        reviewCount: 100,
+        rating: 0,
+        reviewCount: 0,
         tags: [
             "gpu", "graphics-card", "msi", "rtx-5090", "geforce",
             "pci-express-gen5", "gddr7", "ray-tracing", "dlss4",
@@ -383,7 +383,7 @@ export const products: Product[] = [
         ],
         featured: false,
         onSale: false,
-        externalLink: ''
+        externalLink: 'https://www.bestbuy.com/product/msi-nvidia-geforce-geforce-rtx-5090-32g-gaming-trio-oc-32gb-gddr7-pci-express-gen-5-graphics-card-black/J3P7TX6Z3H/sku/6616090?extStoreId=324&utm_source=feed&ref=212&loc=SaleEvent&gclsrc=aw.ds&gad_source=1&gad_campaignid=18221466691&gbraid=0AAAAAD-ORIjJYSJMkI68s9_-1kj1CIGcS&gclid=CjwKCAjwiNXFBhBKEiwAPSaPCYmqLPTXOVkpeW4X_yinQTCLUWO0BjkfkkUWbxTpNdefsodgCjWsvBoCFosQAvD_BwE'
     },
     {
         id: '6',
@@ -422,8 +422,8 @@ export const products: Product[] = [
         hasVariants: false,
         inStock: true,
         stockQuanity: 100,
-        rating: 4.7,
-        reviewCount: 100,
+        rating: 0,
+        reviewCount: 0,
         tags: [
             "nintendo", "switch-2", "console", "gaming", "handheld",
             "hybrid", "joy-con", "oled", "multiplayer", 
@@ -431,7 +431,7 @@ export const products: Product[] = [
         ],
         featured: false,
         onSale: false,
-        externalLink: ''
+        externalLink: 'https://www.bestbuy.com/product/switch-2-system-nintendo-switch-2/J7GSL57TGH'
     },
     {
         id: '7',
@@ -560,7 +560,7 @@ export const products: Product[] = [
         ],
         featured: false,
         onSale: false,
-        externalLink: ''
+        externalLink: 'https://www.bestbuy.com/product/apple-11-inch-ipad-pro-m4-chip-built-for-apple-intelligence-wi-fi-cellular-256gb-with-oled-space-black-unlocked/JJGCQ37HLR'
     },
     {
         id: '8',
@@ -604,7 +604,7 @@ export const products: Product[] = [
         ],
         featured: false,
         onSale: false,
-        externalLink: ''
+        externalLink: 'https://www.bestbuy.com/product/steelseries-apex-pro-tkl-gen-3-wired-mechanical-omnipoint-adjustable-hypermagnetic-gaming-keyboard-with-rapid-tap-black/J3GTVPH8JP/sku/6594154?extStoreId=324&utm_source=feed&ref=212&loc=19638026543&gclsrc=aw.ds&gad_source=1&gad_campaignid=19630546785&gbraid=0AAAAAD-ORIhVxTfMI1F7JmHGT2_YOSn5N&gclid=CjwKCAjwiNXFBhBKEiwAPSaPCfrhmqr1Unt6HrwkrAhOMp3i9aiVFM1GHVX9cMpoSji1bk_tW8N_CBoCwzkQAvD_BwE'
     },
     {
         id: '9',
@@ -648,7 +648,7 @@ export const products: Product[] = [
         ],
         featured: false,
         onSale: false,
-        externalLink: ''
+        externalLink: 'https://www.bestbuy.com/product/razer-naga-v2-pro-mmo-optical-gaming-mouse-with-interchangeable-side-plates-in-2-6-12-button-configurations-wireless-black/J39HWFQQ9G/sku/6521042?extStoreId=311&utm_source=feed&ref=212&loc=19630633677&gclsrc=aw.ds&gad_source=1&gad_campaignid=19638055144&gbraid=0AAAAAD-ORIg-JvnoufNpROvDM3nJy46GK&gclid=CjwKCAjwiNXFBhBKEiwAPSaPCZrnGqkI0tO3n-22PdpSa6Mg47dOSyfHPmdkBRNwWG5BwxmtFenfHRoCDoAQAvD_BwE'
     },
     {
         id: '10',
@@ -694,7 +694,7 @@ export const products: Product[] = [
         ],
         featured: true,
         onSale: false,
-        externalLink: ''
+        externalLink: 'https://www.bestbuy.com/product/creality-k2-plus-3d-printer-black/JXQWF4SGG3?irclickid=zTF3WAUFjxycUiqWKUxnLQJZUkpzKGXweWKt1U0&irgwc=1&ref=198&loc=Future%20Dedicated%20Account&acampID=0&mpid=1943169&affgroup=%22Content%22%2C%22Howl%20Migrated%20Partners%22%2C%22Partners%20to%20Keep%22'
     },
     {
         id: '11',
@@ -816,7 +816,7 @@ export const products: Product[] = [
         ],
         featured: false,
         onSale: false,
-        externalLink: ''
+        externalLink: 'https://www.bestbuy.com/product/bestier-55in-electric-standing-desk-height-computer-home-office-desk-with-hooks-and-wire-holes-black/J39TG422WL'
     },
     {
         id: '12',
@@ -864,7 +864,7 @@ export const products: Product[] = [
         ],
         featured: false,
         onSale: false,
-        externalLink: ''
+        externalLink: 'https://www.bestbuy.com/product/urevo-sp1-lite-under-desk-treadmill-walking-pad-black/J3Q5QXJCZ2/sku/6578080?ref=212&loc=SaleEvent&gclsrc=aw.ds&gad_source=1&gad_campaignid=18221466691&gbraid=0AAAAAD-ORIjJYSJMkI68s9_-1kj1CIGcS&gclid=CjwKCAjwiNXFBhBKEiwAPSaPCUsEOCMX09XtE9TlqaIIozYmGlc4S4Y7yrC0T9hdK_AlH9iGm_W3CBoCi9AQAvD_BwE'
     },
     {
         id: '13',
@@ -938,7 +938,7 @@ export const products: Product[] = [
         ],
         featured: false,
         onSale: false,
-        externalLink: ''
+        externalLink: 'https://www.bestbuy.com/product/roborock-saros-10-ultra-thin-self-lifting-robot-vacuum-and-mop--22000-pa-suction-hyper-force-and-multi-fuction-dock-white/JJ8F5PCPP3'
     },
     {
         id: '14',
@@ -980,7 +980,7 @@ export const products: Product[] = [
         ],
         featured: true,
         onSale: false,
-        externalLink: ''
+        externalLink: 'https://www.mybobs.com/furniture/living-room/sectionals/p/20077816'
     },
     {
         id: '15',
@@ -1110,7 +1110,7 @@ export const products: Product[] = [
         ],
         featured: false,
         onSale: false,
-        externalLink: ''
+        externalLink: 'https://www.containerstore.com/s/office/desk-chairs/branch-verve-chair/12d?productId=11024231&skuId=10099411&irgwc=1&ir_partnerid=221109&ir_adid=2029499&ir_campaignid=24840&cid=af%3Agen_impact_Future%20PLC._221109_trdpro-us&irclickid=zgzWD91FYxycR-E2ds1dwUfqUkpzcRVMeWKt1U0'
     },
     {
         id: '16',
@@ -1131,7 +1131,7 @@ export const products: Product[] = [
             "Quiet, remote-controlled adjustments with memory presets",
             "Premium latex and memory foam layers for durability and comfort"
         ],
-        basePrice: 5399,
+        basePrice: 3299,
         images: [
             '/images/products/home/mattress/mattress1.png',
             '/images/products/home/mattress/mattress2.png',
@@ -1140,9 +1140,66 @@ export const products: Product[] = [
         ],
         category: 'home',
         brand: 'Saatva',
-        hasVariants: false,
+        hasVariants: true,
+        variantOptions: [
+            {
+                type: 'size',
+                name: 'Size',
+                required: true,
+                variants: [
+                    {
+                        id: 'mattress-twin-xl',
+                        name: 'Twin XL',
+                        value: 'twin-xl',
+                        type: 'size',
+                        price: 0,
+                        inStock: true,
+                        stockQuanity: 20
+                    },
+                    {
+                        id: 'mattress-full',
+                        name: 'Full',
+                        value: 'full',
+                        type: 'size',
+                        price: 900,
+                        inStock: true,
+                        stockQuanity: 20
+                    },
+                    {
+                        id: 'mattress-queen',
+                        name: 'Queen',
+                        value: 'queen',
+                        type: 'size',
+                        price: 1300,
+                        inStock: true,
+                        stockQuanity: 20
+                    },
+                    {
+                        id: 'mattress-king',
+                        name: 'King',
+                        value: 'king',
+                        type: 'size',
+                        price: 2100,
+                        inStock: true,
+                        stockQuanity: 20
+                    },
+                    {
+                        id: 'mattress-cal-king',
+                        name: 'Cal King',
+                        value: 'cal-king',
+                        type: 'size',
+                        price: 2100,
+                        inStock: true,
+                        stockQuanity: 20
+                    }
+                ]
+            }
+        ],
+        defaultVariants: {
+            size: 'twin-xl'
+        },
         inStock: true,
-        stockQuanity: 25,
+        stockQuanity: 100,
         rating: 0,
         reviewCount: 0,
         tags: [
@@ -1152,7 +1209,7 @@ export const products: Product[] = [
         ],
         featured: false,
         onSale: false,
-        externalLink: ''
+        externalLink: 'https://www.saatva.com/mattresses/solaire?utm_source=moderncastle&utm_medium=affiliate&click_id=1110loQ9wxd&coupon=vzxrirblvqdxaxbr'
     },
     {
         id: '17',
@@ -1205,7 +1262,7 @@ export const products: Product[] = [
         ],
         featured: false,
         onSale: false,
-        externalLink: ''
+        externalLink: 'https://www.bestbuy.com/product/lg-5-0-cu-ft-he-smart-mega-capacity-all-in-one-electric-washer-dryer-washcombo-with-steam-and-ventless-inverter-heat-pump-black-steel/JJ8VPZQ98S/sku/6568166?ref=212&loc=19602590364&gclsrc=aw.ds&gad_source=1&gad_campaignid=19602598935&gbraid=0AAAAAD-ORIjXqhRfvVVMph0nK7-OIHKkC&gclid=CjwKCAjwiNXFBhBKEiwAPSaPCU04CB5vvuIP-Q34liH2tIA66MMcCNvPYJbPuZQuYmVF0DE9mq6MvhoCUmUQAvD_BwE'
     },
     {
         id: '18',
@@ -1299,7 +1356,7 @@ export const products: Product[] = [
         ],
         featured: false,
         onSale: false,
-        externalLink: ''
+        externalLink: 'https://www.mlbshop.com/chicago-white-sox/jerseys/mens-chicago-white-sox-nike-white-home-limited-pick-a-player-retired-roster-jersey/t-25995323+d-9083443436+f-7921327747+z-9-2434052504?aid=60314&utm_medium=cse&_s=ak1944mlb-pla&sku=209350576&targetid=targetid&utm_campaign=22735929266_182796695738&gad_source=1&gad_campaignid=22735929266&gbraid=0AAAAADwsNmFUUllTWTeWCyz7NoxM0PPK7&gclid=CjwKCAjwiNXFBhBKEiwAPSaPCdx4QLoPtQE8V46-riL-PaYt42p51NNsSNQBSs6htlJiWirgUOGHSxoCjVQQAvD_BwE'
     },
     {
         id: '19',
@@ -1389,8 +1446,8 @@ export const products: Product[] = [
         },
         inStock: true,
         stockQuanity: 100,
-        rating: 5,
-        reviewCount: 100,
+        rating: 0,
+        reviewCount: 0,
         tags: [
             "jersey", "soccer", "football", "chelsea", "nike", 
             "dri-fit-adv", "home", "match-shirt", "world-champions-25", 
@@ -1398,7 +1455,7 @@ export const products: Product[] = [
         ],
         featured: false,
         onSale: false,
-        externalLink: ''
+        externalLink: 'https://store.chelseafc.com/en/chelsea-cup-nike-dri-fit-adv-home-match-shirt-2025-26-with-world-champions-25-chest-badge/p-355525919870071281+z-96-2312743874'
     },
     {
         id: '20',
@@ -1491,7 +1548,7 @@ export const products: Product[] = [
         ],
         featured: false,
         onSale: false,
-        externalLink: ''
+        externalLink: 'https://www.fanatics.com/nhl/chicago-blackhawks/jerseys/connor-bedard-chicago-blackhawks-fanatics-breakaway-jersey-white/o-1306+t-03937345+d-86114567+f-301706005+z-9-3548734347?utm_medium=cse&_s=GPA_CA&sku=206285267&targetid=targetid&utm_campaign=22561237381_180350150300&gad_source=1&gad_campaignid=22561237381&gbraid=0AAAAAD-8WqyjVOV1DFQW87rbUZJVlLZEE&gclid=CjwKCAjwiNXFBhBKEiwAPSaPCZDdPvJeJsUSHvtUQUSWrZsHlYa5nrRtw5Lxzelr4Ez8exnUDkSg3BoCvYkQAvD_BwE'
     },
     {
         id: '21',
@@ -1577,7 +1634,7 @@ export const products: Product[] = [
         ],
         featured: false,
         onSale: false,
-        externalLink: ''
+        externalLink: 'https://www.packersproshop.com/green-bay-packers-jerseys/10-love-fashion-game-jersey'
     },
     {
         id: '22',
@@ -1663,7 +1720,7 @@ export const products: Product[] = [
         ],
         featured: false,
         onSale: false,
-        externalLink: ''
+        externalLink: 'https://store.nba.com/chicago-bulls/mens-chicago-bulls-nike-red-authentic-custom-jersey-icon-edition/t-47700601+p-02003355808035+z-8-734301508?_ref=p-DLP:m-GRID:i-r0c1:po-1'
     },
     {
         id: '23',
@@ -1701,7 +1758,7 @@ export const products: Product[] = [
         ],
         featured: true,
         onSale: false,
-        externalLink: ''
+        externalLink: 'https://www.etsy.com/listing/4349794690/wwe-championship-spinner-replica-title?gpla=1&gao=1&&utm_source=google&utm_medium=cpc&utm_campaign=shopping_us_-toys_and_games_a&utm_custom1=_k_CjwKCAjw_fnFBhB0EiwAH_MfZvMPg6XjORj1K6cLfIp6LK4oGKRER0actXOgj1nbwMGAuxnxLtGn6BoCbKoQAvD_BwE_k_&utm_content=go_22435011576_176375887605_746117422318_pla-2397872109027_c__4349794690_12768591&utm_custom2=22435011576&gad_source=1&gad_campaignid=22435011576&gbraid=0AAAAADtcfRINjlBtmjlzEAYHXlb7e0JHW&gclid=CjwKCAjw_fnFBhB0EiwAH_MfZvMPg6XjORj1K6cLfIp6LK4oGKRER0actXOgj1nbwMGAuxnxLtGn6BoCbKoQAvD_BwE'
     },
     {
         id: '24',
@@ -1745,7 +1802,7 @@ export const products: Product[] = [
         ],
         featured: false,
         onSale: false,
-        externalLink: ''
+        externalLink: 'https://www.bestbuy.com/product/ninja-neverclog-cold-press-juicer-charcoal/JXJVXG5H8S/sku/6535802?extStoreId=311&utm_source=feed&ref=212&loc=20153185852&gclsrc=aw.ds&gad_source=1&gad_campaignid=20149845761&gbraid=0AAAAAD-ORIgLzvQY1vqF1k4V7KAhr_3mf&gclid=CjwKCAjwiNXFBhBKEiwAPSaPCatzn2d3HCF2aiTeuwlN_4HLL8mb7MefkLc40d9FB1rFxW3xWJE_jxoCV88QAvD_BwE'
     },
     {
         id: '25',
@@ -1850,7 +1907,7 @@ export const products: Product[] = [
         ],
         featured: false,
         onSale: false,
-        externalLink: ''
+        externalLink: 'https://www.bestbuy.com/product/kitchenaid-5-5-quart-bowl-lift-stand-mixer-empire-red/J3KHVGJX9H/sku/6531622?extStoreId=311&utm_source=feed&ref=212&loc=19578788097&gclsrc=aw.ds&gad_source=1&gad_campaignid=19586641331&gbraid=0AAAAAD-ORIgdhwfHMBUBnDTLbhIaEwgPR&gclid=CjwKCAjwiNXFBhBKEiwAPSaPCQ29_lfMD04b7084TYHSxt6sNERkcNKCqN3B6I2nr6_Gqzf_QCQ7rRoC2B8QAvD_BwE'
     },
     {
         id: '26',
@@ -1891,7 +1948,7 @@ export const products: Product[] = [
         ],
         featured: true,
         onSale: false,
-        externalLink: ''
+        externalLink: 'https://hexclad.com/collections/sets/products/pots-and-pans-set'
     },
     {
         id: '27',
@@ -1940,7 +1997,7 @@ export const products: Product[] = [
         ],
         featured: false,
         onSale: false,
-        externalLink: ''
+        externalLink: 'https://www.bestbuy.com/product/ninja-slushi-5-in-1-professional-frozen-drink-maker-88-oz-frozen-drink-slushie-machine-5-preset-programs-artic-blue-gray/JXJVXGVRT7/sku/6589081?extStoreId=324&utm_source=feed&ref=212&loc=20153185852&gclsrc=aw.ds&gad_source=1&gad_campaignid=20149845761&gbraid=0AAAAAD-ORIgLzvQY1vqF1k4V7KAhr_3mf&gclid=CjwKCAjwiNXFBhBKEiwAPSaPCVjGabk0DOWQ4drucLXd8p8KiTuXqbi4GfTPu1frTRCwghD4PYc64RoC4_AQAvD_BwE'
     },
     {
         id: '28',
@@ -1986,7 +2043,7 @@ export const products: Product[] = [
         ],
         featured: false,
         onSale: false,
-        externalLink: ''
+        externalLink: 'https://sodastream.com/products/enso?variant=41738909777962'
     },
     {
         id: '29',
@@ -2030,7 +2087,7 @@ export const products: Product[] = [
         ],
         featured: false,
         onSale: false,
-        externalLink: ''
+        externalLink: 'https://www.toyota.com/camry/'
     },
     {
         id: '30',
@@ -2064,7 +2121,7 @@ export const products: Product[] = [
         tags: [],
         featured: false,
         onSale: false,
-        externalLink: ''
+        externalLink: 'https://www.kawasaki.com/en-us/motorcycle/ninja/supersport/ninja-zx-4r/2025-ninja-zx-4rr-abs#gallery'
     },
     {
         id: '31',
@@ -2102,7 +2159,7 @@ export const products: Product[] = [
         tags: [],
         featured: true,
         onSale: false,
-        externalLink: ''
+        externalLink: 'https://configurator.porsche.com/en-US/mode/model/992812?options=9P8.QH1.QR9.VL0.GT0.4GF.3J9.1N3.1X2.6EE.3S0.6NA.8T1.3HA.4L6.6A0.M1P.2C5.K8C.VW4.6I0.0I3.9WT.0P9.2V1.6BA.1G8.1P0.4UB.6RC.5KS.9JA.95D.7K3.G1C.KA2.QQ0.4I8.7AL.9VK.7Y0.4D0.1T0.FT0.VR0.QU8.0TC.5XX.6K9.IW3.VC2.E0A.7UG.0NB.2W0.0N5.9AD.4A3.9ZE.KQ3.EM2.GH3.FM7.1BV.VF2.C2Q.J2B.FZ0.QE0.6XA.2D0.9B0.1LS.7G9.8N7.IV2.GV1.8JU.8VH.1NX.Q1J.43.6E5.8LT.04I.89.24931.97R.1MI.0UB.Z1S&variants=24931_JZ#section-summary'
     },
     {
         id: '32',
@@ -2190,6 +2247,6 @@ export const products: Product[] = [
         ],
         featured: false,
         onSale: false,
-        externalLink: ''
+        externalLink: 'https://www.jamesedition.com/real_estate/san-diego-ca-usa/luxury-country-estate-15430868'
     }
 ];
