@@ -58,7 +58,7 @@ export const products: Product[] = [
                             '/images/products/technology/spaceblack/macblack6.png',
                         ], 
                         inStock: true,
-                        stockQuanity: 25
+                        stockQuantity: 25
                     },
                     {
                         id: 'apple-macbook-pro-silver',
@@ -75,7 +75,7 @@ export const products: Product[] = [
                             '/images/products/technology/silver/macsilver6.png',
                         ], 
                         inStock: true,
-                        stockQuanity: 25
+                        stockQuantity: 25
                     }
                 ]
             },
@@ -91,7 +91,7 @@ export const products: Product[] = [
                         type: 'storage',
                         price: 0,
                         inStock: true,
-                        stockQuanity: 25,
+                        stockQuantity: 25,
                     },
                     {
                         id: 'apple-macbook-pro-48gb',
@@ -100,7 +100,7 @@ export const products: Product[] = [
                         type: 'storage',
                         price: 500,
                         inStock: true,
-                        stockQuanity: 25,
+                        stockQuantity: 25,
                     }
                 ]
             }
@@ -110,7 +110,7 @@ export const products: Product[] = [
             storage: '36gb'
         },
         inStock: true,
-        stockQuanity: 100,
+        stockQuantity: 100,
         rating: 0,
         reviewCount: 0,
         tags: [
@@ -172,7 +172,7 @@ export const products: Product[] = [
                             '/images/products/technology/midnight/maxmidnight3.png',
                         ],
                         inStock: true,
-                        stockQuanity: 20
+                        stockQuantity: 20
                     },
                     {
                         id: 'apple-airpod-max-blue',
@@ -186,7 +186,7 @@ export const products: Product[] = [
                             '/images/products/technology/midnight/maxblue3.png',
                         ],
                         inStock: true,
-                        stockQuanity: 20
+                        stockQuantity: 20
                     },
                     {
                         id: 'apple-airpod-max-orange',
@@ -200,7 +200,7 @@ export const products: Product[] = [
                             '/images/products/technology/midnight/maxorange3.png'
                         ],
                         inStock: true,
-                        stockQuanity: 20
+                        stockQuantity: 20
                     },
                     {
                         id: 'apple-airpod-max-purple',
@@ -214,7 +214,7 @@ export const products: Product[] = [
                             '/images/products/technology/midnight/maxpurple3.png',
                         ],
                         inStock: true,
-                        stockQuanity: 20
+                        stockQuantity: 20
                     },
                     {
                         id: 'apple-airpod-max-starlight',
@@ -228,7 +228,7 @@ export const products: Product[] = [
                             '/images/products/technology/midnight/maxstarlight3.png'
                         ],
                         inStock: true,
-                        stockQuanity: 20
+                        stockQuantity: 20
                     }
                 ]
             }
@@ -237,7 +237,7 @@ export const products: Product[] = [
             color: 'midnight'
         },
         inStock: true,
-        stockQuanity: 100,
+        stockQuantity: 100,
         rating: 0,
         reviewCount: 0,
         tags: [
@@ -278,7 +278,7 @@ export const products: Product[] = [
         brand: 'Apple',
         hasVariants: false,
         inStock: true,
-        stockQuanity: 100,
+        stockQuantity: 100,
         rating: 0,
         reviewCount: 0,
         tags: [
@@ -328,7 +328,7 @@ export const products: Product[] = [
         brand: 'MSI',
         hasVariants: false,
         inStock: true,
-        stockQuanity: 50,
+        stockQuantity: 50,
         rating: 0,
         reviewCount: 0,
         tags: [
@@ -373,7 +373,7 @@ export const products: Product[] = [
         brand: 'Nvidia',
         hasVariants: false,
         inStock: true,
-        stockQuanity: 100,
+        stockQuantity: 100,
         rating: 0,
         reviewCount: 0,
         tags: [
@@ -421,7 +421,7 @@ export const products: Product[] = [
         brand: 'Nintendo',
         hasVariants: false,
         inStock: true,
-        stockQuanity: 100,
+        stockQuantity: 100,
         rating: 0,
         reviewCount: 0,
         tags: [
@@ -482,7 +482,7 @@ export const products: Product[] = [
                             '/images/products/technology/ipadpro/ipad/png'
                         ],
                         inStock: true,
-                        stockQuanity: 10
+                        stockQuantity: 10
                     },
                     {
                         id: 'apple-ipad-pro-13-silver',
@@ -497,7 +497,7 @@ export const products: Product[] = [
                             '/images/products/technology/ipadpro/ipad/png'
                         ],
                         inStock: true,
-                        stockQuanity: 10,
+                        stockQuantity: 10,
                     },
                 ]
             },
@@ -513,7 +513,7 @@ export const products: Product[] = [
                         type: 'storage',
                         price: 0,
                         inStock: true,
-                        stockQuanity: 10,
+                        stockQuantity: 10,
                     },
                     { 
                         id: 'apple-ipad-pro-500gb',
@@ -522,7 +522,7 @@ export const products: Product[] = [
                         type: 'storage',
                         price: 200,
                         inStock: true,
-                        stockQuanity: 10,
+                        stockQuantity: 10,
                     },
                     { 
                         id: 'apple-ipad-pro-1000gb',
@@ -531,7 +531,7 @@ export const products: Product[] = [
                         type: 'storage',
                         price: 600,
                         inStock: true,
-                        stockQuanity: 10,
+                        stockQuantity: 10,
                     },
                     { 
                         id: 'apple-ipad-pro-2000gb',
@@ -540,7 +540,7 @@ export const products: Product[] = [
                         type: 'storage',
                         price: 1000,
                         inStock: true,
-                        stockQuanity: 10,
+                        stockQuantity: 10,
                     }
                 ]
             },
@@ -550,7 +550,7 @@ export const products: Product[] = [
             storage: '256gb'
         },
         inStock: true,
-        stockQuanity: 70,
+        stockQuantity: 70,
         rating: 0,
         reviewCount: 0,
         tags: [
@@ -594,7 +594,7 @@ export const products: Product[] = [
         brand: 'SteelSeries',
         hasVariants: false,
         inStock: true,
-        stockQuanity: 100,
+        stockQuantity: 100,
         rating: 0,
         reviewCount: 0,
         tags: [
@@ -638,7 +638,7 @@ export const products: Product[] = [
         brand: 'Razer',
         hasVariants: false,
         inStock: true,
-        stockQuanity: 100,
+        stockQuantity: 100,
         rating: 0,
         reviewCount: 0,
         tags: [
@@ -684,7 +684,7 @@ export const products: Product[] = [
         brand: 'Creality',
         hasVariants: false,
         inStock: true,
-        stockQuanity: 100,
+        stockQuantity: 100,
         rating: 0,
         reviewCount: 0,
         tags: [
@@ -752,7 +752,7 @@ export const products: Product[] = [
                             '/images/products/home/desk/black/deskblack5.png',
                         ],
                         inStock: true,
-                        stockQuanity: 25,
+                        stockQuantity: 25,
                     },
                     {
                         id: 'standing-desk-brown',
@@ -767,7 +767,7 @@ export const products: Product[] = [
                             '/images/products/home/desk/brown/deskbrown5.png',
                         ],
                         inStock: true,
-                        stockQuanity: 25,
+                        stockQuantity: 25,
                     },
                     {
                         id: 'standing-desk-natural',
@@ -782,7 +782,7 @@ export const products: Product[] = [
                             '/images/products/home/desk/natural/desknatural5.png',
                         ],
                         inStock: true,
-                        stockQuanity: 25,
+                        stockQuantity: 25,
                     },
                     {
                         id: 'standing-desk-white',
@@ -797,7 +797,7 @@ export const products: Product[] = [
                             '/images/products/home/desk/white/deskwhite5.png',
                         ],
                         inStock: true,
-                        stockQuanity: 25,
+                        stockQuantity: 25,
                     }
                 ]
             }
@@ -806,7 +806,7 @@ export const products: Product[] = [
             color: 'black'
         },
         inStock: true,
-        stockQuanity: 100,
+        stockQuantity: 100,
         rating: 0,
         reviewCount: 0,
         tags: [
@@ -854,7 +854,7 @@ export const products: Product[] = [
         brand: 'Urevo',
         hasVariants: false,
         inStock: true,
-        stockQuanity: 100,
+        stockQuantity: 100,
         rating: 0,
         reviewCount: 0,
         tags: [
@@ -927,7 +927,7 @@ export const products: Product[] = [
         brand: 'Roborock',
         hasVariants: false,
         inStock: true,
-        stockQuanity: 100,
+        stockQuantity: 100,
         rating: 0,
         reviewCount: 0,
         tags: [
@@ -970,7 +970,7 @@ export const products: Product[] = [
         brand: 'Bobs',
         hasVariants: false,
         inStock: true,
-        stockQuanity: 5,
+        stockQuantity: 5,
         rating: 0,
         reviewCount: 0,
         tags: [
@@ -1025,7 +1025,7 @@ export const products: Product[] = [
                             '/images/products/home/chair/chairgalaxy.png'
                         ],
                         inStock: true,
-                        stockQuanity: 10,
+                        stockQuantity: 10,
                     },
                     {
                         id: 'branch-verve-chair-wheat',
@@ -1036,7 +1036,7 @@ export const products: Product[] = [
                             '/images/products/home/chair/chairwheat.png'
                         ],
                         inStock: true,
-                        stockQuanity: 10,
+                        stockQuantity: 10,
                     },
                     {
                         id: 'branch-verve-chair-coral',
@@ -1047,7 +1047,7 @@ export const products: Product[] = [
                             '/images/products/home/chair/chaircoral.png'
                         ],
                         inStock: true,
-                        stockQuanity: 10,
+                        stockQuantity: 10,
                     },
                     {
                         id: 'branch-verve-chair-lunar',
@@ -1058,7 +1058,7 @@ export const products: Product[] = [
                             '/images/products/home/chair/chairlunar.png'
                         ],
                         inStock: true,
-                        stockQuanity: 10,
+                        stockQuantity: 10,
                     }
                     ,{
                         id: 'branch-verve-chair-mint',
@@ -1069,7 +1069,7 @@ export const products: Product[] = [
                             '/images/products/home/chair/chairmint.png'
                         ],
                         inStock: true,
-                        stockQuanity: 10,
+                        stockQuantity: 10,
                     }
                     ,{
                         id: 'branch-verve-chair-cobalt',
@@ -1080,7 +1080,7 @@ export const products: Product[] = [
                             '/images/products/home/chair/chaircobalt.png'
                         ],
                         inStock: true,
-                        stockQuanity: 10,
+                        stockQuantity: 10,
                     }
                     ,{
                         id: 'branch-verve-chair-mist',
@@ -1091,7 +1091,7 @@ export const products: Product[] = [
                             '/images/products/home/chair/chairmist.png'
                         ],
                         inStock: true,
-                        stockQuanity: 10,
+                        stockQuantity: 10,
                     }
                 ]
             }
@@ -1100,7 +1100,7 @@ export const products: Product[] = [
             color: 'galaxy'
         },
         inStock: true,
-        stockQuanity: 70,
+        stockQuantity: 70,
         rating: 0,
         reviewCount: 0,
         tags: [
@@ -1154,7 +1154,7 @@ export const products: Product[] = [
                         type: 'size',
                         price: 0,
                         inStock: true,
-                        stockQuanity: 20
+                        stockQuantity: 20
                     },
                     {
                         id: 'mattress-full',
@@ -1163,7 +1163,7 @@ export const products: Product[] = [
                         type: 'size',
                         price: 900,
                         inStock: true,
-                        stockQuanity: 20
+                        stockQuantity: 20
                     },
                     {
                         id: 'mattress-queen',
@@ -1172,7 +1172,7 @@ export const products: Product[] = [
                         type: 'size',
                         price: 1300,
                         inStock: true,
-                        stockQuanity: 20
+                        stockQuantity: 20
                     },
                     {
                         id: 'mattress-king',
@@ -1181,7 +1181,7 @@ export const products: Product[] = [
                         type: 'size',
                         price: 2100,
                         inStock: true,
-                        stockQuanity: 20
+                        stockQuantity: 20
                     },
                     {
                         id: 'mattress-cal-king',
@@ -1190,7 +1190,7 @@ export const products: Product[] = [
                         type: 'size',
                         price: 2100,
                         inStock: true,
-                        stockQuanity: 20
+                        stockQuantity: 20
                     }
                 ]
             }
@@ -1199,7 +1199,7 @@ export const products: Product[] = [
             size: 'twin-xl'
         },
         inStock: true,
-        stockQuanity: 100,
+        stockQuantity: 100,
         rating: 0,
         reviewCount: 0,
         tags: [
@@ -1252,7 +1252,7 @@ export const products: Product[] = [
         brand: 'LG',
         hasVariants: false,
         inStock: true,
-        stockQuanity: 30,
+        stockQuantity: 30,
         rating: 0,
         reviewCount: 0,
         tags: [
@@ -1305,7 +1305,7 @@ export const products: Product[] = [
                         value: 'extra-small',
                         type: 'size',
                         inStock: true,
-                        stockQuanity: 20
+                        stockQuantity: 20
                     },
                     {
                         id: 'paul-konerko-jersey-small',
@@ -1313,7 +1313,7 @@ export const products: Product[] = [
                         value: 'small',
                         type: 'size',
                         inStock: true,
-                        stockQuanity: 20
+                        stockQuantity: 20
                     },
                     {
                         id: 'paul-konerko-jersey-medium',
@@ -1321,7 +1321,7 @@ export const products: Product[] = [
                         value: 'medium',
                         type: 'size',
                         inStock: true,
-                        stockQuanity: 20
+                        stockQuantity: 20
                     },
                     {
                         id: 'paul-konerko-jersey-large',
@@ -1329,7 +1329,7 @@ export const products: Product[] = [
                         value: 'large',
                         type: 'size',
                         inStock: true,
-                        stockQuanity: 20
+                        stockQuantity: 20
                     },
                     {
                         id: 'paul-konerko-jersey-extra-large',
@@ -1337,7 +1337,7 @@ export const products: Product[] = [
                         value: 'extra-large',
                         type: 'size',
                         inStock: true,
-                        stockQuanity: 20
+                        stockQuantity: 20
                     }
                 ]
             }
@@ -1346,7 +1346,7 @@ export const products: Product[] = [
             size: 'small'
         },
         inStock: true,
-        stockQuanity: 100,
+        stockQuantity: 100,
         rating: 0,
         reviewCount: 0,
         tags: [
@@ -1404,7 +1404,7 @@ export const products: Product[] = [
                         value: 'extra-small',
                         type: 'size',
                         inStock: true,
-                        stockQuanity: 20
+                        stockQuantity: 20
                     },
                     {
                         id: 'chelsea-jersey-small',
@@ -1412,7 +1412,7 @@ export const products: Product[] = [
                         value: 'small',
                         type: 'size',
                         inStock: true,
-                        stockQuanity: 20
+                        stockQuantity: 20
                     },
                     {
                         id: 'chelsea-jersey-medium',
@@ -1420,7 +1420,7 @@ export const products: Product[] = [
                         value: 'medium',
                         type: 'size',
                         inStock: true,
-                        stockQuanity: 20
+                        stockQuantity: 20
                     },
                     {
                         id: 'chelsea-jersey-large',
@@ -1428,7 +1428,7 @@ export const products: Product[] = [
                         value: 'large',
                         type: 'size',
                         inStock: true,
-                        stockQuanity: 20
+                        stockQuantity: 20
                     },
                     {
                         id: 'chelsea-jersey-extra-large',
@@ -1436,7 +1436,7 @@ export const products: Product[] = [
                         value: 'extra-large',
                         type: 'size',
                         inStock: true,
-                        stockQuanity: 20
+                        stockQuantity: 20
                     }
                 ]
             }
@@ -1445,7 +1445,7 @@ export const products: Product[] = [
             size: 'small'
         },
         inStock: true,
-        stockQuanity: 100,
+        stockQuantity: 100,
         rating: 0,
         reviewCount: 0,
         tags: [
@@ -1500,7 +1500,7 @@ export const products: Product[] = [
                         value: 'extra-small',
                         type: 'size',
                         inStock: true,
-                        stockQuanity: 20
+                        stockQuantity: 20
                     },
                     {
                         id: 'bedard-jersey-small',
@@ -1508,7 +1508,7 @@ export const products: Product[] = [
                         value: 'small',
                         type: 'size',
                         inStock: true,
-                        stockQuanity: 20
+                        stockQuantity: 20
                     },
                     {
                         id: 'bedard-jersey-medium',
@@ -1516,7 +1516,7 @@ export const products: Product[] = [
                         value: 'medium',
                         type: 'size',
                         inStock: true,
-                        stockQuanity: 20
+                        stockQuantity: 20
                     },
                     {
                         id: 'bedard-jersey-large',
@@ -1524,7 +1524,7 @@ export const products: Product[] = [
                         value: 'large',
                         type: 'size',
                         inStock: true,
-                        stockQuanity: 20
+                        stockQuantity: 20
                     },
                     {
                         id: 'bedard-jersey-extra-large',
@@ -1532,13 +1532,13 @@ export const products: Product[] = [
                         value: 'extra-large',
                         type: 'size',
                         inStock: true,
-                        stockQuanity: 20
+                        stockQuantity: 20
                     }
                 ]
             }
         ],
         inStock: true,
-        stockQuanity: 100,
+        stockQuantity: 100,
         rating: 0,
         reviewCount: 0,
         tags: [
@@ -1586,7 +1586,7 @@ export const products: Product[] = [
                         value: 'extra-small',
                         type: 'size',
                         inStock: true,
-                        stockQuanity: 20
+                        stockQuantity: 20
                     },
                     {
                         id: 'jordan-love-jersey-small',
@@ -1594,7 +1594,7 @@ export const products: Product[] = [
                         value: 'small',
                         type: 'size',
                         inStock: true,
-                        stockQuanity: 20
+                        stockQuantity: 20
                     },
                     {
                         id: 'jordan-love-jersey-medium',
@@ -1602,7 +1602,7 @@ export const products: Product[] = [
                         value: 'medium',
                         type: 'size',
                         inStock: true,
-                        stockQuanity: 20
+                        stockQuantity: 20
                     },
                     {
                         id: 'jordan-love-jersey-large',
@@ -1610,7 +1610,7 @@ export const products: Product[] = [
                         value: 'large',
                         type: 'size',
                         inStock: true,
-                        stockQuanity: 20
+                        stockQuantity: 20
                     },
                     {
                         id: 'jordan-love-jersey-extra-large',
@@ -1618,13 +1618,13 @@ export const products: Product[] = [
                         value: 'extra-large',
                         type: 'size',
                         inStock: true,
-                        stockQuanity: 20
+                        stockQuantity: 20
                     }
                 ]
             }
         ],
         inStock: true,
-        stockQuanity: 100,
+        stockQuantity: 100,
         rating: 0,
         reviewCount: 0,
         tags: [
@@ -1672,7 +1672,7 @@ export const products: Product[] = [
                         value: 'extra-small',
                         type: 'size',
                         inStock: true,
-                        stockQuanity: 20
+                        stockQuantity: 20
                     },
                     {
                         id: 'derrick-rose-jersey-small',
@@ -1680,7 +1680,7 @@ export const products: Product[] = [
                         value: 'small',
                         type: 'size',
                         inStock: true,
-                        stockQuanity: 20
+                        stockQuantity: 20
                     },
                     {
                         id: 'derrick-rose-jersey-medium',
@@ -1688,7 +1688,7 @@ export const products: Product[] = [
                         value: 'medium',
                         type: 'size',
                         inStock: true,
-                        stockQuanity: 20
+                        stockQuantity: 20
                     },
                     {
                         id: 'derrick-rose-jersey-large',
@@ -1696,7 +1696,7 @@ export const products: Product[] = [
                         value: 'large',
                         type: 'size',
                         inStock: true,
-                        stockQuanity: 20
+                        stockQuantity: 20
                     },
                     {
                         id: 'derrick-rose-jersey-extra-large',
@@ -1704,13 +1704,13 @@ export const products: Product[] = [
                         value: 'extra-large',
                         type: 'size',
                         inStock: true,
-                        stockQuanity: 20
+                        stockQuantity: 20
                     }
                 ]
             }
         ],
         inStock: true,
-        stockQuanity: 100,
+        stockQuantity: 100,
         rating: 0,
         reviewCount: 0,
         tags: [
@@ -1748,7 +1748,7 @@ export const products: Product[] = [
         brand: 'WWE',
         hasVariants: false,
         inStock: true,
-        stockQuanity: 100,
+        stockQuantity: 100,
         rating: 0,
         reviewCount: 0,
         tags: [
@@ -1792,7 +1792,7 @@ export const products: Product[] = [
         brand: 'Ninja',
         hasVariants: false,
         inStock: true,
-        stockQuanity: 100,
+        stockQuantity: 100,
         rating: 0,
         reviewCount: 0,
         tags: [
@@ -1860,7 +1860,7 @@ export const products: Product[] = [
                             '/images/products/kitchen/mixer/red/mixerred4.png'
                         ],
                         inStock: true,
-                        stockQuanity: 10
+                        stockQuantity: 10
                     },
                     {
                         id: 'kitchenaid-stand-mixer-silver',
@@ -1874,7 +1874,7 @@ export const products: Product[] = [
                             '/images/products/kitchen/mixer/silver/mixersilver4.png'
                         ],
                         inStock: true,
-                        stockQuanity: 10
+                        stockQuantity: 10
                     },
                     {
                         id: 'kitchenaid-stand-mixer-blue',
@@ -1888,7 +1888,7 @@ export const products: Product[] = [
                             '/images/products/kitchen/mixer/blue/mixerblue4.png'
                         ],
                         inStock: true,
-                        stockQuanity: 10
+                        stockQuantity: 10
                     },
                 ]
             }
@@ -1897,7 +1897,7 @@ export const products: Product[] = [
             color: 'red'
         },
         inStock: true,
-        stockQuanity: 30,
+        stockQuantity: 30,
         rating: 0,
         reviewCount: 0,
         tags: [
@@ -1938,7 +1938,7 @@ export const products: Product[] = [
         brand: 'Hexclad',
         hasVariants: false,
         inStock: true,
-        stockQuanity: 25,
+        stockQuantity: 25,
         rating: 0,
         reviewCount: 0,
         tags: [
@@ -1987,7 +1987,7 @@ export const products: Product[] = [
         brand: 'Ninja',
         hasVariants: false,
         inStock: true,
-        stockQuanity: 100,
+        stockQuantity: 100,
         rating: 0,
         reviewCount: 0,
         tags: [
@@ -2033,7 +2033,7 @@ export const products: Product[] = [
         brand: 'Sodasteam',
         hasVariants: false,
         inStock: true,
-        stockQuanity: 100,
+        stockQuantity: 100,
         rating: 0,
         reviewCount: 0,
         tags: [
@@ -2077,7 +2077,7 @@ export const products: Product[] = [
         brand: 'Toyota',
         hasVariants: false,
         inStock: true,
-        stockQuanity: 5,
+        stockQuantity: 5,
         rating: 0,
         reviewCount: 0,
         tags: [
@@ -2115,7 +2115,7 @@ export const products: Product[] = [
         brand: 'Kawasaki',
         hasVariants: false,
         inStock: true,
-        stockQuanity: 10,
+        stockQuantity: 10,
         rating: 0,
         reviewCount: 0,
         tags: [],
@@ -2153,7 +2153,7 @@ export const products: Product[] = [
         brand: 'Porche',
         hasVariants: false,
         inStock: true,
-        stockQuanity: 5,
+        stockQuantity: 5,
         rating: 0,
         reviewCount: 0,
         tags: [],
@@ -2236,7 +2236,7 @@ export const products: Product[] = [
         brand: 'JamesEdition',
         hasVariants: false,
         inStock: true,
-        stockQuanity: 1,
+        stockQuantity: 1,
         rating: 0,
         reviewCount: 0,
         tags: [

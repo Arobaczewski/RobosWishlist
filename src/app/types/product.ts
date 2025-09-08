@@ -6,7 +6,7 @@ export interface ProductVariant {
     price?: number;
     images?: string[];
     inStock: boolean,
-    stockQuanity: number;
+    stockQuantity: number;
     sku?: string;
 }
 
@@ -31,7 +31,7 @@ export interface Product {
     variantOptions?: ProductVariantOption[];
     defaultVariants?: { [variantType: string]: string };
     inStock: boolean;
-    stockQuanity: number;
+    stockQuantity: number;
     rating?: number;
     reviewCount: number;
     tags?: string[];
