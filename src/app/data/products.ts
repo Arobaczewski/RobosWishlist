@@ -670,7 +670,7 @@ export const products: Product[] = [
         tags: [],
         featured: false,
         onSale: false
-    }
+    },
     {
         id: '12',
         name: `Urevo - SP1 Lite Under Desk Treadmill & Walking Pad - Black`,
@@ -1383,102 +1383,217 @@ export const products: Product[] = [
     },
     {
         id: '24',
-        name: '',
-        description: ``,
-        basePrice: ,
-        originalPrice: ,
+        name: 'Ninja - NeverClog Cold Press Juicer - Charcoal',
+        description: `Introducing the Ninja NeverClog Cold Press Juicer, 
+                      engineered to power through tough ingredients for 
+                      non-stop juicing. Customize the amount of pulp in 
+                      every glass based on your preference: Less Pulp or 
+                      Lots of Pulp. Now with a larger 24 oz. juice jug & 
+                      36 oz. pulp container, allowing you to make larger 
+                      batches of juice for the whole family. It's easy to 
+                      clean, compact in size, and quiet.`,
+        basePrice: 149.99,
         images: [
-
+            '/images/products/kitchen/juicer/juicer1.png',
+            '/images/products/kitchen/juicer/juicer2.png',
+            '/images/products/kitchen/juicer/juicer3.png',
+            '/images/products/kitchen/juicer/juicer4.png',
+            '/images/products/kitchen/juicer/juicer5.png'
         ],
-        category: '',
-        brand: '',
-        hasVariants: ,
+        category: 'kitchen',
+        brand: 'Ninja',
+        hasVariants: false,
         inStock: true,
         stockQuanity: 100,
-        rating: 5,
-        reviewCount: 100,
+        rating: 0,
+        reviewCount: 0,
         tags: [],
-        featured: ,
+        featured: false,
         onSale: false
     },
     {
         id: '25',
-        name: '',
-        description: ``,
-        basePrice: ,
-        originalPrice: ,
+        name: 'KitchenAid - 5.5 Quart Bowl-Lift Stand Mixer',
+        description: `Up your culinary caliber with 2x the power in the 
+                      bowl than our Tilt Head Stand Mixer.* 
+                      Professional-style performance paired with a 3-point 
+                      locking bowl provides you with stability for mixing 
+                      heavy, dense ingredients. Designed with 11 distinct 
+                      speeds, including 1/2 speed, you'll have power and 
+                      control from high to low, and everything in between. 
+                      So no matter if you're folding, kneading, mixing, 
+                      shredding, or beating, the KitchenAid 5.5 Quart 
+                      Bowl-Lift Stand Mixer is designed to take it all on. 
+                      To amplify your creativity, explore 10+ stand mixer 
+                      attachments, each with the power to open a world of 
+                      untapped cooking techniques, experimentation and 
+                      inspiration.** *Compared to KSM150 when measuring 
+                      peak HP in the bowl; above speed 2.**Attachments 
+                      sold separately.`,
+        basePrice: 499.99,
         images: [
-
+            '/images/products/kitchen/mixer/red/mixerred1.png',
+            '/images/products/kitchen/mixer/red/mixerred2.png',
+            '/images/products/kitchen/mixer/red/mixerred3.png',
+            '/images/products/kitchen/mixer/red/mixerred4.png'
         ],
-        category: '',
-        brand: '',
-        hasVariants: ,
+        category: 'kitchen',
+        brand: 'KitchenAid',
+        hasVariants: true,
+        variantOptions: [
+            {
+                type: 'color',
+                name: 'Color',
+                required: true,
+                variants: [
+                    {
+                        id: 'kitchenaid-stand-mixer-red',
+                        name: 'Red',
+                        value: 'red',
+                        type: 'color',
+                        images: [
+                            '/images/products/kitchen/mixer/red/mixerred1.png',
+                            '/images/products/kitchen/mixer/red/mixerred2.png',
+                            '/images/products/kitchen/mixer/red/mixerred3.png',
+                            '/images/products/kitchen/mixer/red/mixerred4.png'
+                        ],
+                        inStock: true,
+                        stockQuanity: 10
+                    },
+                    {
+                        id: 'kitchenaid-stand-mixer-silver',
+                        name: 'Silver',
+                        value: 'silver',
+                        type: 'color',
+                        images: [
+                            '/images/products/kitchen/mixer/silver/mixersilver1.png',
+                            '/images/products/kitchen/mixer/silver/mixersilver2.png',
+                            '/images/products/kitchen/mixer/silver/mixersilver3.png',
+                            '/images/products/kitchen/mixer/silver/mixersilver4.png'
+                        ],
+                        inStock: true,
+                        stockQuanity: 10
+                    },
+                    {
+                        id: 'kitchenaid-stand-mixer-blue',
+                        name: 'Blue',
+                        value: 'blue',
+                        type: 'color',
+                        images: [
+                            '/images/products/kitchen/mixer/blue/mixerblue1.png',
+                            '/images/products/kitchen/mixer/blue/mixerblue2.png',
+                            '/images/products/kitchen/mixer/blue/mixerblue3.png',
+                            '/images/products/kitchen/mixer/blue/mixerblue4.png'
+                        ],
+                        inStock: true,
+                        stockQuanity: 10
+                    },
+                ]
+            }
+        ],
+        defaultVariants: {
+            color: 'red'
+        },
         inStock: true,
-        stockQuanity: 100,
-        rating: 5,
-        reviewCount: 100,
+        stockQuanity: 30,
+        rating: 0,
+        reviewCount: 0,
         tags: [],
-        featured: ,
+        featured: false,
         onSale: false
     },
     {
         id: '26',
-        name: '',
-        description: ``,
-        basePrice: ,
-        originalPrice: ,
+        name: 'Hexclad Hybrid Pots & Pans Set, 12-pc',
+        description: `Our best-selling set includes the pots and pans 
+                      you’ll use every single day. These are the three 
+                      pans that home cooks reach for the most–whether 
+                      scrambling eggs for two, sizzling up dinner for 
+                      four, or searing chops. Our pots are perfect for 
+                      hot chocolate, mac ‘n cheese, or a big, robust 
+                      braise or soup.`,
+        basePrice: 699.99,
         images: [
-
+            '/images/products/kitchen/potsandpans/potsandpans1.png',
+            '/images/products/kitchen/potsandpans/potsandpans2.png',
+            '/images/products/kitchen/potsandpans/potsandpans3.png',
         ],
-        category: '',
-        brand: '',
-        hasVariants: ,
+        category: 'kitchen',
+        brand: 'Hexclad',
+        hasVariants: false,
         inStock: true,
-        stockQuanity: 100,
-        rating: 5,
-        reviewCount: 100,
+        stockQuanity: 25,
+        rating: 0,
+        reviewCount: 0,
         tags: [],
-        featured: ,
+        featured: true,
         onSale: false
     },
     {
         id: '27',
-        name: '',
-        description: ``,
-        basePrice: ,
-        originalPrice: ,
+        name: `Ninja - SLUSHi 5-in-1 Professional Frozen Drink Maker, 
+               88 oz. Frozen Drink & Slushie Machine, 5 Preset Programs - 
+               Artic Blue & Gray`,
+        description: `The Ninja SLUSHi Professional Frozen Drink Maker is 
+                      the easiest way to make frozen drinks at home. No 
+                      ice needed, no blending, no hassles. Create tons of 
+                      drinks with as few as one ingredient. Premium XL 
+                      Capacity unlocks the ultimate party starter so you 
+                      can make fun, flavorful drinks for everyone. No more 
+                      watered-down, tasteless drinks. SLUSHi works quickly 
+                      and keeps drinks frozen for up to 12 hours.`,
+        basePrice: 349.99,
         images: [
-
+            '/images/products/kitchen/slushi/slushi1.png',
+            '/images/products/kitchen/slushi/slushi2.png',
+            '/images/products/kitchen/slushi/slushi3.png',
+            '/images/products/kitchen/slushi/slushi4.png',
+            '/images/products/kitchen/slushi/slushi5.png',
+            '/images/products/kitchen/slushi/slushi6.png',
+            '/images/products/kitchen/slushi/slushi7.png',
+            '/images/products/kitchen/slushi/slushi8.png'
         ],
-        category: '',
-        brand: '',
-        hasVariants: ,
+        category: 'kitchen',
+        brand: 'Ninja',
+        hasVariants: false,
         inStock: true,
         stockQuanity: 100,
-        rating: 5,
-        reviewCount: 100,
+        rating: 0,
+        reviewCount: 0,
         tags: [],
-        featured: ,
+        featured: false,
         onSale: false
     },
     {
         id: '28',
-        name: '',
-        description: ``,
-        basePrice: ,
-        originalPrice: ,
+        name: 'Sodastream - ensō',
+        description: `Enjoy a fresh and personalized sparkling drink 
+                      with enso™, our premium sparkling drink maker. It 
+                      is not only beautiful in both form and function, 
+                      but also embodies SodaStream's long-standing 
+                      expertise in innovation and functionality. Designed 
+                      by Naoto Fukasawa, this product combines remarkable 
+                      high-end materials and minimalistic style. Crafted 
+                      with passion and care for every detail, it offers 
+                      an extraordinary sparkling drink experience.`,
+        basePrice: 199.99,
         images: [
-
+            '/images/products/kitchen/sodastream/sodastream1.png',
+            '/images/products/kitchen/sodastream/sodastream2.png',
+            '/images/products/kitchen/sodastream/sodastream3.png',
+            '/images/products/kitchen/sodastream/sodastream4.png',
+            '/images/products/kitchen/sodastream/sodastream5.png',
+            '/images/products/kitchen/sodastream/sodastream6.png'
         ],
-        category: '',
-        brand: '',
-        hasVariants: ,
+        category: 'kitchen',
+        brand: 'Sodasteam',
+        hasVariants: false,
         inStock: true,
         stockQuanity: 100,
-        rating: 5,
-        reviewCount: 100,
+        rating: 0,
+        reviewCount: 0,
         tags: [],
-        featured: ,
+        featured: false,
         onSale: false
     },
     {
