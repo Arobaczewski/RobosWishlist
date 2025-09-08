@@ -21,6 +21,7 @@ export interface Product {
     id: string;
     name: string;
     description: string;
+    keyFeatures: string[];
     basePrice: number;
     originalPrice?: number;
     images: string[];
@@ -36,6 +37,7 @@ export interface Product {
     tags?: string[];
     featured?: boolean;
     onSale?: boolean;
+    externalLink: string;
 }
 
 export interface ProductsResponse{
