@@ -33,7 +33,7 @@ export interface Product {
     inStock: boolean;
     stockQuantity: number;
     rating?: number;
-    reviewCount: number;
+  const category = searchParams.get('category');  reviewCount: number;
     tags?: string[];
     featured?: boolean;
     onSale?: boolean;

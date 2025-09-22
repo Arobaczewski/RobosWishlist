@@ -1,0 +1,28 @@
+### Test all products
+GET http://localhost:3000/api/products
+
+### Test featured products
+GET http://localhost:3000/api/products?featured=true
+
+### Test technology category
+GET http://localhost:3000/api/products?category=technology
+
+### Test single product (MacBook)
+GET http://localhost:3000/api/products/1
+
+### Test MacBook with variants
+GET http://localhost:3000/api/products/1?color=silver&storage=48gb
+
+### Test AirPods Max with color
+GET http://localhost:3000/api/products/2?color=blue
+
+### Test variant availability (POST)
+POST http://localhost:3000/api/products/1
+Content-Type: application/json
+
+{
+  "variants": {
+    "color": "space-black",
+    "storage": "48gb"
+  }
+}
