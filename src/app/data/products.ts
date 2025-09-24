@@ -27,12 +27,12 @@ export const products: Product[] = [
         ],
         basePrice: 3099,
         images: [
-            '/images/products/technology/spaceblack/macblack1.png',
-            '/images/products/technology/spaceblack/macblack2.png',
-            '/images/products/technology/spaceblack/macblack3.png',
-            '/images/products/technology/spaceblack/macblack4.png',
-            '/images/products/technology/spaceblack/macblack5.png',
-            '/images/products/technology/spaceblack/macblack6.png',
+            '/images/products/technology/macbook/spaceblack/macblack1.png',
+            '/images/products/technology/macbook/spaceblack/macblack2.png',
+            '/images/products/technology/macbook/spaceblack/macblack3.png',
+            '/images/products/technology/macbook/spaceblack/macblack4.png',
+            '/images/products/technology/macbook/spaceblack/macblack5.png',
+            '/images/products/technology/macbook/spaceblack/macblack6.png',
         ],
         category: 'technology',
         brand: 'Apple',
@@ -50,12 +50,12 @@ export const products: Product[] = [
                         type: 'color',
                         price: 0,
                         images: [
-                            '/images/products/technology/spaceblack/macblack1.png',
-                            '/images/products/technology/spaceblack/macblack2.png',
-                            '/images/products/technology/spaceblack/macblack3.png',
-                            '/images/products/technology/spaceblack/macblack4.png',
-                            '/images/products/technology/spaceblack/macblack5.png',
-                            '/images/products/technology/spaceblack/macblack6.png',
+                            '/images/products/technology/macbook/spaceblack/macblack1.png',
+                            '/images/products/technology/macbook/spaceblack/macblack2.png',
+                            '/images/products/technology/macbook/spaceblack/macblack3.png',
+                            '/images/products/technology/macbook/spaceblack/macblack4.png',
+                            '/images/products/technology/macbook/spaceblack/macblack5.png',
+                            '/images/products/technology/macbook/spaceblack/macblack6.png',
                         ], 
                         inStock: true,
                         stockQuantity: 25
@@ -67,12 +67,12 @@ export const products: Product[] = [
                         type: 'color',
                         price: 0,
                         images: [
-                            '/images/products/technology/silver/macsilver1.png',
-                            '/images/products/technology/silver/macsilver2.png',
-                            '/images/products/technology/silver/macsilver3.png',
-                            '/images/products/technology/silver/macsilver4.png',
-                            '/images/products/technology/silver/macsilver5.png',
-                            '/images/products/technology/silver/macsilver6.png',
+                            '/images/products/technology/macbook/silver/macsilver1.png',
+                            '/images/products/technology/macbook/silver/macsilver2.png',
+                            '/images/products/technology/macbook/silver/macsilver3.png',
+                            '/images/products/technology/macbook/silver/macsilver4.png',
+                            '/images/products/technology/macbook/silver/macsilver5.png',
+                            '/images/products/technology/macbook/silver/macsilver6.png',
                         ], 
                         inStock: true,
                         stockQuantity: 25
@@ -147,9 +147,9 @@ export const products: Product[] = [
         ],
         basePrice: 549.99,
         images: [
-            '/images/products/technology/midnight/maxmidnight1.png',
-            '/images/products/technology/midnight/maxmidnight2.png',
-            '/images/products/technology/midnight/maxmidnight3.png',
+            '/images/products/technology/airpodmax/midnight/maxmidnight1.png',
+            '/images/products/technology/airpodmax/midnight/maxmidnight2.png',
+            '/images/products/technology/airpodmax/midnight/maxmidnight3.png',
         ],
         category: 'technology',
         brand: 'Apple',
@@ -167,9 +167,9 @@ export const products: Product[] = [
                         type: 'color',
                         price: 0,
                         images: [
-                            '/images/products/technology/midnight/maxmidnight1.png',
-                            '/images/products/technology/midnight/maxmidnight2.png',
-                            '/images/products/technology/midnight/maxmidnight3.png',
+                            '/images/products/technology/airpodmax/midnight/maxmidnight1.png',
+                            '/images/products/technology/airpodmax/midnight/maxmidnight2.png',
+                            '/images/products/technology/airpodmax/midnight/maxmidnight3.png',
                         ],
                         inStock: true,
                         stockQuantity: 20
@@ -181,9 +181,9 @@ export const products: Product[] = [
                         type: 'color',
                         price: 0,
                         images: [
-                            '/images/products/technology/midnight/maxblue1.png',
-                            '/images/products/technology/midnight/maxblue2.png',
-                            '/images/products/technology/midnight/maxblue3.png',
+                            '/images/products/technology/airpodmax/blue/maxblue1.png',
+                            '/images/products/technology/airpodmax/blue/maxblue2.png',
+                            '/images/products/technology/airpodmax/blue/maxblue3.png',
                         ],
                         inStock: true,
                         stockQuantity: 20
@@ -195,9 +195,9 @@ export const products: Product[] = [
                         type: 'color',
                         price: 0,
                         images: [
-                            '/images/products/technology/midnight/maxorange1.png',
-                            '/images/products/technology/midnight/maxorange2.png',
-                            '/images/products/technology/midnight/maxorange3.png'
+                            '/images/products/technology/airpodmax/orange/maxorange1.png',
+                            '/images/products/technology/airpodmax/orange/maxorange2.png',
+                            '/images/products/technology/airpodmax/orange/maxorange3.png'
                         ],
                         inStock: true,
                         stockQuantity: 20
@@ -209,9 +209,9 @@ export const products: Product[] = [
                         type: 'color',
                         price: 0,
                         images: [
-                            '/images/products/technology/midnight/maxpurple1.png',
-                            '/images/products/technology/midnight/maxpurple2.png',
-                            '/images/products/technology/midnight/maxpurple3.png',
+                            '/images/products/technology/airpodmax/purple/maxpurple1.png',
+                            '/images/products/technology/airpodmax/purple/maxpurple2.png',
+                            '/images/products/technology/airpodmax/purple/maxpurple3.png',
                         ],
                         inStock: true,
                         stockQuantity: 20
@@ -223,9 +223,9 @@ export const products: Product[] = [
                         type: 'color',
                         price: 0,
                         images: [
-                            '/images/products/technology/midnight/maxstarlight1.png',
-                            '/images/products/technology/midnight/maxstarlight2.png',
-                            '/images/products/technology/midnight/maxstarlight3.png'
+                            '/images/products/technology/airpodmax/starlight/maxstarlight1.png',
+                            '/images/products/technology/airpodmax/starlight/maxstarlight2.png',
+                            '/images/products/technology/airpodmax/starlight/maxstarlight3.png'
                         ],
                         inStock: true,
                         stockQuantity: 20
@@ -724,11 +724,11 @@ export const products: Product[] = [
         ],
         basePrice: 179.99,
         images: [
-            '/images/products/home/desk/black/blackdesk1.png',
-            '/images/products/home/desk/black/blackdesk2.png',
-            '/images/products/home/desk/black/blackdesk3.png',
-            '/images/products/home/desk/black/blackdesk4.png',
-            '/images/products/home/desk/black/blackdesk5.png'
+            '/images/products/home/desk/black/deskblack1.png',
+            '/images/products/home/desk/black/deskblack2.png',
+            '/images/products/home/desk/black/deskblack3.png',
+            '/images/products/home/desk/black/deskblack4.png',
+            '/images/products/home/desk/black/deskblack5.png'
         ],
         category: 'home',
         brand: 'Bestier',
@@ -1005,7 +1005,7 @@ export const products: Product[] = [
         ],
         basePrice: 599,
         images: [
-            '/images/products/home/chair/chairblack.png'
+            '/images/products/home/chair/chairgalaxy.png'
         ],
         category: 'home',
         brand: 'Branch',
