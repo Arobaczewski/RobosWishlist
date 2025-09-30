@@ -2133,23 +2133,27 @@ export const products: Product[] = [
                        cockpit deliver an unmatched connection between 
                        road, machine, and driver.`,
         keyFeatures: [
-            "kawasaki", "ninja", "zx4rr", "sportbike", "motorcycle",
-            "abs", "inline-four", "quickshifter", "slipper-clutch",
-            "performance", "track-ready", "racing", "two-wheeler"
+            "4.0L naturally aspirated flat-six engine delivering 502 hp",
+            "0-60 mph in 3.2 seconds with a top speed of 198 mph",
+            "Race-derived PDK transmission or 6-speed manual option",
+            "Rear-wheel steering for exceptional agility and precision",
+            "Active aerodynamics with adjustable rear wing for optimal downforce",
+            "Lightweight construction with carbon fiber components",
+            "Track-focused suspension with multiple driving modes (Normal, Sport, Track)"
         ],
         basePrice: 287760,
         images: [
-            '/images/products/dream/sportscar/sportscar1.png',
-            '/images/products/dream/sportscar/sportscar2.png',
-            '/images/products/dream/sportscar/sportscar3.png',
-            '/images/products/dream/sportscar/sportscar4.png',
-            '/images/products/dream/sportscar/sportscar5.png',
-            '/images/products/dream/sportscar/sportscar6.png',
-            '/images/products/dream/sportscar/sportscar7.png',
-            '/images/products/dream/sportscar/sportscar8.png',
-            '/images/products/dream/sportscar/sportscar9.png'
+            '/images/products/dream/sportscar/porche1.png',
+            '/images/products/dream/sportscar/porche2.png',
+            '/images/products/dream/sportscar/porche3.png',
+            '/images/products/dream/sportscar/porche4.png',
+            '/images/products/dream/sportscar/porche5.png',
+            '/images/products/dream/sportscar/porche6.png',
+            '/images/products/dream/sportscar/porche7.png',
+            '/images/products/dream/sportscar/porche8.png',
+            '/images/products/dream/sportscar/porche9.png'
         ],
-        category: 'dream',
+        category: 'dream',  
         brand: 'Porche',
         hasVariants: false,
         inStock: true,

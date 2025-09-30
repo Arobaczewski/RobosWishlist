@@ -1,14 +1,14 @@
-// src/app/shop/page.tsx
+// app/shop/[category]/page.tsx
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
+import { useParams } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { SlidersHorizontal, X } from 'lucide-react';
 import ProductCard from '@/app/components/shop/ProductCard';
 import ProductListItem from '@/app/components/shop/ProductList';
-import FeaturedCarousel from '@/app/components/shop/FeaturedCarousel';
 import ViewToggle from '@/app/components/shop/ViewToggle';
-import { Product } from '../types/product';
+import { Product } from '@/app/types/product';
 
 interface ProductsResponse {
   products: Product[];
@@ -19,7 +19,6 @@ interface ProductsResponse {
 }
 
 interface Filters {
-  category: string;
   brand: string;
   minPrice: string;
   maxPrice: string;
@@ -31,16 +30,26 @@ interface Filters {
   sortOrder: 'asc' | 'desc';
 }
 
-export default function ShopPage() {
+const categoryNames: { [key: string]: string } = {
+  'technology': 'Technology',
+  'home': 'Home',
+  'kitchen': 'Kitchen',
+  'clothing': 'Clothing',
+  'dream': 'Dream Items'
+};
+
+export default function CategoryPage() {
+  const params = useParams();
+  const category = params.category as string;
+  const categoryName = categoryNames[category] || category;
+
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [data, setData] = useState<ProductsResponse | null>(null);
-  const [featuredProducts, setFeaturedProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [showFilters, setShowFilters] = useState(false);
   
   const [filters, setFilters] = useState<Filters>({
-    category: '',
     brand: '',
     minPrice: '',
     maxPrice: '',
@@ -53,25 +62,7 @@ export default function ShopPage() {
   });
 
   const [currentPage, setCurrentPage] = useState(1);
-  const [availableCategories, setAvailableCategories] = useState<string[]>([]);
   const [availableBrands, setAvailableBrands] = useState<string[]>([]);
-
-  // Fetch featured products for carousel
-  useEffect(() => {
-    const fetchFeaturedProducts = async () => {
-      try {
-        const response = await fetch('/api/products?featured=true&limit=10');
-        if (response.ok) {
-          const result = await response.json();
-          setFeaturedProducts(result.products);
-        }
-      } catch (err) {
-        console.error('Error fetching featured products:', err);
-      }
-    };
-
-    fetchFeaturedProducts();
-  }, []);
 
   // Fetch products
   const fetchProducts = useCallback(async () => {
@@ -81,7 +72,9 @@ export default function ShopPage() {
 
       const queryParams = new URLSearchParams();
       
-      if (filters.category) queryParams.set('category', filters.category);
+      // Always include category
+      queryParams.set('category', category);
+      
       if (filters.brand) queryParams.set('brand', filters.brand);
       if (filters.minPrice) queryParams.set('minPrice', filters.minPrice);
       if (filters.maxPrice) queryParams.set('maxPrice', filters.maxPrice);
@@ -104,11 +97,9 @@ export default function ShopPage() {
       const result = await response.json();
       setData(result);
 
-      // Extract unique categories and brands for filters
+      // Extract unique brands for filters
       if (result.products && result.products.length > 0) {
-        const categories = [...new Set(result.products.map((p: Product) => p.category))];
         const brands = [...new Set(result.products.map((p: Product) => p.brand).filter(Boolean))];
-        setAvailableCategories(categories);
         setAvailableBrands(brands);
       }
 
@@ -118,21 +109,20 @@ export default function ShopPage() {
     } finally {
       setLoading(false);
     }
-  }, [filters, currentPage, viewMode]);
+  }, [category, filters, currentPage, viewMode]);
 
   useEffect(() => {
     fetchProducts();
   }, [fetchProducts]);
 
   // Filter handlers
-  const updateFilter = <K extends keyof Filters>(key: K, value: Filters[K]) => {
-  setFilters(prev => ({ ...prev, [key]: value }));
-  setCurrentPage(1);
-};
+  const updateFilter = (key: keyof Filters, value: any) => {
+    setFilters(prev => ({ ...prev, [key]: value }));
+    setCurrentPage(1);
+  };
 
   const clearFilters = () => {
     setFilters({
-      category: '',
       brand: '',
       minPrice: '',
       maxPrice: '',
@@ -146,7 +136,7 @@ export default function ShopPage() {
     setCurrentPage(1);
   };
 
-  const hasActiveFilters = filters.category || filters.brand || filters.minPrice || 
+  const hasActiveFilters = filters.brand || filters.minPrice || 
                           filters.maxPrice || filters.search || filters.featured || 
                           filters.onSale;
 
@@ -158,20 +148,13 @@ export default function ShopPage() {
         <div className="mb-8">
           {/* Title Section */}
           <div className="mb-6">
-            <h1 className="text-4xl font-bold text-gray-900 dark:text-white">
-              Shop
+            <h1 className="text-4xl font-bold text-gray-900 dark:text-white capitalize">
+              {categoryName}
             </h1>
             <p className="text-gray-600 dark:text-gray-400 mt-2">
-              Discover amazing products from our curated collection
+              Browse our collection of {categoryName.toLowerCase()} products
             </p>
           </div>
-
-          {/* Featured Products Carousel */}
-          {featuredProducts.length > 0 && (
-            <div className="mb-6">
-              <FeaturedCarousel products={featuredProducts} />
-            </div>
-          )}
 
           {/* View Toggle and Filters Bar */}
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
@@ -226,28 +209,7 @@ export default function ShopPage() {
                 transition={{ duration: 0.3 }}
                 className="mb-6 p-6 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm"
               >
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                  {/* Category Filter */}
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                      Category
-                    </label>
-                    <select
-                      value={filters.category}
-                      onChange={(e) => updateFilter('category', e.target.value)}
-                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md 
-                               bg-white dark:bg-gray-700 text-gray-900 dark:text-white
-                               focus:outline-none focus:ring-2 focus:ring-purple-500"
-                    >
-                      <option value="">All Categories</option>
-                      {availableCategories.map(category => (
-                        <option key={category} value={category} className="capitalize">
-                          {category}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                   {/* Brand Filter */}
                   <div>
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
@@ -403,7 +365,7 @@ export default function ShopPage() {
             {data.products.length === 0 ? (
               <div className="text-center py-12">
                 <div className="text-gray-500 dark:text-gray-400 text-lg">
-                  No products found matching your criteria
+                  No products found in this category
                 </div>
                 <button
                   onClick={clearFilters}

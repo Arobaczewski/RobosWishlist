@@ -5,7 +5,7 @@ export interface ProductVariant {
     type: 'color' | 'size' | 'storage';
     price?: number;
     images?: string[];
-    inStock: boolean,
+    inStock: boolean;
     stockQuantity: number;
     sku?: string;
 }
@@ -27,20 +27,20 @@ export interface Product {
     images: string[];
     category: string;
     brand?: string;
-    hasVariants: boolean,
+    hasVariants: boolean;
     variantOptions?: ProductVariantOption[];
     defaultVariants?: { [variantType: string]: string };
     inStock: boolean;
     stockQuantity: number;
     rating?: number;
-  const category = searchParams.get('category');  reviewCount: number;
+    reviewCount: number;
     tags?: string[];
     featured?: boolean;
     onSale?: boolean;
     externalLink: string;
 }
 
-export interface ProductsResponse{
+export interface ProductsResponse {
     products: Product[];
     total: number;
     page: number;

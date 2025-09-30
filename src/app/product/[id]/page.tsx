@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Product } from '@/types/product';
+import { Product } from '@/app/types/product';
 
 interface ProductWithVariants {
   product: Product;
