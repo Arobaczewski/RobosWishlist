@@ -472,7 +472,7 @@ export const products: Product[] = [
                     {
                         id: 'apple-ipad-pro-13-space-black',
                         name: 'Space-black',
-                        value: 'space Black',
+                        value: 'space-black',
                         type: 'color',
                         price: 0,
                         images: [

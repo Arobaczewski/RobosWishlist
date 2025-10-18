@@ -2,6 +2,7 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { SlidersHorizontal, X } from 'lucide-react';
 import ProductCard from '@/app/components/shop/ProductCard';
@@ -32,6 +33,9 @@ interface Filters {
 }
 
 export default function ShopPage() {
+  const searchParams = useSearchParams();
+  const urlSearchQuery = searchParams.get('search');
+
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [data, setData] = useState<ProductsResponse | null>(null);
   const [featuredProducts, setFeaturedProducts] = useState<Product[]>([]);
@@ -55,6 +59,13 @@ export default function ShopPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const [availableCategories, setAvailableCategories] = useState<string[]>([]);
   const [availableBrands, setAvailableBrands] = useState<string[]>([]);
+
+  // Sync URL search param with filters
+  useEffect(() => {
+    if (urlSearchQuery) {
+      setFilters(prev => ({ ...prev, search: urlSearchQuery }));
+    }
+  }, [urlSearchQuery]);
 
   // Fetch featured products for carousel
   useEffect(() => {
@@ -126,9 +137,9 @@ export default function ShopPage() {
 
   // Filter handlers
   const updateFilter = <K extends keyof Filters>(key: K, value: Filters[K]) => {
-  setFilters(prev => ({ ...prev, [key]: value }));
-  setCurrentPage(1);
-};
+    setFilters(prev => ({ ...prev, [key]: value }));
+    setCurrentPage(1);
+  };
 
   const clearFilters = () => {
     setFilters({
@@ -159,15 +170,18 @@ export default function ShopPage() {
           {/* Title Section */}
           <div className="mb-6">
             <h1 className="text-4xl font-bold text-gray-900 dark:text-white">
-              Shop
+              {filters.search ? `Search Results for "${filters.search}"` : 'Shop'}
             </h1>
             <p className="text-gray-600 dark:text-gray-400 mt-2">
-              Discover amazing products from our curated collection
+              {filters.search 
+                ? `Showing products matching your search`
+                : 'Discover amazing products from our curated collection'
+              }
             </p>
           </div>
 
-          {/* Featured Products Carousel */}
-          {featuredProducts.length > 0 && (
+          {/* Featured Products Carousel - Hide when searching */}
+          {!filters.search && featuredProducts.length > 0 && (
             <div className="mb-6">
               <FeaturedCarousel products={featuredProducts} />
             </div>
@@ -227,6 +241,22 @@ export default function ShopPage() {
                 className="mb-6 p-6 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm"
               >
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                  {/* Search Filter */}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                      Search
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="Search products..."
+                      value={filters.search}
+                      onChange={(e) => updateFilter('search', e.target.value)}
+                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md 
+                               bg-white dark:bg-gray-700 text-gray-900 dark:text-white
+                               focus:outline-none focus:ring-2 focus:ring-purple-500"
+                    />
+                  </div>
+
                   {/* Category Filter */}
                   <div>
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
@@ -269,8 +299,32 @@ export default function ShopPage() {
                     </select>
                   </div>
 
-                  {/* Price Range */}
+                  {/* Sort */}
                   <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                      Sort By
+                    </label>
+                    <select
+                      value={`${filters.sortBy}-${filters.sortOrder}`}
+                      onChange={(e) => {
+                        const [sortBy, sortOrder] = e.target.value.split('-');
+                        updateFilter('sortBy', sortBy);
+                        updateFilter('sortOrder', sortOrder as 'asc' | 'desc');
+                      }}
+                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md 
+                               bg-white dark:bg-gray-700 text-gray-900 dark:text-white
+                               focus:outline-none focus:ring-2 focus:ring-purple-500"
+                    >
+                      <option value="id-asc">Default</option>
+                      <option value="price-asc">Price: Low to High</option>
+                      <option value="price-desc">Price: High to Low</option>
+                      <option value="name-asc">Name: A to Z</option>
+                      <option value="name-desc">Name: Z to A</option>
+                    </select>
+                  </div>
+
+                  {/* Price Range */}
+                  <div className="md:col-span-2">
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                       Price Range
                     </label>
@@ -294,30 +348,6 @@ export default function ShopPage() {
                                  focus:outline-none focus:ring-2 focus:ring-purple-500"
                       />
                     </div>
-                  </div>
-
-                  {/* Sort */}
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                      Sort By
-                    </label>
-                    <select
-                      value={`${filters.sortBy}-${filters.sortOrder}`}
-                      onChange={(e) => {
-                        const [sortBy, sortOrder] = e.target.value.split('-');
-                        updateFilter('sortBy', sortBy);
-                        updateFilter('sortOrder', sortOrder);
-                      }}
-                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md 
-                               bg-white dark:bg-gray-700 text-gray-900 dark:text-white
-                               focus:outline-none focus:ring-2 focus:ring-purple-500"
-                    >
-                      <option value="id-asc">Default</option>
-                      <option value="price-asc">Price: Low to High</option>
-                      <option value="price-desc">Price: High to Low</option>
-                      <option value="name-asc">Name: A to Z</option>
-                      <option value="name-desc">Name: Z to A</option>
-                    </select>
                   </div>
                 </div>
 
@@ -403,7 +433,10 @@ export default function ShopPage() {
             {data.products.length === 0 ? (
               <div className="text-center py-12">
                 <div className="text-gray-500 dark:text-gray-400 text-lg">
-                  No products found matching your criteria
+                  {filters.search 
+                    ? `No products found matching "${filters.search}"`
+                    : 'No products found matching your criteria'
+                  }
                 </div>
                 <button
                   onClick={clearFilters}
@@ -489,4 +522,4 @@ export default function ShopPage() {
       </div>
     </div>
   );
-}
+} 

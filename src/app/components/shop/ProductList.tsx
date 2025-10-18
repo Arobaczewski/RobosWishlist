@@ -5,8 +5,9 @@ import { motion } from 'framer-motion';
 import { Heart, ShoppingCart, ExternalLink, Star, Check } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Product } from '@/app/types/product';
+import { useFavorites } from '@/app/store/hooks/useFavorites';
 
 interface ProductListItemProps {
   product: Product;
@@ -24,11 +25,19 @@ export default function ProductListItem({
   index = 0
 }: ProductListItemProps) {
   const [isHovered, setIsHovered] = useState(false);
-  const [isFavorited, setIsFavorited] = useState(false);
   const [selectedVariants, setSelectedVariants] = useState<{ [key: string]: string }>({});
   const [currentImage, setCurrentImage] = useState(product.images[0]);
   const [quantity, setQuantity] = useState(1);
   const [addedToCart, setAddedToCart] = useState(false);
+  const { toggleFavorite, isFavorited} = useFavorites();
+  const isProductFavorited = isFavorited(product.id);
+
+
+  const handleToggleFavorite = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    e.preventDefault();
+    toggleFavorite(product.id)
+  }
 
   // Initialize default variants
   useEffect(() => {
@@ -57,15 +66,6 @@ export default function ProductListItem({
   };
 
   const totalPrice = calculateTotalPrice();
-
-  const handleToggleFavorite = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setIsFavorited(!isFavorited);
-    if (onToggleFavorite) {
-      onToggleFavorite(product);
-    }
-  };
 
   const handleVariantChange = (type: string, value: string, variantImages?: string[]) => {
     setSelectedVariants(prev => ({
@@ -115,6 +115,7 @@ export default function ProductListItem({
     ? Math.round(((product.originalPrice! - product.basePrice) / product.originalPrice!) * 100)
     : 0;
 
+
   return (
     <motion.div
       className="group relative"
@@ -128,7 +129,7 @@ export default function ProductListItem({
       onHoverStart={() => setIsHovered(true)}
       onHoverEnd={() => setIsHovered(false)}
     >
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm dark:shadow-lg hover:shadow-md dark:hover:shadow-xl transition-all duration-300 border border-gray-100 dark:border-gray-700 overflow-hidden">
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg shadow-purple-500/20 dark:shadow-purple-500/30 hover:shadow-xl hover:shadow-purple-500/30 dark:hover:shadow-purple-500/40 transition-all duration-300 border border-gray-100 dark:border-gray-700 overflow-hidden">
         
         <div className="flex flex-col lg:flex-row gap-6 p-6">
           {/* Image Section */}
@@ -174,16 +175,16 @@ export default function ProductListItem({
               <div className="absolute top-3 right-3">
                 <motion.button
                   onClick={handleToggleFavorite}
-                  className={`w-9 h-9 rounded-full backdrop-blur-sm border border-white/30 flex items-center justify-center transition-all duration-200 ${
-                    isFavorited 
-                      ? 'bg-red-500 text-white' 
-                      : 'bg-white/80 dark:bg-gray-800/80 text-gray-600 dark:text-gray-400 hover:text-red-500'
-                  }`}
+                  className={`w-8 h-8 rounded-full backdrop-blur-sm border border-white/30 flex items-center justify-center transition-all duration-200 ${
+                      isProductFavorited 
+                        ? 'bg-red-500 text-white' 
+                        : 'bg-white/80 dark:bg-gray-800/80 text-gray-600 dark:text-gray-400 hover:text-red-500'
+                    }`}
                   whileHover={{ scale: 1.1 }}
                   whileTap={{ scale: 0.9 }}
-                  aria-label={isFavorited ? 'Remove from favorites' : 'Add to favorites'}
+                  aria-label={isProductFavorited ? 'Remove from favorites' : 'Add to favorites'}
                 >
-                  <Heart className={`w-4 h-4 ${isFavorited ? 'fill-current' : ''}`} />
+                  <Heart className={`w-4 h-4 ${isProductFavorited ? 'fill-current' : ''}`} />
                 </motion.button>
               </div>
             </div>
@@ -202,27 +203,6 @@ export default function ProductListItem({
                 {product.name}
               </h3>
             </Link>
-
-            {/* Rating & Reviews */}
-            {product.rating && product.reviewCount && (
-              <div className="flex items-center gap-2 mb-4">
-                <div className="flex items-center">
-                  {[...Array(5)].map((_, i) => (
-                    <Star
-                      key={i}
-                      className={`w-4 h-4 ${
-                        i < Math.floor(product.rating!)
-                          ? 'text-yellow-400 fill-current'
-                          : 'text-gray-300 dark:text-gray-600'
-                      }`}
-                    />
-                  ))}
-                </div>
-                <span className="text-sm text-gray-500 dark:text-gray-400">
-                  {product.rating} ({product.reviewCount})
-                </span>
-              </div>
-            )}
 
             {/* Variant Selection - Inline */}
             {product.hasVariants && product.variantOptions && (
@@ -253,14 +233,24 @@ export default function ProductListItem({
                             title={variant.name}
                             style={{
                               backgroundColor: variant.value === 'space-black' ? '#1f2937' :
-                                             variant.value === 'silver' ? '#e5e7eb' :
-                                             variant.value === 'blue' ? '#3b82f6' :
-                                             variant.value === 'midnight' ? '#1e3a8a' :
-                                             variant.value === 'orange' ? '#f97316' :
-                                             variant.value === 'purple' ? '#a855f7' :
-                                             variant.value === 'starlight' ? '#fef3c7' :
-                                             variant.value === 'natural' ? '#d2b48c' :
-                                             variant.value === 'white' ? '#ffffff' : '#9ca3af'
+                                           variant.value === 'silver' ? '#e5e7eb' :
+                                           variant.value === 'blue' ? '#3b82f6' :
+                                           variant.value === 'red' ? '#FF0000' :
+                                           variant.value === 'midnight' ? '#1f2937' :
+                                           variant.value === 'orange' ? '#f97316' :
+                                           variant.value === 'purple' ? '#CBC3E3' :
+                                           variant.value === 'starlight' ? '#fef3c7' :
+                                           variant.value === 'natural' ? '#d2b48c' :
+                                           variant.value === 'white' ? '#ffffff' : 
+                                           variant.value === 'black' ? '#1f2937' : 
+                                           variant.value === 'brown' ? '#964800' : 
+                                           variant.value === 'galaxy' ? '#1f2937' :
+                                           variant.value === 'wheat' ? '#F5DEB3' : 
+                                           variant.value === 'coral' ? '#FF7F50' :
+                                           variant.value === 'lunar' ? '#A9A9A9' :
+                                           variant.value === 'mint' ? '#B6FFBB' :
+                                           variant.value === 'cobalt' ? '#0047AB' :
+                                           variant.value === 'mist' ? '#B0E0E6' : '#9ca3af'
                             }}
                           >
                             {selectedVariants[option.type] === variant.value && (

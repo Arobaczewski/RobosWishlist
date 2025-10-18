@@ -1,12 +1,15 @@
-// components/layout/Navbar.tsx
 'use client';
 
 import { useState } from 'react';
 import Link from "next/link";
-import { Search, Heart, ShoppingCart, User, Menu, X, ChevronDown } from "lucide-react";
+import { Heart, ShoppingCart, User, Menu, X, ChevronDown, LogOut } from "lucide-react";
 import ThemeToggle from "../theme/ThemeToggle";
 import ShopDropdown from './Header/ShopDropdown';
+import SearchBar from './Header/SearchBar';
+import AuthModal from '../auth/AuthModal';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useAppSelector, useAppDispatch } from '@/app/store/hooks/hooks';
+import { logout } from '@/app/store/slices/authSlice';
 
 const categories = [
   { name: 'All Products', value: '' },
@@ -20,6 +23,16 @@ const categories = [
 export default function Header() {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [isMobileCategoriesOpen, setIsMobileCategoriesOpen] = useState(false);
+    const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+    const [showUserMenu, setShowUserMenu] = useState(false);
+    
+    const { user, isAuthenticated } = useAppSelector((state) => state.auth);
+    const dispatch = useAppDispatch();
+
+    const handleLogout = () => {
+      dispatch(logout());
+      setShowUserMenu(false);
+    };
 
     return (
         <>
@@ -54,36 +67,59 @@ export default function Header() {
                 {/* Desktop Actions */}
                 <div className="hidden lg:flex items-center space-x-4">
                     {/* Search Bar */}
-                    <div className="relative">
-                        <form className="relative">
-                            <input 
-                                type="text" 
-                                placeholder="What are you looking for?"
-                                className="pl-10 pr-10 py-2 w-64 rounded-lg
-                                        bg-white/90 text-gray-800 placeholder-gray-500
-                                        border border-white/50
-                                        focus:outline-none focus:ring-2 focus:ring-purple-400
-                                        dark:bg-black/30 dark:text-gray-100 dark:placeholder-gray-300
-                                        dark:border-white/10"
-                            />
-                            <button
-                                type="submit"
-                                className="absolute left-3 top-1/2 transform -translate-y-1/2 text-purple-300 hover:text-purple-500 transition-colors"
-                            >
-                                <Search className="h-4 w-4"/>
-                            </button>
-                        </form>
-                    </div>
+                    <SearchBar />
 
                     {/* Icon Actions */}
                     <div className="flex items-center space-x-3">
-                        <Link href="/" className="p-2 hover:bg-white/10 rounded-full transition-colors">
+                        <Link href="/favorites" className="p-2 hover:bg-white/10 rounded-full transition-colors">
                             <Heart className="h-5 w-5" />
                         </Link>
-                        <Link href="/" className="p-2 hover:bg-white/10 rounded-full transition-colors">
+                        
+                        {/* User Account/Login */}
+                        {isAuthenticated && user ? (
+                          <div className="relative">
+                            <button
+                              onClick={() => setShowUserMenu(!showUserMenu)}
+                              className="flex items-center gap-2 p-2 hover:bg-white/10 rounded-full transition-colors"
+                            >
+                              <User className="h-5 w-5" />
+                              <span className="text-sm font-medium">{user.name.split(' ')[0]}</span>
+                            </button>
+                            
+                            {/* User Dropdown Menu */}
+                            <AnimatePresence>
+                              {showUserMenu && (
+                                <motion.div
+                                  initial={{ opacity: 0, y: -10 }}
+                                  animate={{ opacity: 1, y: 0 }}
+                                  exit={{ opacity: 0, y: -10 }}
+                                  className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-xl border border-gray-200 dark:border-gray-700 overflow-hidden"
+                                >
+                                  <div className="p-3 border-b border-gray-200 dark:border-gray-700">
+                                    <p className="text-sm font-medium text-gray-900 dark:text-white">{user.name}</p>
+                                    <p className="text-xs text-gray-500 dark:text-gray-400">{user.email}</p>
+                                  </div>
+                                  <button
+                                    onClick={handleLogout}
+                                    className="w-full flex items-center gap-2 px-4 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
+                                  >
+                                    <LogOut className="w-4 h-4" />
+                                    Log Out
+                                  </button>
+                                </motion.div>
+                              )}
+                            </AnimatePresence>
+                          </div>
+                        ) : (
+                          <button
+                            onClick={() => setIsAuthModalOpen(true)}
+                            className="p-2 hover:bg-white/10 rounded-full transition-colors"
+                          >
                             <User className="h-5 w-5" />
-                        </Link>
-                        <Link href="/" className="p-2 hover:bg-white/10 rounded-full transition-colors">
+                          </button>
+                        )}
+                        
+                        <Link href="/cart" className="p-2 hover:bg-white/10 rounded-full transition-colors">
                             <ShoppingCart className="h-5 w-5" />
                         </Link>
                         <ThemeToggle/>
@@ -116,26 +152,7 @@ export default function Header() {
                     >
                         <div className="px-6 py-4 space-y-4">
                             {/* Mobile Search */}
-                            <div className="relative">
-                                <form className="relative">
-                                    <input 
-                                        type="text" 
-                                        placeholder="Search products..."
-                                        className="pl-10 pr-4 py-2 w-full rounded-lg
-                                                bg-white/90 text-gray-800 placeholder-gray-500
-                                                border border-white/50
-                                                focus:outline-none focus:ring-2 focus:ring-purple-400
-                                                dark:bg-black/30 dark:text-gray-100 dark:placeholder-gray-300
-                                                dark:border-white/10"
-                                    />
-                                    <button
-                                        type="submit"
-                                        className="absolute left-3 top-1/2 transform -translate-y-1/2 text-purple-300 hover:text-purple-500 transition-colors"
-                                    >
-                                        <Search className="h-4 w-4"/>
-                                    </button>
-                                </form>
-                            </div>
+                            <SearchBar isMobile={true} />
 
                             {/* Mobile Navigation Links */}
                             <nav className="space-y-2">
@@ -203,23 +220,37 @@ export default function Header() {
                             {/* Mobile Action Icons */}
                             <div className="flex items-center justify-around pt-4 border-t border-white/20">
                                 <Link 
-                                    href="/" 
+                                    href="/favorites" 
                                     onClick={() => setIsMobileMenuOpen(false)}
                                     className="flex flex-col items-center gap-1 p-2 hover:bg-white/10 rounded-lg transition-colors"
                                 >
                                     <Heart className="h-5 w-5" />
                                     <span className="text-xs">Favorites</span>
                                 </Link>
-                                <Link 
-                                    href="/" 
-                                    onClick={() => setIsMobileMenuOpen(false)}
+                                
+                                {isAuthenticated && user ? (
+                                  <button
+                                    onClick={handleLogout}
                                     className="flex flex-col items-center gap-1 p-2 hover:bg-white/10 rounded-lg transition-colors"
-                                >
+                                  >
+                                    <LogOut className="h-5 w-5" />
+                                    <span className="text-xs">Logout</span>
+                                  </button>
+                                ) : (
+                                  <button
+                                    onClick={() => {
+                                      setIsMobileMenuOpen(false);
+                                      setIsAuthModalOpen(true);
+                                    }}
+                                    className="flex flex-col items-center gap-1 p-2 hover:bg-white/10 rounded-lg transition-colors"
+                                  >
                                     <User className="h-5 w-5" />
-                                    <span className="text-xs">Account</span>
-                                </Link>
+                                    <span className="text-xs">Login</span>
+                                  </button>
+                                )}
+                                
                                 <Link 
-                                    href="/" 
+                                    href="/cart" 
                                     onClick={() => setIsMobileMenuOpen(false)}
                                     className="flex flex-col items-center gap-1 p-2 hover:bg-white/10 rounded-lg transition-colors"
                                 >
@@ -236,6 +267,12 @@ export default function Header() {
                 )}
             </AnimatePresence>
         </div>
+
+        {/* Auth Modal */}
+        <AuthModal 
+          isOpen={isAuthModalOpen}
+          onClose={() => setIsAuthModalOpen(false)}
+        />
         </>
     );
 }

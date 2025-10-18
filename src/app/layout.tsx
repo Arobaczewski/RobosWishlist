@@ -1,9 +1,11 @@
+
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "./components/theme/ThemeProvider";
 import Navbar from './components/Layout/Navbar'
 import Footer from "./components/Layout/Footer";
+import { Providers } from "./providers";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -29,11 +31,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           dark:bg-gray-900 dark:text-gray-100
         `}
       >
-        <ThemeProvider>
-          <Navbar />
-          {children}
-          <Footer />
-        </ThemeProvider>
+        <Providers>
+          <ThemeProvider>
+            <Navbar />
+              {children}
+            <Footer />
+          </ThemeProvider>
+        </Providers>
       </body>
     </html>
   );

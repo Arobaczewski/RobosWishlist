@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { products } from "@/app/data/products";
 import { Product } from "@/app/types/product";
-import { filter } from "framer-motion/client";
 
 interface ProductsResponse {
     products: Product[];
@@ -53,22 +52,22 @@ export async function GET(request: NextRequest){
         }
 
         if (minPrice) {
-            const min = parseFloat(minPrice)
+            const min = parseFloat(minPrice);
             filteredProducts = filteredProducts.filter(
-                product => product.basePrice > min
+                product => product.basePrice >= min  // Changed to >=
             );
         }
 
         if (maxPrice) {
-            const max = parseFloat(maxPrice)
+            const max = parseFloat(maxPrice);
             filteredProducts = filteredProducts.filter(
-                product => product.basePrice > max
+                product => product.basePrice <= max  // ✅ FIXED: Changed to <=
             );
         }
 
         if (search && search.trim() !== '') {
             const searchTerm = search.toLowerCase().trim();
-            filteredProducts = filteredProducts.filter (product => 
+            filteredProducts = filteredProducts.filter(product => 
                 product.name.toLowerCase().includes(searchTerm) ||
                 product.description.toLowerCase().includes(searchTerm) ||
                 product.brand?.toLowerCase().includes(searchTerm) ||
@@ -114,7 +113,7 @@ export async function GET(request: NextRequest){
                     bValue = b.reviewCount || 0;
                     break;
                 case 'createdAt':
-                    default: 
+                default: 
                     if(sortBy === 'featured'){
                         aValue = a.featured ? 1 : 0;
                         bValue = b.featured ? 1 : 0;
@@ -164,7 +163,7 @@ export async function GET(request: NextRequest){
 
     } catch (error) {
         console.error('Error fetching products:', error);
-        return NextResponse.json (
+        return NextResponse.json(
             {
                 error: 'Failed to fetch products',
                 message: error instanceof Error ? error.message : 'Unknown error'

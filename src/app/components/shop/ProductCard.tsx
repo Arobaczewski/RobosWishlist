@@ -6,6 +6,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import { Product } from '@/app/types/product';
+import { useFavorites } from '@/app/store/hooks/useFavorites';
 
 interface ProductCardProps {
   product: Product;
@@ -25,11 +26,18 @@ export default function ProductCard({
   index = 0
 }: ProductCardProps) {
   const [isHovered, setIsHovered] = useState(false);
-  const [isFavorited, setIsFavorited] = useState(false);
   const [selectedVariants, setSelectedVariants] = useState<{ [key: string]: string }>({});
   const [currentImage, setCurrentImage] = useState(product.images[0]);
   const [quantity, setQuantity] = useState(1);
   const [addedToCart, setAddedToCart] = useState(false);
+  const { toggleFavorite, isFavorited } = useFavorites();
+  const isProductFavorited = isFavorited(product.id);
+
+  const handleToggleFavorite = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    e.preventDefault();
+    toggleFavorite(product.id);
+  }
 
   const calculateTotalPrice = (): number => {
   let total = product.basePrice;
@@ -63,15 +71,6 @@ const totalPrice = calculateTotalPrice();
       setSelectedVariants(product.defaultVariants);
     }
   }, [product]);
-
-  const handleToggleFavorite = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setIsFavorited(!isFavorited);
-    if (onToggleFavorite) {
-      onToggleFavorite(product);
-    }
-  };
 
   const handleVariantChange = (type: string, value: string, variantImages?: string[]) => {
     setSelectedVariants(prev => ({
@@ -137,7 +136,7 @@ const totalPrice = calculateTotalPrice();
       onHoverStart={() => setIsHovered(true)}
       onHoverEnd={() => setIsHovered(false)}
     >
-      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm dark:shadow-lg hover:shadow-xl dark:hover:shadow-2xl transition-all duration-300 overflow-hidden border border-gray-100 dark:border-gray-700">
+      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg shadow-purple-500/20 dark:shadow-purple-500/30 hover:shadow-xl hover:shadow-purple-500/30 dark:hover:shadow-purple-500/40 transition-all duration-300 overflow-hidden border border-gray-100 dark:border-gray-700">
         
         {/* Image Section */}
         <Link href={`/product/${product.id}`} className="block">
@@ -188,15 +187,15 @@ const totalPrice = calculateTotalPrice();
               <motion.button
                 onClick={handleToggleFavorite}
                 className={`w-8 h-8 rounded-full backdrop-blur-sm border border-white/30 flex items-center justify-center transition-all duration-200 ${
-                  isFavorited 
-                    ? 'bg-red-500 text-white' 
-                    : 'bg-white/80 dark:bg-gray-800/80 text-gray-600 dark:text-gray-400 hover:text-red-500'
-                }`}
+                    isProductFavorited 
+                      ? 'bg-red-500 text-white' 
+                      : 'bg-white/80 dark:bg-gray-800/80 text-gray-600 dark:text-gray-400 hover:text-red-500'
+                  }`}
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
-                aria-label={isFavorited ? 'Remove from favorites' : 'Add to favorites'}
+                aria-label={isProductFavorited ? 'Remove from favorites' : 'Add to favorites'}
               >
-                <Heart className={`w-4 h-4 ${isFavorited ? 'fill-current' : ''}`} />
+                <Heart className={`w-4 h-4 ${isProductFavorited ? 'fill-current' : ''}`} />
               </motion.button>
             </div>
 
@@ -221,30 +220,6 @@ const totalPrice = calculateTotalPrice();
               {product.name}
             </h3>
           </Link>
-
-          {/* Rating & Reviews */}
-          {product.rating && product.reviewCount && (
-            <div className="flex items-center gap-1">
-              <div className="flex items-center">
-                {[...Array(5)].map((_, i) => (
-                  <svg
-                    key={i}
-                    className={`w-3 h-3 ${
-                      i < Math.floor(product.rating!)
-                        ? 'text-yellow-400 fill-current'
-                        : 'text-gray-300 dark:text-gray-600'
-                    }`}
-                    viewBox="0 0 20 20"
-                  >
-                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                  </svg>
-                ))}
-              </div>
-              <span className="text-xs text-gray-500 dark:text-gray-400 ml-1">
-                ({product.reviewCount})
-              </span>
-            </div>
-          )}
 
           {/* Variant Selection */}
           {product.hasVariants && product.variantOptions && (
@@ -277,12 +252,22 @@ const totalPrice = calculateTotalPrice();
                             backgroundColor: variant.value === 'space-black' ? '#1f2937' :
                                            variant.value === 'silver' ? '#e5e7eb' :
                                            variant.value === 'blue' ? '#3b82f6' :
-                                           variant.value === 'midnight' ? '#1e3a8a' :
+                                           variant.value === 'red' ? '#FF0000' :
+                                           variant.value === 'midnight' ? '#1f2937' :
                                            variant.value === 'orange' ? '#f97316' :
-                                           variant.value === 'purple' ? '#a855f7' :
+                                           variant.value === 'purple' ? '#CBC3E3' :
                                            variant.value === 'starlight' ? '#fef3c7' :
                                            variant.value === 'natural' ? '#d2b48c' :
-                                           variant.value === 'white' ? '#ffffff' : '#9ca3af'
+                                           variant.value === 'white' ? '#ffffff' : 
+                                           variant.value === 'black' ? '#1f2937' : 
+                                           variant.value === 'brown' ? '#964800' : 
+                                           variant.value === 'galaxy' ? '#1f2937' :
+                                           variant.value === 'wheat' ? '#F5DEB3' : 
+                                           variant.value === 'coral' ? '#FF7F50' :
+                                           variant.value === 'lunar' ? '#A9A9A9' :
+                                           variant.value === 'mint' ? '#B6FFBB' :
+                                           variant.value === 'cobalt' ? '#0047AB' :
+                                           variant.value === 'mist' ? '#B0E0E6' : '#9ca3af'
                           }}
                         >
                           {selectedVariants[option.type] === variant.value && (
