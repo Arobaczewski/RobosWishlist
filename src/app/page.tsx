@@ -159,7 +159,7 @@ export default function HomePage() {
       </div>
 
       {/* Optional: Call to Action Section */}
-      <div className="bg-gradient-to-br from-purple-600 to-indigo-600 py-16 mt-16">
+      <div className="bg-gradient-to-tr from-gray-900 via-purple-300 to-purple-600 py-16 mt-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-4xl font-bold text-white mb-4">
             Can't Find What You're Looking For?
