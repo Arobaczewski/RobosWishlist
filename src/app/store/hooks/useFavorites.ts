@@ -1,10 +1,9 @@
 import { useAppDispatch, useAppSelector } from "./hooks";
 import { addFavorites, removeFavorites, setFavorites } from "../slices/favoritesSlice";
 import { useEffect } from "react";
-import { useDispatch } from "react-redux";
 
 export function useFavorites() {
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
     const { items: favorites } = useAppSelector((state) => state.favorites);
     const { token, isAuthenticated } = useAppSelector((state) => state.auth);
 
@@ -29,45 +28,6 @@ export function useFavorites() {
                 dispatch(setFavorites(data.favorites));
             } 
         } catch (error) {
-            console.error('Error fetching favorites:', error);
-        }
-    };
-
-    const toggleFavorites = async (productId: string) => {
-        if(!token) {
-            alert('Please log in to favorites');
-            return;
-        }
-
-        const isFavorited = favorites.includes(productId);
-
-        try {
-            if(isFavorited){
-                const response = await fetch(`/api/favorites?productId=${productId}`, {
-                    method: 'DELETE',
-                    headers: {
-                        'Authorization': `Bearer ${token}`
-                    }
-                });
-
-                if(response.ok) {
-                    dispatch(removeFavorites(productId));
-                }
-            } else {
-                const response = await fetch('/api/favorites', {
-                    method: 'POST',
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'Content-Type': 'application/json'
-                    }, 
-                    body: JSON.stringify({ productId })
-                });
-
-                if(response.ok) {
-                    dispatch(addFavorites(productId));
-                }
-            }
-        } catch(error) {
             console.error('Error fetching favorites:', error);
         }
     };
@@ -108,7 +68,7 @@ export function useFavorites() {
             }
         } catch (error) {
             console.error('Error toggling favorite:', error);
-            alert('Failed to updated favorites');
+            alert('Failed to update favorites');
         }
     };
 

@@ -30,34 +30,29 @@ export default function ProductCard({
   const [currentImage, setCurrentImage] = useState(product.images[0]);
   const [quantity, setQuantity] = useState(1);
   const [addedToCart, setAddedToCart] = useState(false);
+  
   const { toggleFavorite, isFavorited } = useFavorites();
   const isProductFavorited = isFavorited(product.id);
 
-  const handleToggleFavorite = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    e.preventDefault();
-    toggleFavorite(product.id);
-  }
-
   const calculateTotalPrice = (): number => {
-  let total = product.basePrice;
-  
-  if (product.hasVariants && product.variantOptions) {
-    product.variantOptions.forEach(option => {
-      const selectedValue = selectedVariants[option.type];
-      if (selectedValue) {
-        const variant = option.variants.find(v => v.value === selectedValue);
-        if (variant && variant.price) {
-          total += variant.price;
+    let total = product.basePrice;
+    
+    if (product.hasVariants && product.variantOptions) {
+      product.variantOptions.forEach(option => {
+        const selectedValue = selectedVariants[option.type];
+        if (selectedValue) {
+          const variant = option.variants.find(v => v.value === selectedValue);
+          if (variant && variant.price) {
+            total += variant.price;
+          }
         }
-      }
-    });
-  }
-  
-  return total;
-};
+      });
+    }
+    
+    return total;
+  };
 
-const totalPrice = calculateTotalPrice();
+  const totalPrice = calculateTotalPrice();
 
   const sizeClasses = {
     small: 'w-full max-w-sm',
@@ -71,6 +66,12 @@ const totalPrice = calculateTotalPrice();
       setSelectedVariants(product.defaultVariants);
     }
   }, [product]);
+
+  const handleToggleFavorite = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    toggleFavorite(product.id);
+  };
 
   const handleVariantChange = (type: string, value: string, variantImages?: string[]) => {
     setSelectedVariants(prev => ({
@@ -124,7 +125,7 @@ const totalPrice = calculateTotalPrice();
 
   return (
     <motion.div
-      className={`${sizeClasses[size]} group`}
+      className={`${sizeClasses[size]} group h-full`}
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ 
@@ -136,9 +137,9 @@ const totalPrice = calculateTotalPrice();
       onHoverStart={() => setIsHovered(true)}
       onHoverEnd={() => setIsHovered(false)}
     >
-      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg shadow-purple-500/20 dark:shadow-purple-500/30 hover:shadow-xl hover:shadow-purple-500/30 dark:hover:shadow-purple-500/40 transition-all duration-300 overflow-hidden border border-gray-100 dark:border-gray-700">
+      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg shadow-purple-500/20 dark:shadow-purple-500/30 hover:shadow-xl hover:shadow-purple-500/30 dark:hover:shadow-purple-500/40 transition-all duration-300 overflow-hidden border border-gray-100 dark:border-gray-700 h-full flex flex-col">
         
-        {/* Image Section */}
+        {/* Image Section - Fixed Height */}
         <Link href={`/product/${product.id}`} className="block">
           <div className="relative aspect-square bg-gray-50 dark:bg-gray-700 overflow-hidden">
             <AnimatePresence mode="wait">
@@ -187,10 +188,10 @@ const totalPrice = calculateTotalPrice();
               <motion.button
                 onClick={handleToggleFavorite}
                 className={`w-8 h-8 rounded-full backdrop-blur-sm border border-white/30 flex items-center justify-center transition-all duration-200 ${
-                    isProductFavorited 
-                      ? 'bg-red-500 text-white' 
-                      : 'bg-white/80 dark:bg-gray-800/80 text-gray-600 dark:text-gray-400 hover:text-red-500'
-                  }`}
+                  isProductFavorited 
+                    ? 'bg-red-500 text-white' 
+                    : 'bg-white/80 dark:bg-gray-800/80 text-gray-600 dark:text-gray-400 hover:text-red-500'
+                }`}
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
                 aria-label={isProductFavorited ? 'Remove from favorites' : 'Add to favorites'}
@@ -209,21 +210,22 @@ const totalPrice = calculateTotalPrice();
           </div>
         </Link>
 
-        {/* Content Section - Prevents navigation */}
-        <div className="p-4 space-y-3" onClick={(e) => e.preventDefault()}>
-          {/* Brand & Name */}
-          <Link href={`/product/${product.id}`} className="block">
+        {/* Content Section - Flexible but contained */}
+        <div className="p-4 flex flex-col flex-1" onClick={(e) => e.preventDefault()}>
+          {/* Brand & Name - Fixed Height */}
+          <Link href={`/product/${product.id}`} className="block mb-3">
             <p className="text-xs font-medium text-purple-600 dark:text-purple-400 uppercase tracking-wide">
               {product.brand}
             </p>
-            <h3 className="font-semibold text-gray-900 dark:text-white line-clamp-2 text-sm leading-5 min-h-[2.5rem] transition-colors duration-300 group-hover:text-purple-600 dark:group-hover:text-purple-400">
+            <h3 className="font-semibold text-gray-900 dark:text-white line-clamp-2 text-sm leading-5 h-10 transition-colors duration-300 group-hover:text-purple-600 dark:group-hover:text-purple-400">
               {product.name}
             </h3>
           </Link>
 
-          {/* Variant Selection */}
+
+          {/* Variant Selection - Scrollable if needed */}
           {product.hasVariants && product.variantOptions && (
-            <div className="space-y-2">
+            <div className="space-y-2 mb-3 max-h-32 overflow-y-auto scrollbar-thin scrollbar-thumb-purple-500 scrollbar-track-gray-200 dark:scrollbar-track-gray-700">
               {product.variantOptions.map(option => (
                 <div key={option.type}>
                   <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1.5">
@@ -252,22 +254,12 @@ const totalPrice = calculateTotalPrice();
                             backgroundColor: variant.value === 'space-black' ? '#1f2937' :
                                            variant.value === 'silver' ? '#e5e7eb' :
                                            variant.value === 'blue' ? '#3b82f6' :
-                                           variant.value === 'red' ? '#FF0000' :
-                                           variant.value === 'midnight' ? '#1f2937' :
+                                           variant.value === 'midnight' ? '#1e3a8a' :
                                            variant.value === 'orange' ? '#f97316' :
-                                           variant.value === 'purple' ? '#CBC3E3' :
+                                           variant.value === 'purple' ? '#a855f7' :
                                            variant.value === 'starlight' ? '#fef3c7' :
                                            variant.value === 'natural' ? '#d2b48c' :
-                                           variant.value === 'white' ? '#ffffff' : 
-                                           variant.value === 'black' ? '#1f2937' : 
-                                           variant.value === 'brown' ? '#964800' : 
-                                           variant.value === 'galaxy' ? '#1f2937' :
-                                           variant.value === 'wheat' ? '#F5DEB3' : 
-                                           variant.value === 'coral' ? '#FF7F50' :
-                                           variant.value === 'lunar' ? '#A9A9A9' :
-                                           variant.value === 'mint' ? '#B6FFBB' :
-                                           variant.value === 'cobalt' ? '#0047AB' :
-                                           variant.value === 'mist' ? '#B0E0E6' : '#9ca3af'
+                                           variant.value === 'white' ? '#ffffff' : '#9ca3af'
                           }}
                         >
                           {selectedVariants[option.type] === variant.value && (
@@ -314,99 +306,105 @@ const totalPrice = calculateTotalPrice();
             </div>
           )}
 
-          {/* Price */}
-          <div className="flex flex-col gap-1 pt-1">
-            {totalPrice !== product.basePrice ? (
-              <>
-                <div className="flex items-baseline gap-2">
-                  <span className="text-lg font-bold text-gray-900 dark:text-white transition-colors duration-300">
-                    ${totalPrice.toLocaleString()}
-                  </span>
-                  <span className="text-sm text-gray-500 dark:text-gray-400">
-                    (Base: ${product.basePrice.toLocaleString()})
-                  </span>
-                </div>
-                {hasDiscount && (
-                  <span className="text-sm text-gray-500 dark:text-gray-400 line-through">
-                    ${product.originalPrice!.toLocaleString()}
-                  </span>
-                )}
-              </>
-            ) : (
-              <>
-                <span className="text-lg font-bold text-gray-900 dark:text-white transition-colors duration-300">
-                  ${product.basePrice.toLocaleString()}
-                </span>
-                {hasDiscount && (
-                  <span className="text-sm text-gray-500 dark:text-gray-400 line-through">
-                    ${product.originalPrice!.toLocaleString()}
-                  </span>
-                )}
-              </>
-            )}
-          </div>
+          {/* Spacer to push bottom content down */}
+          <div className="flex-1"></div>
 
-          {/* Stock Status */}
-          <div className="flex items-center gap-2 text-xs">
-            <div className={`w-2 h-2 rounded-full ${
-              product.inStock ? 'bg-green-500' : 'bg-red-500'
-            }`} />
-            <span className={`font-medium ${
-              product.inStock 
-                ? 'text-green-700 dark:text-green-400' 
-                : 'text-red-700 dark:text-red-400'
-            }`}>
-              {product.inStock ? 'In Stock' : 'Out of Stock'}
-            </span>
-          </div>
-
-          {/* Quantity & Add to Cart */}
-          <div className="flex items-center gap-2 pt-2">
-            {/* Quantity Selector */}
-            <div className="flex items-center border border-gray-300 dark:border-gray-600 rounded-lg">
-              <button
-                onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                className="px-2 py-1 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
-              >
-                <span className="text-gray-600 dark:text-gray-400 text-sm">-</span>
-              </button>
-              <span className="px-3 py-1 text-sm font-medium text-gray-900 dark:text-white min-w-[2rem] text-center border-x border-gray-300 dark:border-gray-600">
-                {quantity}
-              </span>
-              <button
-                onClick={() => setQuantity(quantity + 1)}
-                className="px-2 py-1 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
-              >
-                <span className="text-gray-600 dark:text-gray-400 text-sm">+</span>
-              </button>
-            </div>
-
-            {/* Add to Cart Button */}
-            <motion.button
-              onClick={handleAddToCart}
-              disabled={!product.inStock || addedToCart}
-              className={`flex-1 py-2 px-3 rounded-lg font-medium text-sm flex items-center justify-center gap-1.5 transition-all ${
-                addedToCart
-                  ? 'bg-green-500 text-white'
-                  : product.inStock
-                  ? 'bg-purple-500 hover:bg-purple-600 text-white'
-                  : 'bg-gray-300 dark:bg-gray-700 text-gray-500 cursor-not-allowed'
-              }`}
-              whileHover={product.inStock && !addedToCart ? { scale: 1.02 } : {}}
-              whileTap={product.inStock && !addedToCart ? { scale: 0.98 } : {}}
-            >
-              {addedToCart ? (
+          {/* Bottom Section - Fixed at bottom */}
+          <div className="space-y-3 mt-auto">
+            {/* Price */}
+            <div className="flex flex-col gap-1">
+              {totalPrice !== product.basePrice ? (
                 <>
-                  <Check className="w-4 h-4" />
-                  Added!
+                  <div className="flex items-baseline gap-2">
+                    <span className="text-lg font-bold text-gray-900 dark:text-white transition-colors duration-300">
+                      ${totalPrice.toLocaleString()}
+                    </span>
+                    <span className="text-xs text-gray-500 dark:text-gray-400">
+                      (Base: ${product.basePrice.toLocaleString()})
+                    </span>
+                  </div>
+                  {hasDiscount && (
+                    <span className="text-sm text-gray-500 dark:text-gray-400 line-through">
+                      ${product.originalPrice!.toLocaleString()}
+                    </span>
+                  )}
                 </>
               ) : (
                 <>
-                  <ShoppingCart className="w-4 h-4" />
-                  Add
+                  <span className="text-lg font-bold text-gray-900 dark:text-white transition-colors duration-300">
+                    ${product.basePrice.toLocaleString()}
+                  </span>
+                  {hasDiscount && (
+                    <span className="text-sm text-gray-500 dark:text-gray-400 line-through">
+                      ${product.originalPrice!.toLocaleString()}
+                    </span>
+                  )}
                 </>
               )}
-            </motion.button>
+            </div>
+
+            {/* Stock Status */}
+            <div className="flex items-center gap-2 text-xs">
+              <div className={`w-2 h-2 rounded-full ${
+                product.inStock ? 'bg-green-500' : 'bg-red-500'
+              }`} />
+              <span className={`font-medium ${
+                product.inStock 
+                  ? 'text-green-700 dark:text-green-400' 
+                  : 'text-red-700 dark:text-red-400'
+              }`}>
+                {product.inStock ? 'In Stock' : 'Out of Stock'}
+              </span>
+            </div>
+
+            {/* Quantity & Add to Cart */}
+            <div className="flex items-center gap-2">
+              {/* Quantity Selector */}
+              <div className="flex items-center border border-gray-300 dark:border-gray-600 rounded-lg">
+                <button
+                  onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                  className="px-2 py-1 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                >
+                  <span className="text-gray-600 dark:text-gray-400 text-sm">-</span>
+                </button>
+                <span className="px-3 py-1 text-sm font-medium text-gray-900 dark:text-white min-w-[2rem] text-center border-x border-gray-300 dark:border-gray-600">
+                  {quantity}
+                </span>
+                <button
+                  onClick={() => setQuantity(quantity + 1)}
+                  className="px-2 py-1 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                >
+                  <span className="text-gray-600 dark:text-gray-400 text-sm">+</span>
+                </button>
+              </div>
+
+              {/* Add to Cart Button */}
+              <motion.button
+                onClick={handleAddToCart}
+                disabled={!product.inStock || addedToCart}
+                className={`flex-1 py-2 px-3 rounded-lg font-medium text-sm flex items-center justify-center gap-1.5 transition-all ${
+                  addedToCart
+                    ? 'bg-green-500 text-white'
+                    : product.inStock
+                    ? 'bg-purple-500 hover:bg-purple-600 text-white'
+                    : 'bg-gray-300 dark:bg-gray-700 text-gray-500 cursor-not-allowed'
+                }`}
+                whileHover={product.inStock && !addedToCart ? { scale: 1.02 } : {}}
+                whileTap={product.inStock && !addedToCart ? { scale: 0.98 } : {}}
+              >
+                {addedToCart ? (
+                  <>
+                    <Check className="w-4 h-4" />
+                    Added!
+                  </>
+                ) : (
+                  <>
+                    <ShoppingCart className="w-4 h-4" />
+                    Add
+                  </>
+                )}
+              </motion.button>
+            </div>
           </div>
         </div>
       </div>

@@ -10,6 +10,7 @@ import AuthModal from '../auth/AuthModal';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAppSelector, useAppDispatch } from '@/app/store/hooks/hooks';
 import { logout } from '@/app/store/slices/authSlice';
+import { useFavorites } from '@/app/store/hooks/useFavorites';
 
 const categories = [
   { name: 'All Products', value: '' },
@@ -27,12 +28,15 @@ export default function Header() {
     const [showUserMenu, setShowUserMenu] = useState(false);
     
     const { user, isAuthenticated } = useAppSelector((state) => state.auth);
+    const { favorites } = useFavorites();
     const dispatch = useAppDispatch();
 
     const handleLogout = () => {
       dispatch(logout());
       setShowUserMenu(false);
     };
+
+    const favoritesCount = favorites.length;
 
     return (
         <>
@@ -71,8 +75,18 @@ export default function Header() {
 
                     {/* Icon Actions */}
                     <div className="flex items-center space-x-3">
-                        <Link href="/favorites" className="p-2 hover:bg-white/10 rounded-full transition-colors">
+                        {/* Favorites with Badge */}
+                        <Link href="/favorites" className="relative p-2 hover:bg-white/10 rounded-full transition-colors">
                             <Heart className="h-5 w-5" />
+                            {favoritesCount > 0 && (
+                                <motion.span
+                                    initial={{ scale: 0 }}
+                                    animate={{ scale: 1 }}
+                                    className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center shadow-lg"
+                                >
+                                    {favoritesCount > 9 ? '9+' : favoritesCount}
+                                </motion.span>
+                            )}
                         </Link>
                         
                         {/* User Account/Login */}
@@ -219,13 +233,23 @@ export default function Header() {
 
                             {/* Mobile Action Icons */}
                             <div className="flex items-center justify-around pt-4 border-t border-white/20">
+                                {/* Mobile Favorites with Badge */}
                                 <Link 
                                     href="/favorites" 
                                     onClick={() => setIsMobileMenuOpen(false)}
-                                    className="flex flex-col items-center gap-1 p-2 hover:bg-white/10 rounded-lg transition-colors"
+                                    className="relative flex flex-col items-center gap-1 p-2 hover:bg-white/10 rounded-lg transition-colors"
                                 >
                                     <Heart className="h-5 w-5" />
                                     <span className="text-xs">Favorites</span>
+                                    {favoritesCount > 0 && (
+                                        <motion.span
+                                            initial={{ scale: 0 }}
+                                            animate={{ scale: 1 }}
+                                            className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center shadow-lg"
+                                        >
+                                            {favoritesCount > 9 ? '9+' : favoritesCount}
+                                        </motion.span>
+                                    )}
                                 </Link>
                                 
                                 {isAuthenticated && user ? (

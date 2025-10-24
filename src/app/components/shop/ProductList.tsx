@@ -5,7 +5,7 @@ import { motion } from 'framer-motion';
 import { Heart, ShoppingCart, ExternalLink, Star, Check } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Product } from '@/app/types/product';
 import { useFavorites } from '@/app/store/hooks/useFavorites';
 
@@ -29,15 +29,9 @@ export default function ProductListItem({
   const [currentImage, setCurrentImage] = useState(product.images[0]);
   const [quantity, setQuantity] = useState(1);
   const [addedToCart, setAddedToCart] = useState(false);
-  const { toggleFavorite, isFavorited} = useFavorites();
+
+  const { toggleFavorite, isFavorited } = useFavorites();
   const isProductFavorited = isFavorited(product.id);
-
-
-  const handleToggleFavorite = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    e.preventDefault();
-    toggleFavorite(product.id)
-  }
 
   // Initialize default variants
   useEffect(() => {
@@ -66,6 +60,12 @@ export default function ProductListItem({
   };
 
   const totalPrice = calculateTotalPrice();
+
+  const handleToggleFavorite = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    toggleFavorite(product.id);
+  };
 
   const handleVariantChange = (type: string, value: string, variantImages?: string[]) => {
     setSelectedVariants(prev => ({
@@ -115,7 +115,6 @@ export default function ProductListItem({
     ? Math.round(((product.originalPrice! - product.basePrice) / product.originalPrice!) * 100)
     : 0;
 
-
   return (
     <motion.div
       className="group relative"
@@ -129,10 +128,10 @@ export default function ProductListItem({
       onHoverStart={() => setIsHovered(true)}
       onHoverEnd={() => setIsHovered(false)}
     >
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg shadow-purple-500/20 dark:shadow-purple-500/30 hover:shadow-xl hover:shadow-purple-500/30 dark:hover:shadow-purple-500/40 transition-all duration-300 border border-gray-100 dark:border-gray-700 overflow-hidden">
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg shadow-purple-500/20 dark:shadow-purple-500/30 hover:shadow-xl hover:shadow-purple-500/30 dark:hover:shadow-purple-500/40 transition-all duration-300 border border-gray-100 dark:border-gray-700 overflow-hidden h-full">
         
-        <div className="flex flex-col lg:flex-row gap-6 p-6">
-          {/* Image Section */}
+        <div className="flex flex-col lg:flex-row gap-6 p-6 h-full">
+          {/* Image Section - Fixed Width */}
           <Link href={`/product/${product.id}`} className="lg:w-64 flex-shrink-0">
             <div className="relative aspect-square bg-gray-50 dark:bg-gray-700 rounded-lg overflow-hidden">
               <motion.div
@@ -175,11 +174,11 @@ export default function ProductListItem({
               <div className="absolute top-3 right-3">
                 <motion.button
                   onClick={handleToggleFavorite}
-                  className={`w-8 h-8 rounded-full backdrop-blur-sm border border-white/30 flex items-center justify-center transition-all duration-200 ${
-                      isProductFavorited 
-                        ? 'bg-red-500 text-white' 
-                        : 'bg-white/80 dark:bg-gray-800/80 text-gray-600 dark:text-gray-400 hover:text-red-500'
-                    }`}
+                  className={`w-9 h-9 rounded-full backdrop-blur-sm border border-white/30 flex items-center justify-center transition-all duration-200 ${
+                    isProductFavorited 
+                      ? 'bg-red-500 text-white' 
+                      : 'bg-white/80 dark:bg-gray-800/80 text-gray-600 dark:text-gray-400 hover:text-red-500'
+                  }`}
                   whileHover={{ scale: 1.1 }}
                   whileTap={{ scale: 0.9 }}
                   aria-label={isProductFavorited ? 'Remove from favorites' : 'Add to favorites'}
@@ -190,23 +189,26 @@ export default function ProductListItem({
             </div>
           </Link>
 
-          {/* Content Section - Prevents navigation */}
-          <div className="flex-1 flex flex-col" onClick={(e) => e.preventDefault()}>
-            <Link href={`/product/${product.id}`} className="block mb-4">
-              {/* Brand */}
-              <p className="text-xs font-medium text-purple-600 dark:text-purple-400 uppercase tracking-wide">
-                {product.brand}
-              </p>
+          {/* Content Section - Flexible with flex layout */}
+          <div className="flex-1 flex flex-col min-h-0" onClick={(e) => e.preventDefault()}>
+            {/* Top Section - Brand, Name */}
+            <div className="mb-4">
+              <Link href={`/product/${product.id}`} className="block">
+                {/* Brand */}
+                <p className="text-xs font-medium text-purple-600 dark:text-purple-400 uppercase tracking-wide">
+                  {product.brand}
+                </p>
 
-              {/* Product Name */}
-              <h3 className="font-semibold text-xl text-gray-900 dark:text-white mt-1 transition-colors duration-300 group-hover:text-purple-600 dark:group-hover:text-purple-400">
-                {product.name}
-              </h3>
-            </Link>
+                {/* Product Name - Fixed Height */}
+                <h3 className="font-semibold text-xl text-gray-900 dark:text-white mt-1 transition-colors duration-300 group-hover:text-purple-600 dark:group-hover:text-purple-400 line-clamp-2 h-14">
+                  {product.name}
+                </h3>
+              </Link>
+            </div>
 
-            {/* Variant Selection - Inline */}
+            {/* Variant Selection - Scrollable if needed */}
             {product.hasVariants && product.variantOptions && (
-              <div className="space-y-4 mb-6">
+              <div className="space-y-3 mb-4 max-h-40 overflow-y-auto scrollbar-thin scrollbar-thumb-purple-500 scrollbar-track-gray-200 dark:scrollbar-track-gray-700">
                 {product.variantOptions.map(option => (
                   <div key={option.type}>
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
@@ -233,24 +235,14 @@ export default function ProductListItem({
                             title={variant.name}
                             style={{
                               backgroundColor: variant.value === 'space-black' ? '#1f2937' :
-                                           variant.value === 'silver' ? '#e5e7eb' :
-                                           variant.value === 'blue' ? '#3b82f6' :
-                                           variant.value === 'red' ? '#FF0000' :
-                                           variant.value === 'midnight' ? '#1f2937' :
-                                           variant.value === 'orange' ? '#f97316' :
-                                           variant.value === 'purple' ? '#CBC3E3' :
-                                           variant.value === 'starlight' ? '#fef3c7' :
-                                           variant.value === 'natural' ? '#d2b48c' :
-                                           variant.value === 'white' ? '#ffffff' : 
-                                           variant.value === 'black' ? '#1f2937' : 
-                                           variant.value === 'brown' ? '#964800' : 
-                                           variant.value === 'galaxy' ? '#1f2937' :
-                                           variant.value === 'wheat' ? '#F5DEB3' : 
-                                           variant.value === 'coral' ? '#FF7F50' :
-                                           variant.value === 'lunar' ? '#A9A9A9' :
-                                           variant.value === 'mint' ? '#B6FFBB' :
-                                           variant.value === 'cobalt' ? '#0047AB' :
-                                           variant.value === 'mist' ? '#B0E0E6' : '#9ca3af'
+                                             variant.value === 'silver' ? '#e5e7eb' :
+                                             variant.value === 'blue' ? '#3b82f6' :
+                                             variant.value === 'midnight' ? '#1e3a8a' :
+                                             variant.value === 'orange' ? '#f97316' :
+                                             variant.value === 'purple' ? '#a855f7' :
+                                             variant.value === 'starlight' ? '#fef3c7' :
+                                             variant.value === 'natural' ? '#d2b48c' :
+                                             variant.value === 'white' ? '#ffffff' : '#9ca3af'
                             }}
                           >
                             {selectedVariants[option.type] === variant.value && (
@@ -300,8 +292,8 @@ export default function ProductListItem({
             {/* Spacer to push bottom content down */}
             <div className="flex-1"></div>
 
-            {/* Bottom Section */}
-            <div className="space-y-4 pt-4 border-t border-gray-100 dark:border-gray-700">
+            {/* Bottom Section - Fixed at bottom */}
+            <div className="space-y-4 pt-4 border-t border-gray-100 dark:border-gray-700 mt-auto">
               {/* Price */}
               <div className="flex flex-col gap-1">
                 {totalPrice !== product.basePrice ? (

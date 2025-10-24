@@ -3,10 +3,12 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Heart } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Product } from '@/app/types/product';
+import { useFavorites } from '@/app/store/hooks/useFavorites';
+import ProductCard from '@/app/components/shop/ProductCard';
 
 interface ProductWithVariants {
   product: Product;
@@ -28,6 +30,9 @@ export default function ProductPage() {
   const [error, setError] = useState<string | null>(null);
   const [selectedVariants, setSelectedVariants] = useState<{ [key: string]: string }>({});
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  // Use the favorites hook
+  const { toggleFavorite, isFavorited } = useFavorites();
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -158,6 +163,7 @@ export default function ProductPage() {
   }
 
   const { product, finalPrice, inStock, stockQuantity, images, availableVariants, similarProducts } = data;
+  const isCurrentlyFavorited = isFavorited(productId);
 
   return (
     <div className='min-h-screen bg-gray-50 dark:bg-gray-900 py-8 transition-colors duration-300'>
@@ -180,103 +186,124 @@ export default function ProductPage() {
           </ol>
         </nav>
 
-        <div className='grid grid-cols-1 lg:grid-cols-2 gap-12'>
+        {/* Main Product Section */}
+        <div className='grid grid-cols-1 lg:grid-cols-2 gap-12 mb-12'>
+          {/* Image Gallery */}
           <motion.div
-            className='space-y-4'
             initial={{ opacity: 0, x: -50 }}
             animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6, ease: 'easeOut' }}
+            transition={{ duration: 0.5 }}
           >
-            <div className='relative aspect-square bg-white dark:bg-gray-800 rounded-lg shadow-lg dark:shadow-2xl overflow-hidden transition-colors duration-300'>
-              <AnimatePresence mode='wait'>
-                <motion.div
-                  key={`${images[currentImageIndex]}-${JSON.stringify(selectedVariants)}`}
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.8 }}
-                  transition={{ duration: 0.3 }}
-                >
-                  <Image
-                    src={images[currentImageIndex]}
-                    alt={`${product.name} - Image ${currentImageIndex + 1}`}
-                    width={600}
-                    height={600}
-                    className='w-full h-full object-contain p-4'
-                    priority
-                  />
-                </motion.div>
-              </AnimatePresence>
-
-              {/* Navigation Arrows - Only show if multiple images */}
-              {images.length > 1 && (
-                <>
-                  {/* Previous Image Button */}
-                  <motion.button
-                    onClick={prevImage}
-                    className='absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-full shadow-lg dark:shadow-xl border border-gray-200 dark:border-gray-600 flex items-center justify-center text-gray-700 dark:text-gray-300 hover:bg-white dark:hover:bg-gray-700 transition-all duration-200 z-10'
-                    whileHover={{ scale: 1.1, x: -2 }}
-                    whileTap={{ scale: 0.9 }}
-                    initial={{ opacity: 0, x: -10 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.5 }}
-                    aria-label="Previous image"
-                  >
-                    <ChevronLeft className='w-5 h-5' />
-                  </motion.button>
-
-                  {/* Next Image Button */}
-                  <motion.button
-                    onClick={nextImage}
-                    className='absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-full shadow-lg dark:shadow-xl border border-gray-200 dark:border-gray-600 flex items-center justify-center text-gray-700 dark:text-gray-300 hover:bg-white dark:hover:bg-gray-700 transition-all duration-200 z-10'
-                    whileHover={{ scale: 1.1, x: 2 }}
-                    whileTap={{ scale: 0.9 }}
-                    initial={{ opacity: 0, x: 10 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.5 }}
-                    aria-label="Next image"
-                  >
-                    <ChevronRight className='w-5 h-5' />
-                  </motion.button>
-
-                  {/* Image Counter */}
+            {/* Main Image with Navigation */}
+            <div className='relative bg-white dark:bg-gray-800 rounded-lg shadow-md dark:shadow-xl overflow-hidden mb-4 transition-colors duration-300'>
+              <motion.div 
+                className='aspect-square relative group'
+                whileHover={{ scale: 1.02 }}
+                transition={{ duration: 0.2 }}
+              >
+                <AnimatePresence mode='wait'>
                   <motion.div
-                    className='absolute bottom-4 right-4 px-3 py-1 bg-black/60 dark:bg-black/80 backdrop-blur-sm rounded-full text-white text-sm font-medium'
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.6 }}
+                    key={currentImageIndex}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.3 }}
+                    className='w-full h-full'
                   >
-                    {currentImageIndex + 1} / {images.length}
+                    <Image
+                      src={images[currentImageIndex]}
+                      alt={`${product.name} - Image ${currentImageIndex + 1}`}
+                      fill
+                      className='object-contain p-8'
+                      priority
+                    />
                   </motion.div>
-                </>
-              )}
+                </AnimatePresence>
+
+                {/* Favorite Button - positioned on the image */}
+                <motion.button
+                  onClick={() => toggleFavorite(productId)}
+                  className={`
+                    absolute top-4 right-4 z-10 p-3 rounded-full shadow-lg
+                    backdrop-blur-sm transition-all duration-300
+                    ${isCurrentlyFavorited 
+                      ? 'bg-red-500/90 text-white hover:bg-red-600' 
+                      : 'bg-white/90 dark:bg-gray-800/90 text-gray-600 dark:text-gray-300 hover:bg-white dark:hover:bg-gray-700'
+                    }
+                  `}
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.95 }}
+                  aria-label={isCurrentlyFavorited ? 'Remove from favorites' : 'Add to favorites'}
+                >
+                  <Heart 
+                    className={`w-6 h-6 transition-all duration-300 ${
+                      isCurrentlyFavorited ? 'fill-current' : ''
+                    }`}
+                  />
+                </motion.button>
+
+                {/* Navigation Arrows */}
+                {images.length > 1 && (
+                  <>
+                    <motion.button
+                      onClick={prevImage}
+                      className='absolute left-4 top-1/2 -translate-y-1/2 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm p-2 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 hover:bg-white dark:hover:bg-gray-700'
+                      whileHover={{ scale: 1.1, x: -2 }}
+                      whileTap={{ scale: 0.95 }}
+                      aria-label="Previous image"
+                    >
+                      <ChevronLeft className='w-6 h-6 text-gray-800 dark:text-gray-200' />
+                    </motion.button>
+                    
+                    <motion.button
+                      onClick={nextImage}
+                      className='absolute right-4 top-1/2 -translate-y-1/2 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm p-2 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 hover:bg-white dark:hover:bg-gray-700'
+                      whileHover={{ scale: 1.1, x: 2 }}
+                      whileTap={{ scale: 0.95 }}
+                      aria-label="Next image"
+                    >
+                      <ChevronRight className='w-6 h-6 text-gray-800 dark:text-gray-200' />
+                    </motion.button>
+                  </>
+                )}
+
+                {/* Image Counter */}
+                {images.length > 1 && (
+                  <div className='absolute bottom-4 left-1/2 -translate-x-1/2 bg-black/50 text-white px-3 py-1 rounded-full text-sm backdrop-blur-sm'>
+                    {currentImageIndex + 1} / {images.length}
+                  </div>
+                )}
+              </motion.div>
             </div>
-            
+
+            {/* Thumbnail Gallery */}
             {images.length > 1 && (
-              <motion.div
-                className='flex space-x-2 overflow-x-auto pb-2'
+              <motion.div 
+                className='grid grid-cols-5 gap-2'
                 initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }} // Fixed: Changed from opacity: 0 to opacity: 1
-                transition={{ delay: 0.3, duration: 0.4 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2, duration: 0.5 }}
               >
                 {images.map((image, index) => (
                   <motion.button
                     key={index}
                     onClick={() => setCurrentImageIndex(index)}
-                    className={`flex-shrink-0 w-20 h-20 bg-white rounded-md shadow-sm overflow-hidden border-2 transition-colors ${
-                      currentImageIndex === index ? 'border-purple-500' : 'border-gray-200 hover:border-gray-300'
-                    }`}
+                    className={`
+                      aspect-square bg-white dark:bg-gray-800 rounded-lg overflow-hidden border-2 transition-all duration-300
+                      ${currentImageIndex === index 
+                        ? 'border-purple-500 dark:border-purple-400 shadow-md' 
+                        : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600'
+                      }
+                    `}
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
-                    animate={{
-                      borderColor: currentImageIndex === index ? '#9115c2' : '#e5e7eb'
-                    }}
                   >
                     <Image
                       src={image}
-                      alt={`${product.name} - Thumbnail ${index + 1}`}
-                      width={80}
-                      height={80}
-                      className='w-full h-full object-contain p-1'
+                      alt={`${product.name} thumbnail ${index + 1}`}
+                      width={100}
+                      height={100}
+                      className='w-full h-full object-contain p-2'
                     />
                   </motion.button>
                 ))}
@@ -284,72 +311,54 @@ export default function ProductPage() {
             )}
           </motion.div>
 
-          {/* Product Info */}
-          <motion.div
-            className='space-y-6'
+          {/* Product Details */}
+          <motion.div 
+            className="space-y-6"
             initial={{ opacity: 0, x: 50 }}
-            animate={{ opacity: 1, x: 0 }} // Fixed: Changed from opacity: 0 to opacity: 1
-            transition={{ duration: 0.6, ease: 'easeOut' }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5 }}
           >
-            {/* Header */}
+            {/* Brand & Name */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2, duration: 0.5 }}
             >
-              <p className='text-sm font-medium text-purple-600 dark:text-purple-400 uppercase tracking-wide'>
-                {product.brand}
-              </p>
-              <h1 className='text-3xl font-bold text-gray-900 dark:text-white mt-1 transition-colors duration-300'>
-                {product.name}
-              </h1>
+              <p className='text-sm font-semibold text-purple-600 dark:text-purple-400 uppercase tracking-wide mb-2 transition-colors duration-300'>{product.brand}</p>
+              <h1 className='text-3xl font-bold text-gray-900 dark:text-white mb-2 transition-colors duration-300'>{product.name}</h1>
+              <p className='text-sm text-gray-500 dark:text-gray-400 transition-colors duration-300'>Category: <span className='capitalize'>{product.category}</span></p>
             </motion.div>
 
-            {/* Price */}
+            {/* Price & Stock */}
             <motion.div 
-              className='flex items-baseline space-x-3'
+              className="flex items-baseline gap-4"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3, duration: 0.5 }}
             >
-              <AnimatePresence mode='wait'>
-                <motion.span
-                  key={finalPrice}
-                  className='text-3xl font-bold text-gray-900 dark:text-white transition-colors duration-300'
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -10 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  ${finalPrice.toLocaleString()}
-                </motion.span>
-              </AnimatePresence>
+              <span className='text-4xl font-bold text-gray-900 dark:text-white transition-colors duration-300'>${finalPrice.toLocaleString()}</span>
               {finalPrice !== product.basePrice && (
-                <span className='text-lg text-gray-500 dark:text-gray-400 transition-colors duration-300'>
-                  Base: ${product.basePrice.toLocaleString()}
-                </span>
+                <span className='text-xl text-gray-500 dark:text-gray-400 line-through transition-colors duration-300'>${product.basePrice.toLocaleString()}</span>
               )}
             </motion.div>
-            
-            {/* Stock Status */}
-            <div className="flex items-center space-x-2">
-              {inStock ? (
-                <>
-                  <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-                  <span className="text-green-700 font-medium">
-                    In Stock ({stockQuantity} available)
-                  </span>
-                </>
-              ) : (
-                <>
-                  <div className="w-3 h-3 bg-red-500 rounded-full"></div>
-                  <span className="text-red-700 font-medium">Out of Stock</span>
-                </>
-              )}
-            </div>
 
-            {/* Variant Selectors */}
-            {availableVariants.map((option, index) => (
+            {/* Stock Status */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.35, duration: 0.5 }}
+            >
+              {inStock ? (
+                <p className='text-green-600 dark:text-green-400 font-medium transition-colors duration-300'>
+                  ✓ In Stock {stockQuantity > 0 && `(${stockQuantity} available)`}
+                </p>
+              ) : (
+                <p className='text-red-600 dark:text-red-400 font-medium transition-colors duration-300'>✗ Out of Stock</p>
+              )}
+            </motion.div>
+
+            {/* Variants */}
+            {availableVariants.map((option: any, index) => (
               <motion.div
                 key={option.type} 
                 className="space-y-3"
@@ -492,36 +501,13 @@ export default function ProductPage() {
             <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-8 transition-colors duration-300">Similar Products</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
               {similarProducts.map((similarProduct, index) => (
-                <motion.div
+                <ProductCard
                   key={similarProduct.id}
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.9 + (index * 0.1), duration: 0.5 }}
-                >
-                  <Link 
-                    href={`/product/${similarProduct.id}`}
-                    className="group bg-white dark:bg-gray-800 rounded-lg shadow-sm dark:shadow-lg hover:shadow-md dark:hover:shadow-xl transition-all duration-300 overflow-hidden block"
-                  >
-                    <motion.div 
-                      className="aspect-square bg-gray-100 dark:bg-gray-700 overflow-hidden transition-colors duration-300"
-                      whileHover={{ scale: 1.02 }}
-                      transition={{ duration: 0.2 }}
-                    >
-                      <Image
-                        src={similarProduct.images[0]}
-                        alt={similarProduct.name}
-                        width={300}
-                        height={300}
-                        className="w-full h-full object-contain p-4 group-hover:scale-105 transition-transform"
-                      />
-                    </motion.div>
-                    <div className="p-4">
-                      <p className="text-xs font-medium text-purple-600 dark:text-purple-400 uppercase tracking-wide transition-colors duration-300">{similarProduct.brand}</p>
-                      <h3 className="text-sm font-medium text-gray-900 dark:text-white mt-1 line-clamp-2 transition-colors duration-300">{similarProduct.name}</h3>
-                      <p className="text-lg font-bold text-gray-900 dark:text-white mt-2 transition-colors duration-300">${similarProduct.basePrice.toLocaleString()}</p>
-                    </div>
-                  </Link>
-                </motion.div>
+                  product={similarProduct}
+                  size="medium"
+                  index={index}
+                  priority={false}
+                />
               ))}
             </div>
           </motion.div>
