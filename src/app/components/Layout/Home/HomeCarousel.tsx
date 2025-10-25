@@ -60,7 +60,7 @@ export default function HomeCarousel() {
     const timer = setInterval(() => {
       setDirection(1);
       setCurrentIndex((prev) => (prev + 1) % categories.length);
-    }, 5000);
+    }, 8000);
 
     return () => clearInterval(timer);
   }, []);

@@ -23,7 +23,7 @@ export default function FeaturedCarousel({ products }: FeaturedCarouselProps) {
     const timer = setInterval(() => {
       setDirection(1);
       setCurrentIndex((prev) => (prev + 1) % products.length);
-    }, 6000); // Change slide every 6 seconds
+    }, 8000); // Change slide every 8 seconds
 
     return () => clearInterval(timer);
   }, [products.length]);
