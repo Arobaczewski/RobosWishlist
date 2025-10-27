@@ -78,8 +78,8 @@ const cartSlice = createSlice({
       // Save to localStorage
       saveCartToStorage(state.items);
 
-      // Open cart modal
-      state.isOpen = true;
+      // DO NOT auto-open modal - user must click cart icon to open
+      // state.isOpen = true; // REMOVED
     },
 
     removeFromCart: (state, action: PayloadAction<string>) => {

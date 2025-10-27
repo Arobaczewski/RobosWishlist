@@ -2,15 +2,18 @@
 
 import { useState } from 'react';
 import Link from "next/link";
+import Image from 'next/image';
 import { Heart, ShoppingCart, User, Menu, X, ChevronDown, LogOut } from "lucide-react";
 import ThemeToggle from "../theme/ThemeToggle";
 import ShopDropdown from './Header/ShopDropdown';
 import SearchBar from './Header/SearchBar';
 import AuthModal from '../auth/AuthModal';
+import CartModal from '../cart/CartModal';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAppSelector, useAppDispatch } from '@/app/store/hooks/hooks';
 import { logout } from '@/app/store/slices/authSlice';
 import { useFavorites } from '@/app/store/hooks/useFavorites';
+import { useCart } from '@/app/store/hooks/useCart';
 
 const categories = [
   { name: 'All Products', value: '' },
@@ -29,6 +32,7 @@ export default function Header() {
     
     const { user, isAuthenticated } = useAppSelector((state) => state.auth);
     const { favorites } = useFavorites();
+    const { itemCount, toggleCart } = useCart();
     const dispatch = useAppDispatch();
 
     const handleLogout = () => {
@@ -45,7 +49,7 @@ export default function Header() {
                 {/* Logo */}
                 <div className="flex-shrink-0">
                     <Link href='/' className="block hover:opacity-80 hover:text-purple-200 transition-opacity">
-                        <img src="/images/logo/logo.svg" alt="Robos Wishlist Logo" className="w-40 h-40"/>
+                        <Image src="/images/logo/logo.svg" alt="Robos Wishlist Logo" width={200} height={200}/>
                     </Link>
                 </div>
 
@@ -113,6 +117,14 @@ export default function Header() {
                                     <p className="text-sm font-medium text-gray-900 dark:text-white">{user.name}</p>
                                     <p className="text-xs text-gray-500 dark:text-gray-400">{user.email}</p>
                                   </div>
+                                  <Link
+                                    href="/account/orders"
+                                    onClick={() => setShowUserMenu(false)}
+                                    className="w-full flex items-center gap-2 px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                                  >
+                                    <ShoppingCart className="w-4 h-4" />
+                                    My Orders
+                                  </Link>
                                   <button
                                     onClick={handleLogout}
                                     className="w-full flex items-center gap-2 px-4 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
@@ -133,9 +145,22 @@ export default function Header() {
                           </button>
                         )}
                         
-                        <Link href="/cart" className="p-2 hover:bg-white/10 rounded-full transition-colors">
+                        {/* Cart with Badge */}
+                        <button 
+                          onClick={toggleCart}
+                          className="relative p-2 hover:bg-white/10 rounded-full transition-colors"
+                        >
                             <ShoppingCart className="h-5 w-5" />
-                        </Link>
+                            {itemCount > 0 && (
+                                <motion.span
+                                    initial={{ scale: 0 }}
+                                    animate={{ scale: 1 }}
+                                    className="absolute -top-1 -right-1 bg-purple-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center shadow-lg"
+                                >
+                                    {itemCount > 9 ? '9+' : itemCount}
+                                </motion.span>
+                            )}
+                        </button>
                         <ThemeToggle/>
                     </div>
                 </div>
@@ -144,7 +169,6 @@ export default function Header() {
                 <button 
                     onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                     className="lg:hidden p-2 hover:bg-white/10 rounded-lg transition-colors"
-                    aria-label="Toggle menu"
                 >
                     {isMobileMenuOpen ? (
                         <X className="h-6 w-6" />
@@ -229,6 +253,17 @@ export default function Header() {
                                 >
                                     About
                                 </Link>
+
+                                {/* Mobile Orders Link (if authenticated) */}
+                                {isAuthenticated && user && (
+                                  <Link 
+                                    href='/account/orders' 
+                                    onClick={() => setIsMobileMenuOpen(false)}
+                                    className="block py-2 px-4 hover:bg-white/10 rounded-lg transition-colors font-medium"
+                                  >
+                                    My Orders
+                                  </Link>
+                                )}
                             </nav>
 
                             {/* Mobile Action Icons */}
@@ -273,14 +308,26 @@ export default function Header() {
                                   </button>
                                 )}
                                 
-                                <Link 
-                                    href="/cart" 
-                                    onClick={() => setIsMobileMenuOpen(false)}
-                                    className="flex flex-col items-center gap-1 p-2 hover:bg-white/10 rounded-lg transition-colors"
+                                {/* Mobile Cart with Badge */}
+                                <button 
+                                    onClick={() => {
+                                      setIsMobileMenuOpen(false);
+                                      toggleCart();
+                                    }}
+                                    className="relative flex flex-col items-center gap-1 p-2 hover:bg-white/10 rounded-lg transition-colors"
                                 >
                                     <ShoppingCart className="h-5 w-5" />
                                     <span className="text-xs">Cart</span>
-                                </Link>
+                                    {itemCount > 0 && (
+                                        <motion.span
+                                            initial={{ scale: 0 }}
+                                            animate={{ scale: 1 }}
+                                            className="absolute -top-1 -right-1 bg-purple-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center shadow-lg"
+                                        >
+                                            {itemCount > 9 ? '9+' : itemCount}
+                                        </motion.span>
+                                    )}
+                                </button>
                                 <div className="flex flex-col items-center gap-1 p-2">
                                     <ThemeToggle/>
                                     <span className="text-xs">Theme</span>
@@ -297,6 +344,9 @@ export default function Header() {
           isOpen={isAuthModalOpen}
           onClose={() => setIsAuthModalOpen(false)}
         />
+
+        {/* Cart Modal */}
+        <CartModal />
         </>
     );
 }

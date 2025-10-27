@@ -155,7 +155,7 @@ export function useCart() {
   const subtotal = items.reduce((total, item) => total + (item.price * item.quantity), 0);
   const itemCount = items.reduce((count, item) => count + item.quantity, 0);
   const tax = subtotal * 0.08; // 8% tax for demo
-  const shipping = subtotal > 50 ? 0 : 5.99; // Free shipping over $50
+  const shipping = subtotal > 500 ? 0 : 5.99; // Free shipping over $50
   const total = subtotal + tax + shipping;
 
   return {
