@@ -70,7 +70,7 @@ export const updateUser = (userId: string, updates: Partial<User>) => {
     const users = readUsers();
     const userIndex = users.findIndex(user => user.id === userId);
 
-    if(userIndex !== 1) {
+    if(userIndex !== -1) {
         users[userIndex] = {...users[userIndex], ...updates };
         writeUsers(users);
         return users[userIndex]
