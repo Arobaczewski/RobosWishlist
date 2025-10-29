@@ -284,7 +284,7 @@ export default function CartModal() {
 
                 {/* Action Buttons */}
                 <div className="px-6 pb-6 space-y-3">
-                  <Link href="/checkout" onClick={closeCart}>
+                  <Link href="/cart" onClick={closeCart}>
                     <motion.button
                       whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}

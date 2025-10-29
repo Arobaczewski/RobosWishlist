@@ -1,13 +1,25 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ShoppingCart } from 'lucide-react';
 import { useCart } from '@/app/store/hooks/useCart';
 
 export default function FloatingCartButton() {
   const { itemCount, toggleCart } = useCart();
+  const [isMounted, setIsMounted] = useState(false);
 
-  // Don't show if cart is empty (optional - remove this if you want it always visible)
+  // Fix hydration mismatch - wait for client-side mount
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  // Don't render anything during SSR to avoid hydration mismatch
+  if (!isMounted) {
+    return null;
+  }
+
+  // Optional: Don't show if cart is empty (uncomment if you want this behavior)
   // if (itemCount === 0) return null;
 
   return (
@@ -45,7 +57,7 @@ export default function FloatingCartButton() {
         initial={{ scale: 1, opacity: 0.5 }}
         animate={{ scale: 2, opacity: 0 }}
         transition={{ duration: 0.6 }}
-        className="absolute inset-0 bg-purple-400 rounded-full"
+        className="absolute inset-0 bg-purple-400 rounded-full pointer-events-none"
       />
     </motion.button>
   );

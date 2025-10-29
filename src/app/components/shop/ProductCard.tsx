@@ -16,6 +16,34 @@ interface ProductCardProps {
   index?: number;
 }
 
+// Color mapping for variant display
+const colorMap: { [key: string]: string } = {
+  'space-black': '#000000',
+  'silver': '#c0c0c0',
+  'midnight': '#000000',
+  'starlight': '#f5f5dc',
+  'blue': '#90d5ff',
+  'brown': '#6f4d38',
+  'natural': '#cbb799',
+  'galaxy': '#000000',
+  'wheat': '#cbb799',
+  'coral': '#ff6600',
+  'lunar': '#808080',
+  'mint': '#3EB489',
+  'cobalt': '#1D2545',
+  'mist': '#CDD8D9',
+  'purple': '#b892ff',
+  'orange': '#ff6600',
+  'green': '#00ff00',
+  'pink': '#ff69b4',
+  'white': '#ffffff',
+  'black': '#000000',
+  'red': '#ff0000',
+  'yellow': '#ffff00',
+  'gray': '#808080',
+  'gold': '#ffd700',
+};
+
 export default function ProductCard({
   product,
   priority = false,
@@ -29,6 +57,8 @@ export default function ProductCard({
   const [addedToCart, setAddedToCart] = useState(false);
   const [showFlyingImage, setShowFlyingImage] = useState(false);
   const [flyingImagePosition, setFlyingImagePosition] = useState({ x: 0, y: 0 });
+  const [flyingImageSize, setFlyingImageSize] = useState({ width: 0, height: 0 });
+  const [validationErrors, setValidationErrors] = useState<{ [key: string]: boolean }>({});
   
   const { toggleFavorite, isFavorited } = useFavorites();
   const { addToCart, closeCart } = useCart();
@@ -80,6 +110,12 @@ export default function ProductCard({
       [type]: value
     }));
 
+    // Clear validation error for this variant type
+    setValidationErrors(prev => ({
+      ...prev,
+      [type]: false
+    }));
+
     // Update image if variant has specific images
     if (variantImages && variantImages.length > 0) {
       setCurrentImage(variantImages[0]);
@@ -94,23 +130,33 @@ export default function ProductCard({
 
     // Validate required variants
     if (product.hasVariants && product.variantOptions) {
-      const allRequiredSelected = product.variantOptions.every(option => {
-        if (option.required) {
-          return selectedVariants[option.type] !== undefined;
+      const errors: { [key: string]: boolean } = {};
+      let hasErrors = false;
+
+      product.variantOptions.forEach(option => {
+        if (option.required && !selectedVariants[option.type]) {
+          errors[option.type] = true;
+          hasErrors = true;
         }
-        return true;
       });
 
-      if (!allRequiredSelected) {
-        alert('Please select all required options');
+      if (hasErrors) {
+        setValidationErrors(errors);
         return;
       }
     }
 
-    // Get position of product image for flying animation
+    // Get position and size of product image for flying animation
     if (imageRef.current) {
       const rect = imageRef.current.getBoundingClientRect();
-      setFlyingImagePosition({ x: rect.left, y: rect.top });
+      setFlyingImagePosition({ 
+        x: rect.left + (rect.width / 2), // Center of image
+        y: rect.top + (rect.height / 2)  // Center of image
+      });
+      setFlyingImageSize({
+        width: rect.width * 0.8,  // Start at 80% of original size
+        height: rect.height * 0.8
+      });
       setShowFlyingImage(true);
     }
 
@@ -137,7 +183,7 @@ export default function ProductCard({
       setShowFlyingImage(false);
       setAddedToCart(false);
       setQuantity(1);
-    }, 1000);
+    }, 1200);
   };
 
   const hasDiscount = product.originalPrice && product.originalPrice > product.basePrice;
@@ -198,110 +244,115 @@ export default function ProductCard({
                     -{discountPercentage}%
                   </span>
                 )}
-                
-                {!product.inStock && (
-                  <span className="px-2 py-1 bg-gray-500 text-white text-xs font-medium rounded-full">
-                    Out of Stock
-                  </span>
-                )}
               </div>
 
               {/* Favorite Button */}
-              <div className="absolute top-3 right-3">
-                <motion.button
-                  onClick={handleToggleFavorite}
-                  className={`
-                    p-2 rounded-full shadow-md transition-all duration-300
-                    ${isProductFavorited 
-                      ? 'bg-red-500 text-white' 
-                      : 'bg-white/90 dark:bg-gray-800/90 text-gray-600 dark:text-gray-300 hover:bg-white dark:hover:bg-gray-700'
-                    }
-                  `}
-                  whileHover={{ scale: 1.1 }}
-                  whileTap={{ scale: 0.9 }}
-                >
-                  <Heart 
-                    className={`w-5 h-5 transition-all ${
-                      isProductFavorited ? 'fill-current' : ''
-                    }`}
-                  />
-                </motion.button>
-              </div>
+              <motion.button
+                onClick={handleToggleFavorite}
+                className="absolute top-3 right-3 p-2 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-full hover:bg-white dark:hover:bg-gray-700 transition-all shadow-md"
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.9 }}
+              >
+                <Heart
+                  className={`w-4 h-4 transition-colors ${
+                    isProductFavorited
+                      ? 'fill-red-500 text-red-500'
+                      : 'text-gray-600 dark:text-gray-400'
+                  }`}
+                />
+              </motion.button>
             </div>
           </Link>
 
           {/* Content Section - Flexible Height */}
           <div className="p-4 flex flex-col flex-1">
             {/* Brand & Title */}
-            <Link href={`/product/${product.id}`} className="block mb-3">
-              <p className="text-xs font-semibold text-purple-600 dark:text-purple-400 uppercase tracking-wide mb-1 transition-colors duration-300">
+            <div className="mb-2">
+              <p className="text-xs text-purple-600 dark:text-purple-400 font-medium mb-1">
                 {product.brand}
               </p>
-              <h3 className="font-semibold text-gray-900 dark:text-white line-clamp-2 hover:text-purple-600 dark:hover:text-purple-400 transition-colors duration-300">
-                {product.name}
-              </h3>
-            </Link>
+              <Link href={`/product/${product.id}`}>
+                <h3 className="font-semibold text-gray-900 dark:text-white line-clamp-2 text-sm hover:text-purple-600 dark:hover:text-purple-400 transition-colors">
+                  {product.name}
+                </h3>
+              </Link>
+            </div>
 
-            {/* Variant Selection - Scrollable if needed */}
+            {/* Variants Section */}
             {product.hasVariants && product.variantOptions && (
-              <div className="space-y-2 mb-3 max-h-32 overflow-y-auto scrollbar-thin scrollbar-thumb-purple-500 scrollbar-track-gray-200 dark:scrollbar-track-gray-700">
-                {product.variantOptions.map(option => (
+              <div className="space-y-3 mb-3">
+                {product.variantOptions.map((option: any) => (
                   <div key={option.type}>
-                    <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1.5">
+                    <label className="text-xs font-medium text-gray-700 dark:text-gray-300 block mb-1.5">
                       {option.name}
+                      {validationErrors[option.type] && (
+                        <span className="text-red-500 ml-1">
+                          - Required
+                        </span>
+                      )}
                     </label>
-                    
                     {option.type === 'color' ? (
-                      // Color variant buttons
-                      <div className="flex flex-wrap gap-1.5">
-                        {option.variants.map((variant: any) => (
-                          <motion.button
-                            key={variant.value}
-                            onClick={(e) => {
-                              e.preventDefault();
-                              handleVariantChange(option.type, variant.value, variant.images);
-                            }}
-                            disabled={!variant.inStock}
-                            className={`relative w-8 h-8 rounded-full border-2 transition-all ${
-                              selectedVariants[option.type] === variant.value
-                                ? 'border-purple-500 dark:border-purple-400 ring-2 ring-purple-200 dark:ring-purple-800'
-                                : variant.inStock
-                                ? 'border-gray-300 dark:border-gray-600 hover:border-purple-300'
-                                : 'border-gray-200 dark:border-gray-700 opacity-40 cursor-not-allowed'
-                            }`}
-                            whileHover={variant.inStock ? { scale: 1.1 } : {}}
-                            whileTap={variant.inStock ? { scale: 0.95 } : {}}
-                            title={variant.name}
-                            style={{
-                              backgroundColor: variant.value === 'space-black' ? '#1f2937' :
-                                             variant.value === 'silver' ? '#e5e7eb' :
-                                             variant.value === 'blue' ? '#3b82f6' :
-                                             variant.value === 'midnight' ? '#1e3a8a' :
-                                             variant.value === 'orange' ? '#f97316' :
-                                             variant.value === 'purple' ? '#a855f7' :
-                                             variant.value === 'starlight' ? '#fef3c7' :
-                                             variant.value === 'natural' ? '#d2b48c' :
-                                             variant.value === 'white' ? '#ffffff' : '#9ca3af'
-                            }}
-                          >
-                            {selectedVariants[option.type] === variant.value && (
-                              <motion.div
-                                initial={{ scale: 0 }}
-                                animate={{ scale: 1 }}
-                                className="absolute inset-0 flex items-center justify-center"
-                              >
-                                <Check className="w-4 h-4 text-white drop-shadow-lg" style={{
-                                  filter: variant.value === 'white' || variant.value === 'starlight' ? 'invert(1)' : 'none'
-                                }} />
-                              </motion.div>
-                            )}
-                            {!variant.inStock && (
-                              <div className="absolute inset-0 flex items-center justify-center">
-                                <div className="w-full h-0.5 bg-red-500 rotate-45"></div>
-                              </div>
-                            )}
-                          </motion.button>
-                        ))}
+                      // Color swatches
+                      <div className="flex flex-wrap gap-2">
+                        {option.variants.map((variant: any) => {
+                          const isSelected = selectedVariants[option.type] === variant.value;
+                          const colorValue = colorMap[variant.value] || '#cccccc';
+                          
+                          return (
+                            <motion.button
+                              key={variant.value}
+                              onClick={(e) => {
+                                e.preventDefault();
+                                if (variant.inStock) {
+                                  handleVariantChange(option.type, variant.value, variant.images);
+                                }
+                              }}
+                              disabled={!variant.inStock}
+                              className={`relative w-8 h-8 rounded-full border-2 transition-all ${
+                                isSelected
+                                  ? 'border-purple-500 scale-110 shadow-lg'
+                                  : validationErrors[option.type]
+                                  ? 'border-red-500'
+                                  : 'border-gray-300 dark:border-gray-600'
+                              } ${
+                                !variant.inStock 
+                                  ? 'cursor-not-allowed opacity-40' 
+                                  : 'hover:scale-110 hover:shadow-md cursor-pointer'
+                              }`}
+                              whileHover={variant.inStock ? { scale: 1.15 } : {}}
+                              whileTap={variant.inStock ? { scale: 0.95 } : {}}
+                              title={`${variant.name}${variant.price > 0 ? ` (+$${variant.price})` : ''}${!variant.inStock ? ' (Out of Stock)' : ''}`}
+                            >
+                              <div 
+                                className="w-full h-full rounded-full"
+                                style={{ 
+                                  backgroundColor: colorValue,
+                                  boxShadow: colorValue === '#ffffff' ? 'inset 0 0 0 1px rgba(0,0,0,0.1)' : 'none'
+                                }}
+                              />
+                              {isSelected && (
+                                <motion.div
+                                  initial={{ scale: 0 }}
+                                  animate={{ scale: 1 }}
+                                  className="absolute inset-0 flex items-center justify-center"
+                                >
+                                  <Check className={`w-4 h-4 ${
+                                    colorValue === '#ffffff' || colorValue === '#f5f5dc' 
+                                      ? 'text-gray-800' 
+                                      : 'text-white'
+                                  }`} style={{ 
+                                    filter: 'drop-shadow(0 0 2px rgba(0,0,0,0.5))'
+                                  }} />
+                                </motion.div>
+                              )}
+                              {!variant.inStock && (
+                                <div className="absolute inset-0 flex items-center justify-center">
+                                  <div className="w-full h-0.5 bg-red-500 rotate-45"></div>
+                                </div>
+                              )}
+                            </motion.button>
+                          );
+                        })}
                       </div>
                     ) : (
                       // Dropdown for other variants
@@ -312,8 +363,13 @@ export default function ProductCard({
                           handleVariantChange(option.type, e.target.value);
                         }}
                         onClick={(e) => e.preventDefault()}
-                        className="w-full px-2 py-1.5 text-xs border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
+                        className={`w-full px-2 py-1.5 text-xs border rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 ${
+                          validationErrors[option.type]
+                            ? 'border-red-500 focus:ring-red-500'
+                            : 'border-gray-300 dark:border-gray-600 focus:ring-purple-500'
+                        }`}
                       >
+                        <option value="" disabled>Select {option.name}</option>
                         {option.variants.map((variant: any) => (
                           <option
                             key={variant.value}
@@ -442,43 +498,53 @@ export default function ProductCard({
         </div>
       </motion.div>
 
-      {/* Flying Image Animation - Flies to bottom right floating cart */}
+      {/* Enhanced Flying Image Animation - Starts BIGGER and shrinks to cart icon */}
       <AnimatePresence>
         {showFlyingImage && (
           <motion.div
             initial={{ 
               position: 'fixed',
-              left: flyingImagePosition.x,
-              top: flyingImagePosition.y,
-              width: 80,
-              height: 80,
+              left: flyingImagePosition.x - (flyingImageSize.width / 2), // Center on starting position
+              top: flyingImagePosition.y - (flyingImageSize.height / 2),
+              width: flyingImageSize.width,
+              height: flyingImageSize.height,
               opacity: 1,
               scale: 1,
-              zIndex: 9999
+              zIndex: 9999,
+              rotate: 0
             }}
             animate={{ 
-              left: typeof window !== 'undefined' ? window.innerWidth - 80 : 0,
-              top: typeof window !== 'undefined' ? window.innerHeight - 80 : 0,
-              scale: 0.3,
-              opacity: 0.8
+              left: typeof window !== 'undefined' ? window.innerWidth - 100 : 0,
+              top: typeof window !== 'undefined' ? window.innerHeight - 100 : 0,
+              width: 60,
+              height: 60,
+              scale: 0.4,
+              opacity: 0.7,
+              rotate: 360 // Add a spin for extra flair!
             }}
             exit={{ 
               opacity: 0,
-              scale: 0
+              scale: 0.1
             }}
             transition={{ 
-              duration: 0.8,
-              ease: [0.4, 0.0, 0.2, 1]
+              duration: 1.0,
+              ease: [0.25, 0.1, 0.25, 1.0], // Smooth easing
+              rotate: {
+                duration: 0.8,
+                ease: "easeOut"
+              }
             }}
             className="pointer-events-none"
           >
-            <div className="relative w-full h-full bg-white dark:bg-gray-800 rounded-lg shadow-2xl border-2 border-purple-500">
+            <div className="relative w-full h-full bg-white dark:bg-gray-800 rounded-xl shadow-2xl border-2 border-purple-500 overflow-hidden">
               <Image
                 src={currentImage}
                 alt={product.name}
                 fill
                 className="object-contain p-2"
               />
+              {/* Glow effect */}
+              <div className="absolute inset-0 bg-purple-500/20 animate-pulse"></div>
             </div>
           </motion.div>
         )}

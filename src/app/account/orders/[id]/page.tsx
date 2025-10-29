@@ -29,22 +29,31 @@ export default function OrderDetailPage() {
   const { fetchOrderById, deleteOrderById } = useOrders();
   const [order, setOrder] = useState<Order | null>(null);
   const [loading, setLoading] = useState(true);
+  const [isMounted, setIsMounted] = useState(false);
+
+  // Fix hydration mismatch
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   // Redirect if not authenticated
   useEffect(() => {
-    if (!isAuthenticated) {
+    if (isMounted && !isAuthenticated) {
       router.push('/');
     }
-  }, [isAuthenticated, router]);
+  }, [isMounted, isAuthenticated, router]);
 
-  // Fetch order
+  // Fetch order - FIXED: Removed fetchOrderById from dependencies
   useEffect(() => {
+    if (!isMounted) return;
+    
     if (!orderId) {
       router.push('/account/orders');
       return;
     }
 
     const loadOrder = async () => {
+      setLoading(true);
       const fetchedOrder = await fetchOrderById(orderId);
       if (fetchedOrder) {
         setOrder(fetchedOrder);
@@ -55,7 +64,8 @@ export default function OrderDetailPage() {
     };
 
     loadOrder();
-  }, [orderId, fetchOrderById, router]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [orderId, isMounted]); // Only run when orderId or isMounted changes
 
   const handleDeleteOrder = async () => {
     if (!order) return;
@@ -68,7 +78,7 @@ export default function OrderDetailPage() {
     }
   };
 
-  if (loading) {
+  if (!isMounted || loading) {
     return (
       <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
         <div className="text-center">
@@ -184,6 +194,7 @@ export default function OrderDetailPage() {
                     transition={{ delay: 0.3 + index * 0.1 }}
                     className="flex gap-4 pb-6 border-b border-gray-200 dark:border-gray-700 last:border-0 last:pb-0"
                   >
+                    {/* FIXED: Added 'relative' class to Link parent */}
                     <Link
                       href={`/product/${item.productId}`}
                       className="relative w-24 h-24 bg-gray-100 dark:bg-gray-700 rounded-lg overflow-hidden flex-shrink-0 group"
@@ -193,19 +204,21 @@ export default function OrderDetailPage() {
                         alt={item.name}
                         fill
                         className="object-contain p-2 group-hover:scale-110 transition-transform"
+                        sizes="96px"
                       />
                     </Link>
 
                     <div className="flex-1 min-w-0">
-                      <Link
+                      <Link 
                         href={`/product/${item.productId}`}
-                        className="group"
+                        className="block group"
                       >
-                        <h3 className="font-semibold text-gray-900 dark:text-white group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors mb-2">
+                        <h3 className="font-semibold text-gray-900 dark:text-white group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors mb-1">
                           {item.name}
                         </h3>
                       </Link>
-
+                      
+                      {/* Variants */}
                       {Object.keys(item.selectedVariants).length > 0 && (
                         <div className="flex flex-wrap gap-2 mb-3">
                           {Object.entries(item.selectedVariants).map(([key, value]) => (
@@ -296,6 +309,23 @@ export default function OrderDetailPage() {
                     information, estimated delivery dates, and shipping updates here.
                   </p>
                 </div>
+                {/* Actions */}
+                <motion.div
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.4 }}
+                  className="space-y-3"
+                >
+                  <Link href="/shop">
+                    <motion.button
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      className="w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 px-6 rounded-xl transition-colors"
+                    >
+                      Shop Again
+                    </motion.button>
+                  </Link>
+                </motion.div>
               </div>
             </motion.div>
           </div>
@@ -386,24 +416,6 @@ export default function OrderDetailPage() {
                   </p>
                 </div>
               </div>
-            </motion.div>
-
-            {/* Actions */}
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.4 }}
-              className="space-y-3"
-            >
-              <Link href="/shop">
-                <motion.button
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  className="w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 px-6 rounded-xl transition-colors"
-                >
-                  Shop Again
-                </motion.button>
-              </Link>
             </motion.div>
           </div>
         </div>

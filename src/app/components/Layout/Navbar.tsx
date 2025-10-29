@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from "next/link";
 import Image from 'next/image';
 import { Heart, ShoppingCart, User, Menu, X, ChevronDown, LogOut } from "lucide-react";
@@ -29,11 +29,17 @@ export default function Header() {
     const [isMobileCategoriesOpen, setIsMobileCategoriesOpen] = useState(false);
     const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
     const [showUserMenu, setShowUserMenu] = useState(false);
+    const [isMounted, setIsMounted] = useState(false);
     
     const { user, isAuthenticated } = useAppSelector((state) => state.auth);
     const { favorites } = useFavorites();
     const { itemCount, toggleCart } = useCart();
     const dispatch = useAppDispatch();
+
+    // Fix hydration mismatch - wait for client-side mount
+    useEffect(() => {
+      setIsMounted(true);
+    }, []);
 
     const handleLogout = () => {
       dispatch(logout());
@@ -41,6 +47,66 @@ export default function Header() {
     };
 
     const favoritesCount = favorites.length;
+
+    // During SSR and initial render, show loading state
+    if (!isMounted) {
+      return (
+        <div className="w-full bg-gradient-to-br from-gray-900 via-purple-300 to-purple-600 border-b border-purple-400 shadow-sm sticky top-0 z-40">
+          <header className="flex justify-between items-center px-6 py-4 max-w-7xl mx-auto text-white">
+            {/* Logo */}
+            <div className="flex-shrink-0">
+              <Link href='/' className="block hover:opacity-80 hover:text-purple-200 transition-opacity">
+                <Image src="/images/logo/logo.svg" alt="Robos Wishlist Logo" width={200} height={200}/>
+              </Link>
+            </div>
+
+            {/* Desktop Navigation */}
+            <nav className="hidden lg:block">
+              <ul className="flex items-center space-x-8">
+                <li>
+                  <Link href='/' className="hover:text-purple-100 transition-colors font-medium">
+                    Home
+                  </Link>
+                </li>
+                <li>
+                  <ShopDropdown />
+                </li>
+                <li>
+                  <Link href='/about' className="hover:text-purple-100 transition-colors font-medium">
+                    About
+                  </Link>
+                </li>
+              </ul>
+            </nav>
+
+            {/* Desktop Actions - Placeholder during SSR */}
+            <div className="hidden lg:flex items-center space-x-4">
+              <SearchBar />
+              <div className="flex items-center space-x-3">
+                <Link href="/favorites" className="relative p-2 hover:bg-white/10 rounded-full transition-colors">
+                  <Heart className="h-5 w-5" />
+                </Link>
+                <button className="p-2 hover:bg-white/10 rounded-full transition-colors">
+                  <User className="h-5 w-5" />
+                </button>
+                <button className="relative p-2 hover:bg-white/10 rounded-full transition-colors">
+                  <ShoppingCart className="h-5 w-5" />
+                </button>
+                <ThemeToggle />
+              </div>
+            </div>
+
+            {/* Mobile Menu Button */}
+            <button
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              className="lg:hidden p-2 hover:bg-white/10 rounded-full transition-colors"
+            >
+              {isMobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+            </button>
+          </header>
+        </div>
+      );
+    }
 
     return (
         <>
@@ -147,34 +213,32 @@ export default function Header() {
                         
                         {/* Cart with Badge */}
                         <button 
-                          onClick={toggleCart}
-                          className="relative p-2 hover:bg-white/10 rounded-full transition-colors"
+                            onClick={toggleCart}
+                            className="relative p-2 hover:bg-white/10 rounded-full transition-colors"
                         >
                             <ShoppingCart className="h-5 w-5" />
                             {itemCount > 0 && (
                                 <motion.span
                                     initial={{ scale: 0 }}
                                     animate={{ scale: 1 }}
-                                    className="absolute -top-1 -right-1 bg-purple-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center shadow-lg"
+                                    className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center shadow-lg"
                                 >
                                     {itemCount > 9 ? '9+' : itemCount}
                                 </motion.span>
                             )}
                         </button>
-                        <ThemeToggle/>
+                        
+                        {/* Theme Toggle */}
+                        <ThemeToggle />
                     </div>
                 </div>
 
                 {/* Mobile Menu Button */}
-                <button 
+                <button
                     onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                    className="lg:hidden p-2 hover:bg-white/10 rounded-lg transition-colors"
+                    className="lg:hidden p-2 hover:bg-white/10 rounded-full transition-colors"
                 >
-                    {isMobileMenuOpen ? (
-                        <X className="h-6 w-6" />
-                    ) : (
-                        <Menu className="h-6 w-6" />
-                    )}
+                    {isMobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
                 </button>
             </header>
 
@@ -182,18 +246,20 @@ export default function Header() {
             <AnimatePresence>
                 {isMobileMenuOpen && (
                     <motion.div
-                        initial={{ height: 0, opacity: 0 }}
-                        animate={{ height: 'auto', opacity: 1 }}
-                        exit={{ height: 0, opacity: 0 }}
-                        transition={{ duration: 0.3 }}
-                        className="lg:hidden bg-white/10 backdrop-blur-md border-t border-white/20 overflow-hidden"
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: 'auto' }}
+                        exit={{ opacity: 0, height: 0 }}
+                        transition={{ duration: 0.2 }}
+                        className="lg:hidden border-t border-white/20 overflow-hidden"
                     >
-                        <div className="px-6 py-4 space-y-4">
+                        <div className="px-6 py-4 space-y-2">
                             {/* Mobile Search */}
-                            <SearchBar isMobile={true} />
-
-                            {/* Mobile Navigation Links */}
-                            <nav className="space-y-2">
+                            <div className="pb-4">
+                                <SearchBar />
+                            </div>
+                            
+                            {/* Mobile Navigation */}
+                            <nav className="space-y-1">
                                 <Link 
                                     href='/' 
                                     onClick={() => setIsMobileMenuOpen(false)}
@@ -202,7 +268,7 @@ export default function Header() {
                                     Home
                                 </Link>
                                 
-                                {/* Mobile Shop with Expandable Categories */}
+                                {/* Mobile Shop with Categories */}
                                 <div>
                                     <button
                                         onClick={() => setIsMobileCategoriesOpen(!isMobileCategoriesOpen)}
