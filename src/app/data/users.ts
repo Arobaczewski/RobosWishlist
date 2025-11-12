@@ -1,83 +1,100 @@
-import fs, { read } from 'fs';
+import fs from 'fs';
 import path from 'path';
 
-export interface User {
-  id: string;
-  email: string;
-  password: string; // This will be encrypted
-  name: string;
-  createdAt: string;
-  favorites: string[]; // Product IDs
+interface Address {
+    street: string;
+    city: string;
+    state: string;
+    zipCode: string;
+    country: string;
 }
 
-const DATA_FILE = path.join(process.cwd(), 'data', 'users.join');
+interface User {
+    id: string;
+    email: string;
+    password: string;
+    name: string;
+    createdAt: string;
+    favorites: string[];
+    address?: Address;
+}
 
+// Path to JSON file for persistent storage
+const DATA_FILE = path.join(process.cwd(), 'data', 'users.json');
+
+// Ensure data directory exists
 function ensureDataDirectory() {
     const dataDir = path.join(process.cwd(), 'data');
-    if(!fs.existsSync(dataDir)){
+    if (!fs.existsSync(dataDir)) {
         fs.mkdirSync(dataDir, { recursive: true });
     }
 }
 
-function readUsers(): User[] {
-    ensureDataDirectory();
-
-    if(!fs.existsSync(DATA_FILE)){
-        fs.writeFileSync(DATA_FILE, JSON.stringify([], null, 2));
-        return [];
-    }
-
+// Load users from JSON file
+function loadUsers(): User[] {
     try {
-        const data = fs.readFileSync(DATA_FILE, 'utf-8');
-        return JSON.parse(data);
-    } catch(error){
-        console.error('Error reading users file:', error);
-        return [];
-    }
-}
-
-function writeUsers(users: User[]){
-    ensureDataDirectory();
-
-    try {
-        fs.writeFileSync(DATA_FILE, JSON.stringify(users, null, 2));
+        ensureDataDirectory();
+        if (fs.existsSync(DATA_FILE)) {
+            const data = fs.readFileSync(DATA_FILE, 'utf-8');
+            return JSON.parse(data);
+        }
     } catch (error) {
-        console.error('Error writing users file:', error);
+        console.error('Error loading users:', error);
+    }
+    return [];
+}
+
+// Save users to JSON file
+function saveUsers(users: User[]) {
+    try {
+        ensureDataDirectory();
+        fs.writeFileSync(DATA_FILE, JSON.stringify(users, null, 2));
+        console.log('✅ Users saved to file');
+    } catch (error) {
+        console.error('❌ Error saving users:', error);
     }
 }
 
-export const getUsers = (): User[] => {
-    return readUsers();
-}
+// Load users on module initialization
+let users: User[] = loadUsers();
+console.log(`📁 Loaded ${users.length} users from storage`);
 
-export const addUser = (user: User) => {
-    const users = readUsers();
-    users.push(user);
-    writeUsers(users);
-}
-
-export const findUserByEmail = (email: string): User | undefined => {
-    const users = readUsers();
+// Find user by email
+export function findUserByEmail(email: string) {
+    users = loadUsers(); // Reload to get latest data
     return users.find(user => user.email.toLowerCase() === email.toLowerCase());
-};
+}
 
-export const findUserById = (id: string): User | undefined => {
-  const users = readUsers();
-  return users.find(user => user.id === id);
-};
+// Add new user
+export function addUser(user: User) {
+    users = loadUsers(); // Reload to get latest data
+    users.push(user);
+    saveUsers(users); // Save to file immediately
+    console.log(`✅ User added: ${user.email}`);
+}
 
-export const updateUser = (userId: string, updates: Partial<User>) => {
-    const users = readUsers();
+// Find user by ID
+export function findUserById(userId: string) {
+    users = loadUsers(); // Reload to get latest data
+    return users.find(user => user.id === userId);
+}
+
+// Update user data
+export function updateUser(userId: string, updatedData: any) {
+    users = loadUsers(); // Reload to get latest data
     const userIndex = users.findIndex(user => user.id === userId);
-
-    if(userIndex !== -1) {
-        users[userIndex] = {...users[userIndex], ...updates };
-        writeUsers(users);
-        return users[userIndex]
+    
+    if (userIndex !== -1) {
+        // Merge existing user data with updates
+        users[userIndex] = {
+            ...users[userIndex],
+            ...updatedData
+        };
+        saveUsers(users); // Save to file immediately
+        console.log(`✅ User updated: ${users[userIndex].email}`);
+        return users[userIndex];
     }
-
+    
+    console.log(`❌ User not found: ${userId}`);
     return null;
 }
-
-// Start with an empty array - users will be added when they sign up
-export let users: User[] = [];

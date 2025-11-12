@@ -6,7 +6,9 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     <NextThemesProvider
       attribute="class"
       defaultTheme="light"
-      enableSystem={false}  // turn system off until it's working
+      enableSystem={false}
+      storageKey="robo-theme"
+      disableTransitionOnChange={false}
     >
       {children}
     </NextThemesProvider>

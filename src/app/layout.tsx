@@ -32,17 +32,17 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           dark:bg-gray-900 dark:text-gray-100
         `}
       >
-        <Providers>
-          <ThemeProvider>
+        <ThemeProvider>
+          <Providers>
             <Navbar />
             {children}
             <Footer />
             
-            {/* Cart Components - Add these */}
+            {/* Cart Components */}
             <CartModal />
             <FloatingCartButton />
-          </ThemeProvider>
-        </Providers>
+          </Providers>
+        </ThemeProvider>
       </body>
     </html>
   );

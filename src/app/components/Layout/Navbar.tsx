@@ -3,7 +3,8 @@
 import { useState, useEffect } from 'react';
 import Link from "next/link";
 import Image from 'next/image';
-import { Heart, ShoppingCart, User, Menu, X, ChevronDown, LogOut } from "lucide-react";
+import { useRouter } from 'next/navigation';
+import { Heart, ShoppingCart, User, Menu, X, ChevronDown, LogOut, User2 } from "lucide-react";
 import ThemeToggle from "../theme/ThemeToggle";
 import ShopDropdown from './Header/ShopDropdown';
 import SearchBar from './Header/SearchBar';
@@ -25,6 +26,7 @@ const categories = [
 ];
 
 export default function Header() {
+    const router = useRouter();
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [isMobileCategoriesOpen, setIsMobileCategoriesOpen] = useState(false);
     const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
@@ -44,6 +46,7 @@ export default function Header() {
     const handleLogout = () => {
       dispatch(logout());
       setShowUserMenu(false);
+      router.push('/'); // Redirect to home page after logout
     };
 
     const favoritesCount = favorites.length;
@@ -183,6 +186,14 @@ export default function Header() {
                                     <p className="text-sm font-medium text-gray-900 dark:text-white">{user.name}</p>
                                     <p className="text-xs text-gray-500 dark:text-gray-400">{user.email}</p>
                                   </div>
+                                  <Link
+                                    href="/account/profile"
+                                    onClick={() => setShowUserMenu(false)}
+                                    className="w-full flex items-center gap-2 px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                                  >
+                                    <User2 className="w-4 h-4" />
+                                    My Profile
+                                  </Link>
                                   <Link
                                     href="/account/orders"
                                     onClick={() => setShowUserMenu(false)}

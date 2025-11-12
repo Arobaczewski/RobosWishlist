@@ -1,10 +1,19 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
+interface Address {
+    street: string;
+    city: string;
+    state: string;
+    zipCode: string;
+    country: string;
+}
+
 interface User {
     id: string;
     email: string;
     name: string;
     favorites: string[];
+    address?: Address;
 }
 
 interface AuthState { 

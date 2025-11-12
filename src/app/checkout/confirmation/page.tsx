@@ -43,7 +43,8 @@ export default function OrderConfirmationPage() {
     };
 
     loadOrder();
-  }, [orderId, fetchOrderById, router]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [orderId]); // Only re-run when orderId changes, not when fetchOrderById changes
 
   if (loading) {
     return (
@@ -95,11 +96,11 @@ export default function OrderConfirmationPage() {
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.3 }}
-          className="bg-gradient-to-r from-yellow-500 to-orange-500 rounded-2xl p-8 mb-8 shadow-2xl"
+          className="bg-gradient-to-br from-gray-900 via-purple-300 to-purple-600 border-b border-purple-400 rounded-2xl p-8 mb-8 shadow-2xl"
         >
           <div className="flex items-start gap-4">
             <div className="bg-white rounded-full p-3 flex-shrink-0">
-              <AlertCircle className="w-8 h-8 text-orange-600" />
+              <AlertCircle className="w-8 h-8 text-purple-600" />
             </div>
             <div className="text-white">
               <h2 className="text-2xl font-bold mb-3">
