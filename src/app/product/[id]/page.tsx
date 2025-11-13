@@ -263,12 +263,13 @@ export default function ProductPage() {
                       animate={{ opacity: 1 }}
                       exit={{ opacity: 0 }}
                       transition={{ duration: 0.3 }}
-                      className='w-full h-full'
+                      className='relative w-full h-full'
                     >
                       <Image
                         src={images[currentImageIndex]}
                         alt={`${product.name} - Image ${currentImageIndex + 1}`}
                         fill
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 40vw"
                         className='object-contain p-8'
                         priority
                       />
@@ -344,7 +345,7 @@ export default function ProductPage() {
                       key={index}
                       onClick={() => setCurrentImageIndex(index)}
                       className={`
-                        aspect-square bg-white dark:bg-gray-800 rounded-lg overflow-hidden border-2 transition-all duration-300
+                        aspect-square relative bg-white dark:bg-gray-800 rounded-lg overflow-hidden border-2 transition-all duration-300
                         ${currentImageIndex === index 
                           ? 'border-purple-500 dark:border-purple-400 shadow-md' 
                           : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600'
@@ -614,6 +615,7 @@ export default function ProductPage() {
                 src={images[currentImageIndex]}
                 alt={product.name}
                 fill
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 40vw"
                 className="object-contain p-2"
               />
               <div className="absolute inset-0 bg-purple-500/20 animate-pulse"></div>

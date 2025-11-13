@@ -30,7 +30,7 @@ export interface PaymentInfo {
 
 export interface Order {
   id: string;
-  userId: string;
+  userId: string | null; // Changed to allow null for guest orders
   items: OrderItem[];
   subtotal: number;
   tax: number;

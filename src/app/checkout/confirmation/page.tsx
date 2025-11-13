@@ -10,7 +10,6 @@ import {
   CreditCard, 
   AlertCircle,
   ArrowRight,
-  Download,
   Home
 } from 'lucide-react';
 import Image from 'next/image';
@@ -22,9 +21,11 @@ export default function OrderConfirmationPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const orderId = searchParams.get('orderId');
+  const orderToken = searchParams.get('token'); // Guest order token
   const { fetchOrderById } = useOrders();
   const [order, setOrder] = useState<Order | null>(null);
   const [loading, setLoading] = useState(true);
+  const [isGuest, setIsGuest] = useState(false);
 
   useEffect(() => {
     if (!orderId) {
@@ -33,18 +34,35 @@ export default function OrderConfirmationPage() {
     }
 
     const loadOrder = async () => {
-      const fetchedOrder = await fetchOrderById(orderId);
-      if (fetchedOrder) {
-        setOrder(fetchedOrder);
-      } else {
+      try {
+        let fetchedOrder: Order | null = null;
+
+        // If we have an order token, fetch as guest
+        if (orderToken) {
+          setIsGuest(true);
+          // Fetch with token for guest access
+          fetchedOrder = await fetchOrderById(orderId, orderToken);
+        } else {
+          // Fetch with authentication for logged-in users
+          fetchedOrder = await fetchOrderById(orderId);
+        }
+
+        if (fetchedOrder) {
+          setOrder(fetchedOrder);
+        } else {
+          router.push('/');
+        }
+      } catch (error) {
+        console.error('Error loading order:', error);
         router.push('/');
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     };
 
     loadOrder();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [orderId]); // Only re-run when orderId changes, not when fetchOrderById changes
+  }, [orderId, orderToken]); // Re-run when orderId or token changes
 
   if (loading) {
     return (
@@ -126,6 +144,32 @@ export default function OrderConfirmationPage() {
           </div>
         </motion.div>
 
+        {/* Guest User Notice */}
+        {isGuest && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.35 }}
+            className="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-xl p-6 mb-6"
+          >
+            <div className="flex items-start gap-3">
+              <AlertCircle className="w-5 h-5 text-yellow-600 dark:text-yellow-400 flex-shrink-0 mt-0.5" />
+              <div>
+                <h3 className="font-semibold text-yellow-900 dark:text-yellow-200 mb-2">
+                  Guest Order Confirmation
+                </h3>
+                <p className="text-yellow-800 dark:text-yellow-300 text-sm">
+                  You checked out as a guest. Save this page URL to access your order details later. 
+                  In a real application, we would email you this confirmation link.
+                </p>
+                <p className="text-yellow-700 dark:text-yellow-400 text-xs mt-2">
+                  Create an account to track all your orders in one place!
+                </p>
+              </div>
+            </div>
+          </motion.div>
+        )}
+
         {/* Order Details */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -202,6 +246,7 @@ export default function OrderConfirmationPage() {
                       src={item.image}
                       alt={item.name}
                       fill
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 40vw"
                       className="object-contain p-2"
                     />
                   </div>
@@ -310,16 +355,29 @@ export default function OrderConfirmationPage() {
           transition={{ delay: 0.6 }}
           className="grid sm:grid-cols-2 gap-4"
         >
-          <Link href="/account/orders">
-            <motion.button
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              className="w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold py-4 px-6 rounded-xl transition-colors flex items-center justify-center gap-2"
-            >
-              <Package className="w-5 h-5" />
-              View All Orders
-            </motion.button>
-          </Link>
+          {!isGuest ? (
+            <Link href="/account/orders">
+              <motion.button
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                className="w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold py-4 px-6 rounded-xl transition-colors flex items-center justify-center gap-2"
+              >
+                <Package className="w-5 h-5" />
+                View All Orders
+              </motion.button>
+            </Link>
+          ) : (
+            <Link href="/login">
+              <motion.button
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                className="w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold py-4 px-6 rounded-xl transition-colors flex items-center justify-center gap-2"
+              >
+                <Package className="w-5 h-5" />
+                Create Account to Track Orders
+              </motion.button>
+            </Link>
+          )}
           <Link href="/shop">
             <motion.button
               whileHover={{ scale: 1.02 }}

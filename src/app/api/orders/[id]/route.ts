@@ -23,20 +23,21 @@ function verifyToken(request: NextRequest): string | null {
   }
 }
 
-// GET - Retrieve a specific order by ID
+// Helper function to verify order token for guest access
+function verifyOrderToken(token: string, orderId: string): boolean {
+  // Token format: orderId-randomString
+  const parts = token.split('-');
+  if (parts.length < 2) return false;
+  
+  const tokenOrderId = parts[0];
+  return tokenOrderId === orderId;
+}
+
+// GET - Retrieve a specific order by ID (supports both authenticated users and guest token)
 export async function GET(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
-  const userId = verifyToken(request);
-
-  if (!userId) {
-    return NextResponse.json(
-      { error: 'Unauthorized' },
-      { status: 401 }
-    );
-  }
-
   try {
     const orderId = params.id;
 
@@ -47,20 +48,43 @@ export async function GET(
       );
     }
 
-    const user = findUserById(userId);
-
-    if (!user) {
-      return NextResponse.json(
-        { error: 'User not found' },
-        { status: 404 }
-      );
-    }
-
+    // Get the order first
     const order = getOrderById(orderId);
 
     if (!order) {
       return NextResponse.json(
         { error: 'Order not found' },
+        { status: 404 }
+      );
+    }
+
+    // Check for guest order token in query params
+    const { searchParams } = new URL(request.url);
+    const orderToken = searchParams.get('token');
+
+    // If there's a valid order token, allow guest access
+    if (orderToken && verifyOrderToken(orderToken, orderId)) {
+      return NextResponse.json(
+        { order },
+        { status: 200 }
+      );
+    }
+
+    // Otherwise, require authentication
+    const userId = verifyToken(request);
+
+    if (!userId) {
+      return NextResponse.json(
+        { error: 'Unauthorized - authentication or valid order token required' },
+        { status: 401 }
+      );
+    }
+
+    const user = findUserById(userId);
+
+    if (!user) {
+      return NextResponse.json(
+        { error: 'User not found' },
         { status: 404 }
       );
     }
@@ -86,7 +110,7 @@ export async function GET(
   }
 }
 
-// DELETE - Delete a specific order
+// DELETE - Delete a specific order (requires authentication)
 export async function DELETE(
   request: NextRequest,
   { params }: { params: { id: string } }
@@ -158,7 +182,7 @@ export async function DELETE(
   }
 }
 
-// PATCH - Update order status (for future features like cancellation)
+// PATCH - Update order status (requires authentication)
 export async function PATCH(
   request: NextRequest,
   { params }: { params: { id: string } }

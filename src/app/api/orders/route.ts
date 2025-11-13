@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { findUserById } from '@/app/data/users';
 import { createOrder, getOrdersByUserId, deleteAllOrdersByUserId } from '@/app/data/orders';
 import jwt from 'jsonwebtoken';
+import { randomBytes } from 'crypto';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key-change-in-production';
 
@@ -23,7 +24,13 @@ function verifyToken(request: NextRequest): string | null {
   }
 }
 
-// GET - Retrieve all orders for a user
+// Helper function to generate a secure order access token
+function generateOrderToken(orderId: string): string {
+  const randomString = randomBytes(32).toString('hex');
+  return `${orderId}-${randomString}`;
+}
+
+// GET - Retrieve all orders for a user (requires authentication)
 export async function GET(request: NextRequest) {
   const userId = verifyToken(request);
 
@@ -60,20 +67,11 @@ export async function GET(request: NextRequest) {
   }
 }
 
-// POST - Create a new order
+// POST - Create a new order (supports both authenticated and guest users)
 export async function POST(request: NextRequest) {
-  const userId = verifyToken(request);
-
-  if (!userId) {
-    return NextResponse.json(
-      { error: 'Unauthorized' },
-      { status: 401 }
-    );
-  }
-
   try {
     const body = await request.json();
-    const { items, subtotal, tax, shipping, total, shippingAddress, paymentInfo } = body;
+    const { items, subtotal, tax, shipping, total, shippingAddress, paymentInfo, isGuest } = body;
 
     // Validate required fields
     if (!items || !Array.isArray(items) || items.length === 0) {
@@ -108,16 +106,35 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const user = findUserById(userId);
+    let userId: string | null = null;
+    let orderToken: string | null = null;
 
-    if (!user) {
-      return NextResponse.json(
-        { error: 'User not found' },
-        { status: 404 }
-      );
+    // Check if this is a guest checkout
+    if (isGuest) {
+      // Guest checkout - no authentication required
+      userId = null;
+    } else {
+      // Authenticated user - verify token
+      userId = verifyToken(request);
+
+      if (!userId) {
+        return NextResponse.json(
+          { error: 'Unauthorized - authentication required for user orders' },
+          { status: 401 }
+        );
+      }
+
+      const user = findUserById(userId);
+
+      if (!user) {
+        return NextResponse.json(
+          { error: 'User not found' },
+          { status: 404 }
+        );
+      }
     }
 
-    // Create the order
+    // Create the order (pass null for guest userId)
     const newOrder = createOrder({
       userId,
       items,
@@ -129,10 +146,17 @@ export async function POST(request: NextRequest) {
       paymentInfo,
     });
 
+    // Generate secure access token for guest orders
+    if (isGuest) {
+      orderToken = generateOrderToken(newOrder.id);
+    }
+
     return NextResponse.json(
       { 
         message: 'Order created successfully',
-        order: newOrder
+        order: newOrder,
+        // Return token for guest orders so they can access order confirmation
+        ...(isGuest && { orderToken })
       },
       { status: 201 }
     );
@@ -145,7 +169,7 @@ export async function POST(request: NextRequest) {
   }
 }
 
-// DELETE - Delete all orders for a user (for demo cleanup)
+// DELETE - Delete all orders for a user (for demo cleanup, requires authentication)
 export async function DELETE(request: NextRequest) {
   const userId = verifyToken(request);
 

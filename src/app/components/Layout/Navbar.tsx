@@ -59,7 +59,7 @@ export default function Header() {
             {/* Logo */}
             <div className="flex-shrink-0">
               <Link href='/' className="block hover:opacity-80 hover:text-purple-200 transition-opacity">
-                <Image src="/images/logo/logo.svg" alt="Robos Wishlist Logo" width={200} height={200}/>
+                <Image src="/images/logo/logo.svg" alt="Robos Wishlist Logo" width={200} height={200} priority/>
               </Link>
             </div>
 
@@ -118,7 +118,7 @@ export default function Header() {
                 {/* Logo */}
                 <div className="flex-shrink-0">
                     <Link href='/' className="block hover:opacity-80 hover:text-purple-200 transition-opacity">
-                        <Image src="/images/logo/logo.svg" alt="Robos Wishlist Logo" width={200} height={200}/>
+                        <Image src="/images/logo/logo.svg" alt="Robos Wishlist Logo" width={200} height={200} priority/>
                     </Link>
                 </div>
 

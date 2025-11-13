@@ -218,7 +218,7 @@ export default function ProductCard({
                   animate={{ opacity: 1, scale: isHovered ? 1.05 : 1 }}
                   exit={{ opacity: 0 }}
                   transition={{ duration: 0.3 }}
-                  className="w-full h-full"
+                  className="relative w-full h-full"
                 >
                   <Image
                     src={currentImage}
@@ -541,6 +541,7 @@ export default function ProductCard({
                 src={currentImage}
                 alt={product.name}
                 fill
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 40vw"
                 className="object-contain p-2"
               />
               {/* Glow effect */}

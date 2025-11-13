@@ -657,6 +657,7 @@ export default function CheckoutPage() {
                               src={item.image}
                               alt={item.name}
                               fill
+                              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 40vw"
                               className="object-contain p-2"
                             />
                           </div>
@@ -786,6 +787,7 @@ export default function CheckoutPage() {
                           src={item.image}
                           alt={item.name}
                           fill
+                          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 40vw"
                           className="object-contain p-1"
                         />
                       </div>

@@ -168,7 +168,7 @@ export default function FeaturedCarousel({ products }: FeaturedCarouselProps) {
                       src={currentProduct.images[0]}
                       alt={currentProduct.name}
                       fill
-                      className="object-contain drop-shadow-2xl"
+                      className="object-contain priority drop-shadow-2xl"
                       priority
                       sizes="(max-width: 1024px) 100vw, 50vw"
                       unoptimized={currentProduct.images[0].endsWith('.png')}
