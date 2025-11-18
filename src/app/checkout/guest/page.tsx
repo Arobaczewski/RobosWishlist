@@ -574,8 +574,7 @@ export default function GuestCheckoutPage() {
                       <div className="flex items-start gap-3">
                         <AlertCircle className="w-5 h-5 text-yellow-600 dark:text-yellow-400 flex-shrink-0 mt-0.5" />
                         <div className="text-sm text-yellow-800 dark:text-yellow-300">
-                          <p className="font-semibold mb-1">Demo Payment Form</p>
-                          <p>Enter any card information - no actual payment will be processed. This is for demonstration purposes only.</p>
+                          <strong>DEMO ONLY:</strong> This is a portfolio project. No real payment will be processed. Use test card: 4242 4242 4242 4242
                         </div>
                       </div>
                     </div>
@@ -597,7 +596,7 @@ export default function GuestCheckoutPage() {
                             });
                           }}
                           className={`w-full px-4 py-3 border ${errors.cardNumber ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'} rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-colors`}
-                          placeholder="1234 5678 9012 3456"
+                          placeholder="4242 4242 4242 4242"
                           maxLength={19}
                         />
                         {errors.cardNumber && (
