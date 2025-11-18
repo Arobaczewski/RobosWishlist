@@ -64,7 +64,42 @@ export function useOrders() {
     }
   };
 
-  const fetchOrderById = async (orderId: string) => {
+  // Updated to support both authenticated users and guest tokens
+  const fetchOrderById = async (orderId: string, guestToken?: string): Promise<Order | null> => {
+    // If we have a guest token, use that instead of auth token
+    if (guestToken) {
+      dispatch(setLoading(true));
+      dispatch(clearError());
+
+      try {
+        // For guest orders, append token as query parameter
+        const response = await fetch(`/api/orders/${orderId}?token=${encodeURIComponent(guestToken)}`, {
+          headers: {
+            'Content-Type': 'application/json'
+            // No Authorization header for guest access
+          }
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          dispatch(setCurrentOrder(data.order));
+          dispatch(setLoading(false));
+          return data.order;
+        } else {
+          const errorData = await response.json();
+          dispatch(setError(errorData.error || 'Failed to fetch order'));
+          dispatch(setLoading(false));
+          return null;
+        }
+      } catch (error) {
+        console.error('Error fetching order:', error);
+        dispatch(setError('Failed to fetch order. Please try again.'));
+        dispatch(setLoading(false));
+        return null;
+      }
+    }
+
+    // Original authenticated user logic
     if (!token) return null;
 
     dispatch(setLoading(true));
@@ -85,11 +120,13 @@ export function useOrders() {
       } else {
         const errorData = await response.json();
         dispatch(setError(errorData.error || 'Failed to fetch order'));
+        dispatch(setLoading(false));
         return null;
       }
     } catch (error) {
       console.error('Error fetching order:', error);
       dispatch(setError('Failed to fetch order. Please try again.'));
+      dispatch(setLoading(false));
       return null;
     }
   };

@@ -157,12 +157,12 @@ export default function CartModal() {
                             </p>
                           )}
 
-                          {/* Variants */}
+                          {/* Variants - FIXED: Added unique key by combining item.id with key */}
                           {Object.keys(item.selectedVariants).length > 0 && (
                             <div className="flex flex-wrap gap-1 mb-2">
                               {Object.entries(item.selectedVariants).map(([key, value]) => (
                                 <span
-                                  key={key}
+                                  key={`${item.id}-${key}`}
                                   className="text-xs bg-white dark:bg-gray-700 px-2 py-0.5 rounded-full text-gray-600 dark:text-gray-300 border border-gray-200 dark:border-gray-600"
                                 >
                                   {value}
@@ -171,26 +171,26 @@ export default function CartModal() {
                             </div>
                           )}
 
-                          {/* Price and Quantity */}
                           <div className="flex items-center justify-between mt-2">
                             {/* Quantity Controls */}
-                            <div className="flex items-center gap-2">
+                            <div className="flex items-center gap-2 bg-white dark:bg-gray-700 rounded-lg p-1">
                               <button
                                 onClick={() => updateItemQuantity(item.id, Math.max(1, item.quantity - 1))}
-                                className="w-7 h-7 rounded-md bg-white dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 flex items-center justify-center transition-colors border border-gray-200 dark:border-gray-600"
+                                disabled={item.quantity <= 1}
+                                className="p-1 hover:bg-gray-100 dark:hover:bg-gray-600 rounded disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                                 aria-label="Decrease quantity"
                               >
-                                <Minus className="w-3 h-3 text-gray-600 dark:text-gray-300" />
+                                <Minus className="w-4 h-4 text-gray-700 dark:text-gray-300" />
                               </button>
-                              <span className="text-sm font-medium text-gray-900 dark:text-white min-w-[1.5rem] text-center">
+                              <span className="w-8 text-center font-semibold text-gray-900 dark:text-white text-sm">
                                 {item.quantity}
                               </span>
                               <button
                                 onClick={() => updateItemQuantity(item.id, item.quantity + 1)}
-                                className="w-7 h-7 rounded-md bg-white dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 flex items-center justify-center transition-colors border border-gray-200 dark:border-gray-600"
+                                className="p-1 hover:bg-gray-100 dark:hover:bg-gray-600 rounded transition-colors"
                                 aria-label="Increase quantity"
                               >
-                                <Plus className="w-3 h-3 text-gray-600 dark:text-gray-300" />
+                                <Plus className="w-4 h-4 text-gray-700 dark:text-gray-300" />
                               </button>
                             </div>
 
