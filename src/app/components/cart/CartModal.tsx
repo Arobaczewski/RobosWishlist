@@ -321,7 +321,7 @@ export default function CartModal() {
                   initial={{ opacity: 0, scale: 0.95 }}
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.95 }}
-                  className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-md bg-white dark:bg-gray-800 rounded-2xl shadow-2xl z-[60] p-6"
+                  className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[calc(100%-2rem)] sm:w-full max-w-md bg-white dark:bg-gray-800 rounded-2xl shadow-2xl z-[60] p-6 mx-4 max-h-[90vh] overflow-y-auto"
                 >
                   <div className="flex items-start gap-4 mb-6">
                     <div className="bg-red-100 dark:bg-red-900/30 rounded-full p-3 flex-shrink-0">
