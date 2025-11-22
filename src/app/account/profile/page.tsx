@@ -3,7 +3,10 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAppSelector, useAppDispatch } from '@/app/store/hooks/hooks';
-import { setCredentials } from '@/app/store/slices/authSlice';
+import {
+  updateUserProfile,
+  updateUserPassword,
+} from '@/app/store/slices/authSlice';
 import { motion } from 'framer-motion';
 import { User, Mail, MapPin, Lock, Save, Edit2, X, Check } from 'lucide-react';
 
@@ -30,8 +33,7 @@ interface PasswordFormData {
 export default function ProfilePage() {
   const router = useRouter();
   const dispatch = useAppDispatch();
-  const { user, isAuthenticated, token } = useAppSelector((state) => state.auth);
-
+  const { user, isAuthenticated } = useAppSelector((state) => state.auth);
   const [isEditingProfile, setIsEditingProfile] = useState(false);
   const [isEditingPassword, setIsEditingPassword] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -117,89 +119,106 @@ export default function ProfilePage() {
   };
 
   const handleProfileSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-    setMessage(null);
+  e.preventDefault();
+  if (!user) return;
 
-    try {
-      const response = await fetch('/api/user/update-profile', {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
+  setLoading(true);
+  setMessage(null);
+
+  try {
+    const resultAction = await dispatch(
+      updateUserProfile({
+        userId: user.id,
+        updates: {
+          name: profileData.name,
+          email: profileData.email,
+          phone: profileData.phone,
+          address: {
+            street: profileData.address.street,
+            addressLine2: profileData.address.addressLine2,
+            city: profileData.address.city,
+            state: profileData.address.state,
+            zipCode: profileData.address.zipCode,
+            country: profileData.address.country,
+          },
         },
-        body: JSON.stringify(profileData)
-      });
+      })
+    );
 
-      const data = await response.json();
-
-      if (response.ok) {
-        // Update Redux store with new user data
-        dispatch(setCredentials({ user: data.user, token: token! }));
-        setMessage({ type: 'success', text: 'Profile updated successfully!' });
-        setIsEditingProfile(false);
-      } else {
-        setMessage({ type: 'error', text: data.error || 'Failed to update profile' });
-      }
-    } catch (error) {
-      console.error('Profile update error:', error);
-      setMessage({ type: 'error', text: 'An error occurred while updating your profile' });
-    } finally {
-      setLoading(false);
+    if (updateUserProfile.rejected.match(resultAction)) {
+      const errorMsg =
+        resultAction.payload ?? 'Failed to update profile. Please try again.';
+      setMessage({ type: 'error', text: errorMsg });
+    } else {
+      setMessage({ type: 'success', text: 'Profile updated successfully!' });
+      setIsEditingProfile(false);
     }
-  };
+  } catch (error) {
+    console.error('Profile update error:', error);
+    setMessage({
+      type: 'error',
+      text: 'An error occurred while updating your profile',
+    });
+  } finally {
+    setLoading(false);
+  }
+};
 
   const handlePasswordSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-    setMessage(null);
+  e.preventDefault();
+  if (!user) return;
 
-    // Validation
-    if (passwordData.newPassword !== passwordData.confirmPassword) {
-      setMessage({ type: 'error', text: 'New passwords do not match' });
-      setLoading(false);
-      return;
-    }
+  setLoading(true);
+  setMessage(null);
 
-    if (passwordData.newPassword.length < 6) {
-      setMessage({ type: 'error', text: 'New password must be at least 6 characters' });
-      setLoading(false);
-      return;
-    }
+  // Validation
+  if (passwordData.newPassword !== passwordData.confirmPassword) {
+    setMessage({ type: 'error', text: 'New passwords do not match' });
+    setLoading(false);
+    return;
+  }
 
-    try {
-      const response = await fetch('/api/user/update-password', {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        },
-        body: JSON.stringify({
-          currentPassword: passwordData.currentPassword,
-          newPassword: passwordData.newPassword
-        })
+  if (passwordData.newPassword.length < 6) {
+    setMessage({
+      type: 'error',
+      text: 'New password must be at least 6 characters',
+    });
+    setLoading(false);
+    return;
+  }
+
+  try {
+    const resultAction = await dispatch(
+      updateUserPassword({
+        userId: user.id,
+        currentPassword: passwordData.currentPassword,
+        newPassword: passwordData.newPassword,
+      })
+    );
+
+    if (updateUserPassword.rejected.match(resultAction)) {
+      const errorMsg =
+        resultAction.payload ?? 'Failed to update password. Please try again.';
+      setMessage({ type: 'error', text: errorMsg });
+    } else {
+      setMessage({ type: 'success', text: 'Password updated successfully!' });
+      setIsEditingPassword(false);
+      setPasswordData({
+        currentPassword: '',
+        newPassword: '',
+        confirmPassword: '',
       });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        setMessage({ type: 'success', text: 'Password updated successfully!' });
-        setIsEditingPassword(false);
-        setPasswordData({
-          currentPassword: '',
-          newPassword: '',
-          confirmPassword: ''
-        });
-      } else {
-        setMessage({ type: 'error', text: data.error || 'Failed to update password' });
-      }
-    } catch (error) {
-      console.error('Password update error:', error);
-      setMessage({ type: 'error', text: 'An error occurred while updating your password' });
-    } finally {
-      setLoading(false);
     }
-  };
+  } catch (error) {
+    console.error('Password update error:', error);
+    setMessage({
+      type: 'error',
+      text: 'An error occurred while updating your password',
+    });
+  } finally {
+    setLoading(false);
+  }
+};
 
   if (!isAuthenticated || !user) {
     return null;

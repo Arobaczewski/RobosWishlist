@@ -1,3 +1,6 @@
+"use client";
+
+import { useEffect, useCallback } from "react";
 import { useAppDispatch, useAppSelector } from "./hooks";
 import {
   setOrders,
@@ -10,265 +13,287 @@ import {
   setError,
   clearError,
 } from "../slices/ordersSlice";
-import { Order, OrderItem, ShippingAddress, PaymentInfo } from "@/app/data/orders";
-import { useEffect } from "react";
+import type {
+  Order,
+  OrderItem,
+  ShippingAddress,
+  PaymentInfo,
+} from "@/app/data/orders";
+
+const isBrowser = typeof window !== "undefined";
+const ORDERS_KEY = "demo_orders_all";
+
+function loadAllOrders(): Order[] {
+  if (!isBrowser) return [];
+  try {
+    const raw = window.localStorage.getItem(ORDERS_KEY);
+    return raw ? (JSON.parse(raw) as Order[]) : [];
+  } catch (error) {
+    console.error("Error loading orders from localStorage:", error);
+    return [];
+  }
+}
+
+function saveAllOrders(orders: Order[]) {
+  if (!isBrowser) return;
+  try {
+    window.localStorage.setItem(ORDERS_KEY, JSON.stringify(orders));
+  } catch (error) {
+    console.error("Error saving orders to localStorage:", error);
+  }
+}
 
 interface CreateOrderData {
   items: OrderItem[];
-  subtotal: number;
-  tax: number;
-  shipping: number;
-  total: number;
   shippingAddress: ShippingAddress;
   paymentInfo: PaymentInfo;
+  totalAmount: number;
+  status?: Order["status"] | string;
+  isGuest?: boolean;
+  // 👇 This lets your existing code pass extra fields without TS freaking out
+  [key: string]: any;
 }
 
 export function useOrders() {
   const dispatch = useAppDispatch();
-  const { orders, loading, error, currentOrder } = useAppSelector((state) => state.orders);
-  const { token, isAuthenticated, user } = useAppSelector((state) => state.auth);
+  const { orders, currentOrder, loading, error } = useAppSelector(
+    (state) => state.orders
+  );
+  const { user, isAuthenticated } = useAppSelector((state) => state.auth);
 
-  // Fetch orders when user logs in
+  // Load orders for the current user when auth changes
   useEffect(() => {
-    if (isAuthenticated && token) {
-      fetchOrders();
+    if (!isBrowser) return;
+
+    const allOrders = loadAllOrders();
+
+    if (isAuthenticated && user) {
+      const userOrders = allOrders.filter(
+        (o: any) => o.userId === user.id
+      );
+      dispatch(setOrders(userOrders));
     } else {
-      // Clear orders when user logs out
-      dispatch(clearOrders());
+      // logged out: clear user orders from state
+      dispatch(setOrders([]));
     }
-  }, [isAuthenticated, token]);
+  }, [dispatch, isAuthenticated, user?.id]);
 
-  const fetchOrders = async () => {
-    if (!token) return;
+  const syncUserOrdersFromAll = useCallback(
+    (allOrders: Order[]) => {
+      if (isAuthenticated && user) {
+        const userOrders = allOrders.filter(
+          (o: any) => o.userId === user.id
+        );
+        dispatch(setOrders(userOrders));
+      } else {
+        dispatch(setOrders([]));
+      }
+    },
+    [dispatch, isAuthenticated, user?.id]
+  );
 
+  const fetchOrders = useCallback(async () => {
+    if (!isBrowser) return;
     dispatch(setLoading(true));
     dispatch(clearError());
 
     try {
-      const response = await fetch('/api/orders', {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        dispatch(setOrders(data.orders || []));
-      } else {
-        const errorData = await response.json();
-        dispatch(setError(errorData.error || 'Failed to fetch orders'));
-      }
-    } catch (error) {
-      console.error('Error fetching orders:', error);
-      dispatch(setError('Failed to fetch orders. Please try again.'));
+      const allOrders = loadAllOrders();
+      syncUserOrdersFromAll(allOrders);
+    } catch (err) {
+      console.error("Error fetching orders:", err);
+      dispatch(setError("Failed to load orders."));
+    } finally {
+      dispatch(setLoading(false));
     }
-  };
+  }, [dispatch, syncUserOrdersFromAll]);
 
-  // Updated to support both authenticated users and guest tokens
-  const fetchOrderById = async (orderId: string, guestToken?: string): Promise<Order | null> => {
-    // If we have a guest token, use that instead of auth token
-    if (guestToken) {
+  // Note: we accept an optional second arg (_orderToken) so your existing
+  // confirmation page can still call fetchOrderById(orderId, orderToken)
+  const fetchOrderById = useCallback(
+    async (orderId: string, _orderToken?: string): Promise<Order | null> => {
+      if (!isBrowser) return null;
       dispatch(setLoading(true));
       dispatch(clearError());
 
       try {
-        // For guest orders, append token as query parameter
-        const response = await fetch(`/api/orders/${orderId}?token=${encodeURIComponent(guestToken)}`, {
-          headers: {
-            'Content-Type': 'application/json'
-            // No Authorization header for guest access
-          }
-        });
+        // First, check current state
+        let order = orders.find((o) => o.id === orderId) || null;
 
-        if (response.ok) {
-          const data = await response.json();
-          dispatch(setCurrentOrder(data.order));
-          dispatch(setLoading(false));
-          return data.order;
+        if (!order) {
+          // fallback to searching all orders in localStorage
+          const allOrders = loadAllOrders();
+          order = allOrders.find((o) => o.id === orderId) || null;
+        }
+
+        if (order) {
+          dispatch(setCurrentOrder(order));
+          return order;
         } else {
-          const errorData = await response.json();
-          dispatch(setError(errorData.error || 'Failed to fetch order'));
-          dispatch(setLoading(false));
+          dispatch(setError("Order not found."));
           return null;
         }
-      } catch (error) {
-        console.error('Error fetching order:', error);
-        dispatch(setError('Failed to fetch order. Please try again.'));
-        dispatch(setLoading(false));
+      } catch (err) {
+        console.error("Error fetching order:", err);
+        dispatch(setError("Failed to load order."));
         return null;
-      }
-    }
-
-    // Original authenticated user logic
-    if (!token) return null;
-
-    dispatch(setLoading(true));
-    dispatch(clearError());
-
-    try {
-      const response = await fetch(`/api/orders/${orderId}`, {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        dispatch(setCurrentOrder(data.order));
+      } finally {
         dispatch(setLoading(false));
-        return data.order;
-      } else {
-        const errorData = await response.json();
-        dispatch(setError(errorData.error || 'Failed to fetch order'));
-        dispatch(setLoading(false));
-        return null;
       }
-    } catch (error) {
-      console.error('Error fetching order:', error);
-      dispatch(setError('Failed to fetch order. Please try again.'));
-      dispatch(setLoading(false));
-      return null;
-    }
-  };
+    },
+    [dispatch, orders]
+  );
 
-  const createOrder = async (orderData: CreateOrderData, isGuest: boolean = false): Promise<Order | null> => {
-    // For guest checkout, we don't need authentication
-    if (!isGuest && (!token || !user)) {
-      dispatch(setError('You must be logged in to place an order'));
-      return null;
-    }
-
-    dispatch(setLoading(true));
-    dispatch(clearError());
-
-    try {
-      const response = await fetch('/api/orders', {
-        method: 'POST',
-        headers: {
-          ...(token && !isGuest ? { 'Authorization': `Bearer ${token}` } : {}),
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          ...(user && !isGuest ? { userId: user.id } : {}),
-          ...orderData,
-          isGuest
-        })
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        dispatch(addOrder(data.order));
-        dispatch(setLoading(false));
-        // Return the order with orderToken if it's a guest order
-        return { ...data.order, orderToken: data.orderToken };
-      } else {
-        const errorData = await response.json();
-        dispatch(setError(errorData.error || 'Failed to create order'));
-        return null;
+  const createOrder = useCallback(
+    async (data: CreateOrderData): Promise<Order> => {
+      if (!isBrowser) {
+        throw new Error("Orders are only available in the browser.");
       }
-    } catch (error) {
-      console.error('Error creating order:', error);
-      dispatch(setError('Failed to create order. Please try again.'));
-      return null;
-    }
-  };
 
-  const deleteOrderById = async (orderId: string): Promise<boolean> => {
-    if (!token) return false;
+      dispatch(setLoading(true));
+      dispatch(clearError());
 
-    dispatch(setLoading(true));
-    dispatch(clearError());
+      try {
+        const allOrders = loadAllOrders();
 
-    try {
-      const response = await fetch(`/api/orders/${orderId}`, {
-        method: 'DELETE',
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      });
+        const id =
+          typeof crypto !== "undefined" && "randomUUID" in crypto
+            ? crypto.randomUUID()
+            : Date.now().toString();
 
-      if (response.ok) {
+        const now = new Date().toISOString();
+        const userId = isAuthenticated && user ? user.id : null;
+        const status = data.status ?? "processing";
+
+        const newOrder: Order = {
+          ...(data as any),
+          id,
+          userId,
+          status,
+          createdAt: now,
+        };
+
+        const updatedAll = [...allOrders, newOrder];
+        saveAllOrders(updatedAll);
+
+        syncUserOrdersFromAll(updatedAll);
+        dispatch(addOrder(newOrder));
+        dispatch(setCurrentOrder(newOrder));
+
+        return newOrder;
+      } catch (err) {
+        console.error("Error creating order:", err);
+        dispatch(setError("Failed to create order."));
+        throw err;
+      } finally {
+        dispatch(setLoading(false));
+      }
+    },
+    [dispatch, isAuthenticated, user, syncUserOrdersFromAll]
+  );
+
+  const deleteOrderById = useCallback(
+    async (orderId: string) => {
+      if (!isBrowser) return;
+      dispatch(setLoading(true));
+      dispatch(clearError());
+
+      try {
+        const allOrders = loadAllOrders();
+        const updatedAll = allOrders.filter((o) => o.id !== orderId);
+        saveAllOrders(updatedAll);
+
+        syncUserOrdersFromAll(updatedAll);
         dispatch(removeOrder(orderId));
+      } catch (err) {
+        console.error("Error deleting order:", err);
+        dispatch(setError("Failed to delete order."));
+      } finally {
         dispatch(setLoading(false));
-        return true;
-      } else {
-        const errorData = await response.json();
-        dispatch(setError(errorData.error || 'Failed to delete order'));
-        return false;
       }
-    } catch (error) {
-      console.error('Error deleting order:', error);
-      dispatch(setError('Failed to delete order. Please try again.'));
-      return false;
-    }
-  };
+    },
+    [dispatch, syncUserOrdersFromAll]
+  );
 
-  const deleteAllOrders = async (): Promise<boolean> => {
-    if (!token) return false;
-
+  const deleteAllOrders = useCallback(async () => {
+    if (!isBrowser) return;
     dispatch(setLoading(true));
     dispatch(clearError());
 
     try {
-      const response = await fetch('/api/orders', {
-        method: 'DELETE',
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      });
+      const allOrders = loadAllOrders();
 
-      if (response.ok) {
-        dispatch(clearOrders());
-        dispatch(setLoading(false));
-        return true;
+      if (isAuthenticated && user) {
+        const updatedAll = allOrders.filter(
+          (o: any) => o.userId !== user.id
+        );
+        saveAllOrders(updatedAll);
       } else {
-        const errorData = await response.json();
-        dispatch(setError(errorData.error || 'Failed to delete orders'));
-        return false;
+        // guest: we won't touch stored orders for other users
       }
-    } catch (error) {
-      console.error('Error deleting orders:', error);
-      dispatch(setError('Failed to delete orders. Please try again.'));
-      return false;
+
+      dispatch(clearOrders());
+    } catch (err) {
+      console.error("Error deleting all orders:", err);
+      dispatch(setError("Failed to delete orders."));
+    } finally {
+      dispatch(setLoading(false));
     }
-  };
+  }, [dispatch, isAuthenticated, user]);
 
-  const updateStatus = async (orderId: string, status: Order['status']): Promise<boolean> => {
-    if (!token) return false;
+  const updateStatus = useCallback(
+    async (orderId: string, status: Order["status"] | string) => {
+      if (!isBrowser) return;
+      dispatch(setLoading(true));
+      dispatch(clearError());
 
-    try {
-      const response = await fetch(`/api/orders/${orderId}`, {
-        method: 'PATCH',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ status })
-      });
+      try {
+        const allOrders = loadAllOrders();
+        const idx = allOrders.findIndex((o) => o.id === orderId);
+        if (idx === -1) {
+          dispatch(setError("Order not found."));
+          return;
+        }
 
-      if (response.ok) {
-        dispatch(updateOrderStatus({ orderId, status }));
-        return true;
+        (allOrders[idx] as any).status = status;
+        saveAllOrders(allOrders);
+
+        syncUserOrdersFromAll(allOrders);
+        dispatch(updateOrderStatus({ id: orderId, status }));
+      } catch (err) {
+        console.error("Error updating order status:", err);
+        dispatch(setError("Failed to update order status."));
+      } finally {
+        dispatch(setLoading(false));
       }
-      return false;
-    } catch (error) {
-      console.error('Error updating order status:', error);
-      return false;
-    }
-  };
+    },
+    [dispatch, syncUserOrdersFromAll]
+  );
 
-  // Helper functions for order statistics
-  const getTotalSpent = (): number => {
-    return orders.reduce((total, order) => total + order.total, 0);
-  };
+  const getTotalSpent = useCallback(() => {
+    // Assumes each Order has a totalAmount or similar field
+    return orders.reduce((sum, order: any) => {
+      const amount =
+        typeof order.totalAmount === "number" ? order.totalAmount : 0;
+      return sum + amount;
+    }, 0);
+  }, [orders]);
 
-  const getOrderCount = (): number => {
+  const getOrderCount = useCallback(() => {
     return orders.length;
-  };
+  }, [orders]);
 
-  const getRecentOrders = (limit: number = 5): Order[] => {
-    return orders.slice(0, limit);
-  };
+  const getRecentOrders = useCallback(
+    (limit = 5) => {
+      const sorted = [...orders].sort((a: any, b: any) => {
+        const aTime = a.createdAt ? new Date(a.createdAt).getTime() : 0;
+        const bTime = b.createdAt ? new Date(b.createdAt).getTime() : 0;
+        return bTime - aTime;
+      });
+      return sorted.slice(0, limit);
+    },
+    [orders]
+  );
 
   return {
     orders,

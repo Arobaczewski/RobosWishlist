@@ -1,84 +1,83 @@
-import { useAppDispatch, useAppSelector } from "./hooks";
-import { addFavorites, removeFavorites, setFavorites } from "../slices/favoritesSlice";
+"use client";
+
 import { useEffect } from "react";
+import { useAppDispatch, useAppSelector } from "./hooks";
+import {
+  addFavorites,
+  removeFavorites,
+  setFavorites,
+} from "../slices/favoritesSlice";
+
+const isBrowser = typeof window !== "undefined";
+
+// Helper: get the localStorage key for a given user
+function getFavoritesKey(userId: string) {
+  return `demo_favorites_${userId}`;
+}
 
 export function useFavorites() {
-    const dispatch = useAppDispatch();
-    const { items: favorites } = useAppSelector((state) => state.favorites);
-    const { token, isAuthenticated } = useAppSelector((state) => state.auth);
+  const dispatch = useAppDispatch();
+  const { items: favorites } = useAppSelector((state) => state.favorites);
+  const { user, isAuthenticated } = useAppSelector((state) => state.auth);
 
-    useEffect(() => {
-        if(isAuthenticated && token) {
-            fetchFavorites();
-        }
-    }, [isAuthenticated, token]);
+  // On mount / when user changes, load favorites from localStorage
+  useEffect(() => {
+    if (!isBrowser) return;
 
-    const fetchFavorites = async () => {
-        if(!token) return;
+    if (!isAuthenticated || !user) {
+      // Logged out → clear favorites in state
+      dispatch(setFavorites([]));
+      return;
+    }
 
-        try {
-            const response = await fetch('/api/favorites', {
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
-            });
+    try {
+      const key = getFavoritesKey(user.id);
+      const raw = window.localStorage.getItem(key);
+      const stored = raw ? (JSON.parse(raw) as string[]) : [];
+      dispatch(setFavorites(stored));
+    } catch (error) {
+      console.error("Error loading favorites from localStorage:", error);
+      dispatch(setFavorites([]));
+    }
+  }, [isAuthenticated, user?.id, dispatch]);
 
-            if (response.ok) {
-                const data = await response.json();
-                dispatch(setFavorites(data.favorites));
-            } 
-        } catch (error) {
-            console.error('Error fetching favorites:', error);
-        }
-    };
+  const persistFavorites = (userId: string, items: string[]) => {
+    if (!isBrowser) return;
+    try {
+      const key = getFavoritesKey(userId);
+      window.localStorage.setItem(key, JSON.stringify(items));
+    } catch (error) {
+      console.error("Error saving favorites to localStorage:", error);
+    }
+  };
 
-    const toggleFavorite = async (productId: string) => {
-        if (!token) {
-            alert('Please log in to save favorites');
-            return;
-        }
+  const toggleFavorite = (productId: string) => {
+    if (!isAuthenticated || !user) {
+      alert("Please log in to save favorites.");
+      return;
+    }
 
-        const isFavorited = favorites.includes(productId);
+    const isAlreadyFavorited = favorites.includes(productId);
+    let updated: string[];
 
-        try {
-            if(isFavorited){
-                const response = await fetch(`/api/favorites?productId=${productId}`, {
-                    method: 'DELETE',
-                    headers: {
-                        'Authorization': `Bearer ${token}`
-                    }
-                });
-                if(response.ok) {
-                    dispatch(removeFavorites(productId));
-                }
-            
-            } else {
-                const response = await fetch('/api/favorites', {
-                    method: 'POST',
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ productId })
-                });
+    if (isAlreadyFavorited) {
+      dispatch(removeFavorites(productId));
+      updated = favorites.filter((id) => id !== productId);
+    } else {
+      dispatch(addFavorites(productId));
+      updated = [...favorites, productId];
+    }
 
-                if(response.ok){
-                    dispatch(addFavorites(productId));
-                }
-            }
-        } catch (error) {
-            console.error('Error toggling favorite:', error);
-            alert('Failed to update favorites');
-        }
-    };
+    persistFavorites(user.id, updated);
+  };
 
-    const isFavorited = (productId: string) => {
-        return favorites.includes(productId);
-    };
+  const isFavorited = (productId: string) => {
+    return favorites.includes(productId);
+  };
 
-    return {
-        favorites,
-        toggleFavorite,
-        isFavorited
-    };
+  return {
+    favorites,
+    toggleFavorite,
+    isFavorited,
+  };
 }

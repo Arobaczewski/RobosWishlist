@@ -209,56 +209,62 @@ export default function CheckoutPage() {
 
   // Handle place order
   const handlePlaceOrder = async () => {
-    if (isProcessing || loading) return;
+  if (isProcessing || loading) return;
 
-    setIsProcessing(true);
+  setIsProcessing(true);
 
-    try {
-      const orderData = {
-        items: items.map(item => ({
-          id: item.id,
-          productId: item.productId,
-          name: item.name,
-          price: item.price,
-          quantity: item.quantity,
-          image: item.image,
-          selectedVariants: item.selectedVariants,
-        })),
-        subtotal,
-        tax,
-        shipping,
-        total,
-        shippingAddress: shippingData,
-        paymentInfo: {
-          cardType: paymentData.cardType || detectCardType(paymentData.cardNumber),
-          lastFourDigits: paymentData.cardNumber.replace(/\s/g, '').slice(-4),
-          cardholderName: paymentData.cardholderName,
-        },
-      };
+  try {
+    const orderData = {
+      items: items.map(item => ({
+        id: item.id,
+        productId: item.productId,
+        name: item.name,
+        price: item.price,
+        quantity: item.quantity,
+        image: item.image,
+        selectedVariants: item.selectedVariants,
+      })),
+      subtotal,
+      tax,
+      shipping,
+      total,
+      shippingAddress: shippingData,
+      paymentInfo: {
+        cardType: paymentData.cardType || detectCardType(paymentData.cardNumber),
+        lastFourDigits: paymentData.cardNumber.replace(/\s/g, '').slice(-4),
+        cardholderName: paymentData.cardholderName,
+      },
+    };
 
-      const order = await createOrder(orderData, !isAuthenticated);
+    const order = await createOrder({
+      ...orderData,
+      isGuest: !isAuthenticated,
+      totalAmount: total, // 👈 satisfies CreateOrderData
+    });
 
-      if (order) {
-        // Clear cart
-        await emptyCart();
-        
-        // For guest orders, store the orderToken in sessionStorage
-        if (order.orderToken) {
-          sessionStorage.setItem(`guestOrder_${order.id}`, order.orderToken);
-        }
-        
-        // Redirect to confirmation page (supports both authenticated and guest orders)
-        router.push(`/checkout/confirmation?orderId=${order.id}&guest=${!isAuthenticated}`);
-      } else {
-        alert('Failed to create order. Please try again.');
-        setIsProcessing(false);
+
+    if (order) {
+      // Clear cart
+      await emptyCart();
+      
+      // For guest orders, store the orderToken in sessionStorage (if it exists in your type)
+      if (order.orderToken) {
+        sessionStorage.setItem(`guestOrder_${order.id}`, order.orderToken);
       }
-    } catch (error) {
-      console.error('Error placing order:', error);
-      alert('An error occurred. Please try again.');
+      
+      // Redirect to confirmation
+      router.push(`/checkout/confirmation?orderId=${order.id}&guest=${!isAuthenticated}`);
+    } else {
+      alert('Failed to create order. Please try again.');
       setIsProcessing(false);
     }
-  };
+  } catch (error) {
+    console.error('Error placing order:', error);
+    alert('An error occurred. Please try again.');
+    setIsProcessing(false);
+  }
+};
+
 
   const steps = [
     { id: 'shipping', label: 'Shipping', icon: MapPin },
