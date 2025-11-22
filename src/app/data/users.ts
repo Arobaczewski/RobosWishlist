@@ -3,6 +3,7 @@ import path from 'path';
 
 interface Address {
     street: string;
+    addressLine2?: string;  // Optional second address line
     city: string;
     state: string;
     zipCode: string;
@@ -14,6 +15,7 @@ interface User {
     email: string;
     password: string;
     name: string;
+    phone?: string;  // Added phone number field
     createdAt: string;
     favorites: string[];
     address?: Address;

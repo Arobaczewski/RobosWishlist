@@ -10,8 +10,10 @@ import { User, Mail, MapPin, Lock, Save, Edit2, X, Check } from 'lucide-react';
 interface ProfileFormData {
   name: string;
   email: string;
+  phone: string;
   address: {
     street: string;
+    addressLine2: string;  // Added second address line
     city: string;
     state: string;
     zipCode: string;
@@ -38,8 +40,10 @@ export default function ProfilePage() {
   const [profileData, setProfileData] = useState<ProfileFormData>({
     name: '',
     email: '',
+    phone: '',
     address: {
       street: '',
+      addressLine2: '',
       city: '',
       state: '',
       zipCode: '',
@@ -66,8 +70,10 @@ export default function ProfilePage() {
       setProfileData({
         name: user.name || '',
         email: user.email || '',
+        phone: user.phone || '',
         address: {
           street: user.address?.street || '',
+          addressLine2: user.address?.addressLine2 || '',
           city: user.address?.city || '',
           state: user.address?.state || '',
           zipCode: user.address?.zipCode || '',
@@ -285,6 +291,21 @@ export default function ProfilePage() {
               </div>
             </div>
 
+            {/* Phone */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                Phone Number
+              </label>
+              <input
+                type="tel"
+                value={profileData.phone}
+                onChange={(e) => handleProfileChange('phone', e.target.value)}
+                disabled={!isEditingProfile}
+                placeholder="(123) 456-7890"
+                className="w-full px-4 py-3 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent disabled:opacity-60 disabled:cursor-not-allowed text-gray-900 dark:text-white"
+              />
+            </div>
+
             {/* Address Section */}
             <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
               <div className="flex items-center gap-2 mb-4">
@@ -304,6 +325,21 @@ export default function ProfilePage() {
                     onChange={(e) => handleProfileChange('address.street', e.target.value)}
                     disabled={!isEditingProfile}
                     placeholder="123 Main St"
+                    className="w-full px-4 py-3 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent disabled:opacity-60 disabled:cursor-not-allowed text-gray-900 dark:text-white"
+                  />
+                </div>
+
+                {/* Address Line 2 */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    Address Line 2 (Optional)
+                  </label>
+                  <input
+                    type="text"
+                    value={profileData.address.addressLine2}
+                    onChange={(e) => handleProfileChange('address.addressLine2', e.target.value)}
+                    disabled={!isEditingProfile}
+                    placeholder="Apt, suite, unit, building, floor, etc."
                     className="w-full px-4 py-3 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent disabled:opacity-60 disabled:cursor-not-allowed text-gray-900 dark:text-white"
                   />
                 </div>
@@ -389,8 +425,10 @@ export default function ProfilePage() {
                       setProfileData({
                         name: user.name || '',
                         email: user.email || '',
+                        phone: user.phone || '',
                         address: {
                           street: user.address?.street || '',
+                          addressLine2: user.address?.addressLine2 || '',
                           city: user.address?.city || '',
                           state: user.address?.state || '',
                           zipCode: user.address?.zipCode || '',

@@ -2,6 +2,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface Address {
     street: string;
+    addressLine2?: string;  // Optional second address line
     city: string;
     state: string;
     zipCode: string;
@@ -12,6 +13,7 @@ interface User {
     id: string;
     email: string;
     name: string;
+    phone?: string;  // Added phone field
     favorites: string[];
     address?: Address;
 }

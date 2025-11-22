@@ -10,7 +10,6 @@ import {
   MapPin, 
   Package, 
   Check,
-  ShoppingBag,
   AlertCircle
 } from 'lucide-react';
 import Image from 'next/image';
@@ -45,9 +44,10 @@ export default function CheckoutPage() {
   const router = useRouter();
   const { items, subtotal, tax, shipping, total, emptyCart } = useCart();
   const { createOrder, loading } = useOrders();
-  const { isAuthenticated } = useAppSelector((state) => state.auth);
+  const { isAuthenticated, user } = useAppSelector((state) => state.auth);
 
   const [currentStep, setCurrentStep] = useState<CheckoutStep>('shipping');
+  const [useSavedAddress, setUseSavedAddress] = useState(false);
   const [shippingData, setShippingData] = useState<ShippingFormData>({
     fullName: '',
     email: '',
@@ -77,6 +77,39 @@ export default function CheckoutPage() {
   }, [items.length, router, isProcessing]);
 
   // Don't redirect unauthenticated users - allow guest checkout
+
+  // Handle saved address checkbox
+  useEffect(() => {
+    if (useSavedAddress && user?.address) {
+      // TypeScript guard: ensure address exists
+      const address = user.address;
+      
+      setShippingData(prev => ({
+        ...prev,
+        fullName: user.name || prev.fullName,
+        addressLine1: address.street || prev.addressLine1,
+        addressLine2: address.addressLine2 || '',
+        city: address.city || prev.city,
+        state: address.state || prev.state,
+        zipCode: address.zipCode || prev.zipCode,
+        country: address.country || prev.country,
+        phone: user.phone || prev.phone,
+      }));
+    } else if (!useSavedAddress && user?.address) {
+      // Clear the form when unchecked (except email)
+      setShippingData(prev => ({
+        fullName: '',
+        email: prev.email,
+        addressLine1: '',
+        addressLine2: '',
+        city: '',
+        state: '',
+        zipCode: '',
+        country: 'United States',
+        phone: '',
+      }));
+    }
+  }, [useSavedAddress, user]);
 
   // Detect card type from number
   const detectCardType = (number: string): string => {
@@ -329,6 +362,31 @@ export default function CheckoutPage() {
                     Shipping Information
                   </h2>
 
+                  {/* Use Saved Address Checkbox */}
+                  {isAuthenticated && user?.address && user.address.street && (
+                    <div className="mb-6 p-4 bg-purple-50 dark:bg-purple-900/20 border border-purple-200 dark:border-purple-800 rounded-lg">
+                      <label className="flex items-start gap-3 cursor-pointer">
+                        <input
+                          type="checkbox"
+                          checked={useSavedAddress}
+                          onChange={(e) => setUseSavedAddress(e.target.checked)}
+                          className="mt-1 w-4 h-4 text-purple-600 bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 rounded focus:ring-purple-500 focus:ring-2"
+                        />
+                        <div className="flex-1">
+                          <span className="font-medium text-gray-900 dark:text-white">
+                            Use my saved address
+                          </span>
+                          <div className="mt-1 text-sm text-gray-600 dark:text-gray-400">
+                            <p>{user.name}</p>
+                            <p>{user.address.street}</p>
+                            <p>{user.address.city}, {user.address.state} {user.address.zipCode}</p>
+                            <p>{user.address.country}</p>
+                          </div>
+                        </div>
+                      </label>
+                    </div>
+                  )}
+
                   <div className="space-y-4">
                     {/* Full Name */}
                     <div>
@@ -339,9 +397,10 @@ export default function CheckoutPage() {
                         type="text"
                         value={shippingData.fullName}
                         onChange={(e) => setShippingData({ ...shippingData, fullName: e.target.value })}
+                        disabled={useSavedAddress}
                         className={`w-full px-4 py-3 border rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-500 ${
                           errors.fullName ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'
-                        }`}
+                        } ${useSavedAddress ? 'opacity-60 cursor-not-allowed' : ''}`}
                         placeholder="John Doe"
                       />
                       {errors.fullName && (
@@ -382,9 +441,10 @@ export default function CheckoutPage() {
                         type="text"
                         value={shippingData.addressLine1}
                         onChange={(e) => setShippingData({ ...shippingData, addressLine1: e.target.value })}
+                        disabled={useSavedAddress}
                         className={`w-full px-4 py-3 border rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-500 ${
                           errors.addressLine1 ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'
-                        }`}
+                        } ${useSavedAddress ? 'opacity-60 cursor-not-allowed' : ''}`}
                         placeholder="123 Main St"
                       />
                       {errors.addressLine1 && (
@@ -401,7 +461,8 @@ export default function CheckoutPage() {
                         type="text"
                         value={shippingData.addressLine2}
                         onChange={(e) => setShippingData({ ...shippingData, addressLine2: e.target.value })}
-                        className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
+                        disabled={useSavedAddress}
+                        className={`w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-500 ${useSavedAddress ? 'opacity-60 cursor-not-allowed' : ''}`}
                         placeholder="Apt, suite, etc."
                       />
                     </div>
@@ -416,9 +477,10 @@ export default function CheckoutPage() {
                           type="text"
                           value={shippingData.city}
                           onChange={(e) => setShippingData({ ...shippingData, city: e.target.value })}
+                          disabled={useSavedAddress}
                           className={`w-full px-4 py-3 border rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-500 ${
                             errors.city ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'
-                          }`}
+                          } ${useSavedAddress ? 'opacity-60 cursor-not-allowed' : ''}`}
                           placeholder="City"
                         />
                         {errors.city && (
@@ -433,9 +495,10 @@ export default function CheckoutPage() {
                           type="text"
                           value={shippingData.state}
                           onChange={(e) => setShippingData({ ...shippingData, state: e.target.value })}
+                          disabled={useSavedAddress}
                           className={`w-full px-4 py-3 border rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-500 ${
                             errors.state ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'
-                          }`}
+                          } ${useSavedAddress ? 'opacity-60 cursor-not-allowed' : ''}`}
                           placeholder="State"
                         />
                         {errors.state && (
@@ -450,9 +513,10 @@ export default function CheckoutPage() {
                           type="text"
                           value={shippingData.zipCode}
                           onChange={(e) => setShippingData({ ...shippingData, zipCode: e.target.value })}
+                          disabled={useSavedAddress}
                           className={`w-full px-4 py-3 border rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-500 ${
                             errors.zipCode ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'
-                          }`}
+                          } ${useSavedAddress ? 'opacity-60 cursor-not-allowed' : ''}`}
                           placeholder="12345"
                         />
                         {errors.zipCode && (
@@ -470,13 +534,19 @@ export default function CheckoutPage() {
                         type="tel"
                         value={shippingData.phone}
                         onChange={(e) => setShippingData({ ...shippingData, phone: e.target.value })}
+                        disabled={useSavedAddress && !!user?.phone}
                         className={`w-full px-4 py-3 border rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-500 ${
                           errors.phone ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'
-                        }`}
+                        } ${useSavedAddress && user?.phone ? 'opacity-60 cursor-not-allowed' : ''}`}
                         placeholder="(123) 456-7890"
                       />
                       {errors.phone && (
                         <p className="mt-1 text-sm text-red-600 dark:text-red-400">{errors.phone}</p>
+                      )}
+                      {useSavedAddress && !user?.phone && (
+                        <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
+                          Phone number is not saved in your profile. Please enter it.
+                        </p>
                       )}
                     </div>
                   </div>
