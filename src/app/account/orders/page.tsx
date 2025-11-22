@@ -41,21 +41,19 @@ export default function OrdersPage() {
 
   const handleDeleteOrder = async (orderId: string) => {
     if (confirm('Are you sure you want to delete this demo order?')) {
-      const success = await deleteOrderById(orderId);
-      if (success) {
-        // Order deleted successfully
-      }
+      await deleteOrderById(orderId);
+      // Optionally: show a toast or message here if you want
     }
   };
 
+
   const handleDeleteAllOrders = async () => {
     if (confirm('Are you sure you want to delete ALL demo orders? This cannot be undone.')) {
-      const success = await deleteAllOrders();
-      if (success) {
-        setShowDeleteConfirm(false);
-      }
+      await deleteAllOrders();
+      setShowDeleteConfirm(false);
     }
   };
+
 
   if (loading) {
     return (
