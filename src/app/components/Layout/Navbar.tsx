@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Link from "next/link";
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
@@ -32,6 +32,8 @@ export default function Header() {
     const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
     const [showUserMenu, setShowUserMenu] = useState(false);
     const [isMounted, setIsMounted] = useState(false);
+    const [isCollapsed, setIsCollapsed] = useState(false);   // 👈 NEW
+    const lastScrollYRef = useRef(0); 
     
     const { user, isAuthenticated } = useAppSelector((state) => state.auth);
     const { favorites } = useFavorites();
@@ -42,6 +44,37 @@ export default function Header() {
     useEffect(() => {
       setIsMounted(true);
     }, []);
+
+    // Handle collapse on scroll
+    useEffect(() => {
+      if (typeof window === 'undefined') return;
+
+      lastScrollYRef.current = window.scrollY;
+
+      const handleScroll = () => {
+        const current = window.scrollY;
+        const last = lastScrollYRef.current;
+
+        const scrollingDown = current > last;
+        const scrollingUp = current < last;
+
+        // Only collapse after they've scrolled a bit (e.g. 80px)
+        if (scrollingDown && current > 80) {
+          setIsCollapsed(true);
+        } else if (scrollingUp) {
+          setIsCollapsed(false);
+        }
+
+        lastScrollYRef.current = current;
+      };
+
+      window.addEventListener('scroll', handleScroll, { passive: true });
+
+      return () => {
+        window.removeEventListener('scroll', handleScroll);
+      };
+    }, []);
+
 
     const handleLogout = () => {
       dispatch(logout());
@@ -55,7 +88,11 @@ export default function Header() {
     if (!isMounted) {
       return (
         <div className="w-full bg-gradient-to-br from-gray-900 via-purple-300 to-purple-600 border-b border-purple-400 shadow-sm sticky top-0 z-40">
-          <header className="flex justify-between items-center px-6 py-4 max-w-7xl mx-auto text-white">
+          <header
+            className={`flex justify-between items-center px-6 max-w-7xl mx-auto text-white transition-all duration-300 ${
+              isCollapsed ? 'py-2' : 'py-4'
+            }`}
+          >
             {/* Logo */}
             <div className="flex-shrink-0">
               <Link href='/' className="block hover:opacity-80 hover:text-purple-200 transition-opacity">
@@ -116,12 +153,19 @@ export default function Header() {
         <div className="w-full bg-gradient-to-br from-gray-900 via-purple-300 to-purple-600 border-b border-purple-400 shadow-sm sticky top-0 z-40">
             <header className="flex justify-between items-center px-6 py-4 max-w-7xl mx-auto text-white">
                 {/* Logo */}
-                <div className="flex-shrink-0">
-                    <Link href='/' className="block hover:opacity-80 hover:text-purple-200 transition-opacity">
-                        <Image src="/images/logo/logo.svg" alt="Robos Wishlist Logo" width={200} height={200} priority/>
-                    </Link>
+                <div className={`flex-shrink-0 transition-transform duration-300 ${
+                  isCollapsed ? 'scale-90' : 'scale-100'
+                }`}>
+                  <Link href='/' className="block hover:opacity-80 hover:text-purple-200 transition-opacity">
+                    <Image
+                      src="/images/logo/logo.svg"
+                      alt="Robos Wishlist Logo"
+                      width={200}
+                      height={200}
+                      priority
+                    />
+                  </Link>
                 </div>
-
                 {/* Desktop Navigation */}
                 <nav className="hidden lg:block">
                     <ul className="flex items-center space-x-8">
