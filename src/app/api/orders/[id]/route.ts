@@ -36,10 +36,12 @@ function verifyOrderToken(token: string, orderId: string): boolean {
 // GET - Retrieve a specific order by ID (supports both authenticated users and guest token)
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const orderId = params.id;
+    const { id } = await params;
+
+    const orderId = id;
 
     if (!orderId) {
       return NextResponse.json(
@@ -113,7 +115,7 @@ export async function GET(
 // DELETE - Delete a specific order (requires authentication)
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   const userId = verifyToken(request);
 
@@ -125,7 +127,9 @@ export async function DELETE(
   }
 
   try {
-    const orderId = params.id;
+    const { id } = await params;
+
+    const orderId = id;
 
     if (!orderId) {
       return NextResponse.json(
@@ -185,7 +189,7 @@ export async function DELETE(
 // PATCH - Update order status (requires authentication)
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   const userId = verifyToken(request);
 
@@ -197,7 +201,9 @@ export async function PATCH(
   }
 
   try {
-    const orderId = params.id;
+    const { id } = await params;
+
+    const orderId = id;
 
     if (!orderId) {
       return NextResponse.json(
