@@ -20,7 +20,7 @@ export default function OrderConfirmationPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const orderId = searchParams.get('orderId');
-  const orderToken = searchParams.get('token'); // Guest order token
+  const isGuestParam = searchParams.get('guest') === 'true'; // Check if guest checkout
   const { fetchOrderById } = useOrders();
   const [order, setOrder] = useState<Order | null>(null);
   const [loading, setLoading] = useState(true);
@@ -36,11 +36,22 @@ export default function OrderConfirmationPage() {
       try {
         let fetchedOrder: Order | null = null;
 
-        // If we have an order token, fetch as guest
-        if (orderToken) {
+        // Check for guest checkout via query param
+        if (isGuestParam) {
           setIsGuest(true);
-          // Fetch with token for guest access
-          fetchedOrder = await fetchOrderById(orderId, orderToken);
+          // Retrieve the orderToken from sessionStorage
+          const orderToken = sessionStorage.getItem(`guestOrder_${orderId}`);
+          
+          if (orderToken) {
+            // Fetch with token for guest access
+            fetchedOrder = await fetchOrderById(orderId, orderToken);
+            // Clean up the token after successful fetch
+            sessionStorage.removeItem(`guestOrder_${orderId}`);
+          } else {
+            console.error('Guest order token not found');
+            router.push('/');
+            return;
+          }
         } else {
           // Fetch with authentication for logged-in users
           fetchedOrder = await fetchOrderById(orderId);
@@ -61,7 +72,7 @@ export default function OrderConfirmationPage() {
 
     loadOrder();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [orderId, orderToken]); // Re-run when orderId or token changes
+  }, [orderId, isGuestParam]); // Re-run when orderId or guest param changes
 
   if (loading) {
     return (
@@ -387,21 +398,6 @@ export default function OrderConfirmationPage() {
               <ArrowRight className="w-5 h-5" />
             </motion.button>
           </Link>
-        </motion.div>
-
-        {/* Portfolio Note */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.8 }}
-          className="mt-8 text-center"
-        >
-          <p className="text-sm text-gray-500 dark:text-gray-400">
-            Thank you for exploring this portfolio project! 🚀
-          </p>
-          <p className="text-xs text-gray-400 dark:text-gray-500 mt-2">
-            Built with Next.js, TypeScript, Redux, and Tailwind CSS
-          </p>
         </motion.div>
       </div>
     </div>

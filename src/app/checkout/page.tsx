@@ -23,6 +23,7 @@ type CheckoutStep = 'shipping' | 'payment' | 'review';
 
 interface ShippingFormData {
   fullName: string;
+  email: string;  // For guest checkout
   addressLine1: string;
   addressLine2: string;
   city: string;
@@ -49,6 +50,7 @@ export default function CheckoutPage() {
   const [currentStep, setCurrentStep] = useState<CheckoutStep>('shipping');
   const [shippingData, setShippingData] = useState<ShippingFormData>({
     fullName: '',
+    email: '',
     addressLine1: '',
     addressLine2: '',
     city: '',
@@ -74,12 +76,7 @@ export default function CheckoutPage() {
     }
   }, [items.length, router, isProcessing]);
 
-  // Redirect if not authenticated
-  useEffect(() => {
-    if (!isAuthenticated) {
-      router.push('/cart');
-    }
-  }, [isAuthenticated, router]);
+  // Don't redirect unauthenticated users - allow guest checkout
 
   // Detect card type from number
   const detectCardType = (number: string): string => {
@@ -111,6 +108,16 @@ export default function CheckoutPage() {
     const newErrors: Record<string, string> = {};
 
     if (!shippingData.fullName.trim()) newErrors.fullName = 'Full name is required';
+    
+    // Email is required for guest checkout
+    if (!isAuthenticated) {
+      if (!shippingData.email.trim()) {
+        newErrors.email = 'Email is required for guest checkout';
+      } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(shippingData.email)) {
+        newErrors.email = 'Invalid email address';
+      }
+    }
+    
     if (!shippingData.addressLine1.trim()) newErrors.addressLine1 = 'Address is required';
     if (!shippingData.city.trim()) newErrors.city = 'City is required';
     if (!shippingData.state.trim()) newErrors.state = 'State is required';
@@ -196,14 +203,19 @@ export default function CheckoutPage() {
         },
       };
 
-      const order = await createOrder(orderData);
+      const order = await createOrder(orderData, !isAuthenticated);
 
       if (order) {
         // Clear cart
         await emptyCart();
         
-        // Redirect to order confirmation
-        router.push(`/checkout/confirmation?orderId=${order.id}`);
+        // For guest orders, store the orderToken in sessionStorage
+        if (order.orderToken) {
+          sessionStorage.setItem(`guestOrder_${order.id}`, order.orderToken);
+        }
+        
+        // Redirect to confirmation page (supports both authenticated and guest orders)
+        router.push(`/checkout/confirmation?orderId=${order.id}&guest=${!isAuthenticated}`);
       } else {
         alert('Failed to create order. Please try again.');
         setIsProcessing(false);
@@ -242,6 +254,13 @@ export default function CheckoutPage() {
           <p className="text-gray-600 dark:text-gray-400">
             Complete your purchase
           </p>
+          {!isAuthenticated && (
+            <div className="mt-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
+              <p className="text-sm text-blue-800 dark:text-blue-300">
+                💡 Checking out as a guest. <Link href="/auth/login" className="underline font-semibold">Sign in</Link> to save your order history and checkout faster next time.
+              </p>
+            </div>
+          )}
         </motion.div>
 
         {/* Progress Steps */}
@@ -329,6 +348,30 @@ export default function CheckoutPage() {
                         <p className="mt-1 text-sm text-red-600 dark:text-red-400">{errors.fullName}</p>
                       )}
                     </div>
+
+                    {/* Email (for guest checkout) */}
+                    {!isAuthenticated && (
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                          Email Address *
+                        </label>
+                        <input
+                          type="email"
+                          value={shippingData.email}
+                          onChange={(e) => setShippingData({ ...shippingData, email: e.target.value })}
+                          className={`w-full px-4 py-3 border rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-500 ${
+                            errors.email ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'
+                          }`}
+                          placeholder="john@example.com"
+                        />
+                        {errors.email && (
+                          <p className="mt-1 text-sm text-red-600 dark:text-red-400">{errors.email}</p>
+                        )}
+                        <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
+                          We'll send your order confirmation to this email
+                        </p>
+                      </div>
+                    )}
 
                     {/* Address Line 1 */}
                     <div>

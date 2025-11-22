@@ -41,7 +41,7 @@ export default function CartPage() {
 
   const handleGuestCheckout = () => {
     setShowAuthModal(false);
-    router.push('/checkout/guest');
+    router.push('/checkout');
   };
 
   if (items.length === 0) {

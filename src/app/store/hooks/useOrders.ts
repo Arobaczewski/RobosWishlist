@@ -131,8 +131,9 @@ export function useOrders() {
     }
   };
 
-  const createOrder = async (orderData: CreateOrderData): Promise<Order | null> => {
-    if (!token || !user) {
+  const createOrder = async (orderData: CreateOrderData, isGuest: boolean = false): Promise<Order | null> => {
+    // For guest checkout, we don't need authentication
+    if (!isGuest && (!token || !user)) {
       dispatch(setError('You must be logged in to place an order'));
       return null;
     }
@@ -144,12 +145,13 @@ export function useOrders() {
       const response = await fetch('/api/orders', {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${token}`,
+          ...(token && !isGuest ? { 'Authorization': `Bearer ${token}` } : {}),
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          userId: user.id,
-          ...orderData
+          ...(user && !isGuest ? { userId: user.id } : {}),
+          ...orderData,
+          isGuest
         })
       });
 
@@ -157,7 +159,8 @@ export function useOrders() {
         const data = await response.json();
         dispatch(addOrder(data.order));
         dispatch(setLoading(false));
-        return data.order;
+        // Return the order with orderToken if it's a guest order
+        return { ...data.order, orderToken: data.orderToken };
       } else {
         const errorData = await response.json();
         dispatch(setError(errorData.error || 'Failed to create order'));
