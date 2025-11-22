@@ -310,6 +310,7 @@ export default function CartModal() {
           <AnimatePresence>
             {showClearConfirm && (
               <>
+                {/* Dark backdrop */}
                 <motion.div
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
@@ -317,47 +318,55 @@ export default function CartModal() {
                   className="fixed inset-0 bg-black/70 backdrop-blur-sm z-[100]"
                   onClick={() => setShowClearConfirm(false)}
                 />
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.95 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.95 }}
-                  className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 
-                             w-[90%] sm:w-[400px] max-w-md bg-white dark:bg-gray-800 rounded-2xl shadow-2xl z-[100] 
-                             p-6 max-h-[90vh] overflow-y-auto"
-                >
-                  <div className="flex items-start gap-4 mb-6">
-                    <div className="bg-red-100 dark:bg-red-900/30 rounded-full p-3 flex-shrink-0">
-                      <AlertCircle className="w-6 h-6 text-red-600 dark:text-red-400" />
-                    </div>
-                    <div>
-                      <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
-                        Clear Cart?
-                      </h3>
-                      <p className="text-gray-600 dark:text-gray-400 text-sm">
-                        Are you sure you want to remove all {itemCount} {itemCount === 1 ? 'item' : 'items'} from your cart? This action cannot be undone.
-                      </p>
-                    </div>
-                  </div>
 
-                  <div className="flex gap-3">
-                    <button
-                      onClick={() => setShowClearConfirm(false)}
-                      className="flex-1 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-900 dark:text-white font-semibold py-3 px-6 rounded-xl transition-colors"
-                    >
-                      Cancel
-                    </button>
-                    <button
-                      onClick={handleClearCart}
-                      className="flex-1 bg-red-600 hover:bg-red-700 text-white font-semibold py-3 px-6 rounded-xl transition-colors flex items-center justify-center gap-2"
-                    >
-                      <Trash2 className="w-4 h-4" />
-                      Clear All
-                    </button>
-                  </div>
-                </motion.div>
+                {/* Centering wrapper */}
+                <div className="fixed inset-0 z-[100] flex items-center justify-center px-4">
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.95 }}
+                    className="w-full sm:w-[400px] max-w-md bg-white dark:bg-gray-800 rounded-2xl shadow-2xl 
+                              p-6 max-h-[90vh] overflow-y-auto"
+                  >
+                    <div className="flex items-start gap-4 mb-6">
+                      <div className="bg-red-100 dark:bg-red-900/30 rounded-full p-3 flex-shrink-0">
+                        <AlertCircle className="w-6 h-6 text-red-600 dark:text-red-400" />
+                      </div>
+                      <div>
+                        <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
+                          Clear Cart?
+                        </h3>
+                        <p className="text-gray-600 dark:text-gray-400 text-sm">
+                          Are you sure you want to remove all {itemCount}{" "}
+                          {itemCount === 1 ? "item" : "items"} from your cart? This action
+                          cannot be undone.
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="flex gap-3">
+                      <button
+                        onClick={() => setShowClearConfirm(false)}
+                        className="flex-1 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 
+                                  text-gray-900 dark:text-white font-semibold py-3 px-6 rounded-xl transition-colors"
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        onClick={handleClearCart}
+                        className="flex-1 bg-red-600 hover:bg-red-700 text-white font-semibold py-3 px-6 
+                                  rounded-xl transition-colors flex items-center justify-center gap-2"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                        Clear All
+                      </button>
+                    </div>
+                  </motion.div>
+                </div>
               </>
             )}
           </AnimatePresence>
+
         </>
       )}
     </AnimatePresence>
