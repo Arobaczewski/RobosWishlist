@@ -32,7 +32,7 @@ export default function Header() {
     const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
     const [showUserMenu, setShowUserMenu] = useState(false);
     const [isMounted, setIsMounted] = useState(false);
-    const [isCollapsed, setIsCollapsed] = useState(false);   // 👈 NEW
+    const [isHidden, setIsHidden] = useState(false);
     const lastScrollYRef = useRef(0); 
     
     const { user, isAuthenticated } = useAppSelector((state) => state.auth);
@@ -45,8 +45,7 @@ export default function Header() {
       setIsMounted(true);
     }, []);
 
-    // Handle collapse on scroll
-    useEffect(() => {
+     useEffect(() => {
       if (typeof window === 'undefined') return;
 
       lastScrollYRef.current = window.scrollY;
@@ -55,14 +54,20 @@ export default function Header() {
         const current = window.scrollY;
         const last = lastScrollYRef.current;
 
-        const scrollingDown = current > last;
-        const scrollingUp = current < last;
+        // Always show at very top of page
+        if (current <= 0) {
+          setIsHidden(false);
+        } else {
+          const scrollingDown = current > last;
+          const scrollingUp = current < last;
 
-        // Only collapse after they've scrolled a bit (e.g. 80px)
-        if (scrollingDown && current > 80) {
-          setIsCollapsed(true);
-        } else if (scrollingUp) {
-          setIsCollapsed(false);
+          // Collapse only after scrolling down a bit
+          if (scrollingDown && current > 80) {
+            setIsHidden(true);
+          } else if (scrollingUp && last - current > 5) {
+            // small threshold to avoid flicker
+            setIsHidden(false);
+          }
         }
 
         lastScrollYRef.current = current;
@@ -87,12 +92,12 @@ export default function Header() {
     // During SSR and initial render, show loading state
     if (!isMounted) {
       return (
-        <div className="w-full bg-gradient-to-br from-gray-900 via-purple-300 to-purple-600 border-b border-purple-400 shadow-sm sticky top-0 z-40">
-          <header
-            className={`flex justify-between items-center px-6 max-w-7xl mx-auto text-white transition-all duration-300 ${
-              isCollapsed ? 'py-2' : 'py-4'
-            }`}
-          >
+        <div
+          className={`w-full bg-gradient-to-br from-gray-900 via-purple-300 to-purple-600 border-b border-purple-400 shadow-sm sticky top-0 z-40 transform transition-transform duration-300 ${
+            isHidden ? '-translate-y-full' : 'translate-y-0'
+          }`}
+        >
+         <header className="flex justify-between items-center px-6 py-4 max-w-7xl mx-auto text-white">
             {/* Logo */}
             <div className="flex-shrink-0">
               <Link href='/' className="block hover:opacity-80 hover:text-purple-200 transition-opacity">
@@ -150,12 +155,16 @@ export default function Header() {
 
     return (
         <>
-        <div className="w-full bg-gradient-to-br from-gray-900 via-purple-300 to-purple-600 border-b border-purple-400 shadow-sm sticky top-0 z-40">
-            <header className="flex justify-between items-center px-6 py-4 max-w-7xl mx-auto text-white">
-                {/* Logo */}
-                <div className={`flex-shrink-0 transition-transform duration-300 ${
-                  isCollapsed ? 'scale-90' : 'scale-100'
-                }`}>
+            <div
+              className={`w-full bg-gradient-to-br from-gray-900 via-purple-300 to-purple-600 border-b border-purple-400 shadow-sm sticky top-0 z-40 transform transition-transform duration-300 ${
+                isHidden ? '-translate-y-full' : 'translate-y-0'
+              }`}
+            >
+              <header className="flex justify-between items-center px-6 py-4 max-w-7xl mx-auto text-white">
+                  {/* Logo */}
+                  <div className={`flex-shrink-0 transition-transform duration-300 ${
+                    isHidden ? 'scale-90' : 'scale-100'
+                  }`}>
                   <Link href='/' className="block hover:opacity-80 hover:text-purple-200 transition-opacity">
                     <Image
                       src="/images/logo/logo.svg"
