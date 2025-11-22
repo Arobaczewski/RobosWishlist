@@ -1,7 +1,7 @@
 // src/app/shop/page.tsx
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { SlidersHorizontal, X } from 'lucide-react';
@@ -32,7 +32,7 @@ interface Filters {
   sortOrder: 'asc' | 'desc';
 }
 
-export default function ShopPage() {
+function ShopPageContent() {
   const searchParams = useSearchParams();
   const urlSearchQuery = searchParams.get('search');
 
@@ -538,3 +538,17 @@ export default function ShopPage() {
     </div>
   );
 } 
+
+export default function ShopPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600" />
+        </div>
+      }
+    >
+      <ShopPageContent />
+    </Suspense>
+  );
+}
