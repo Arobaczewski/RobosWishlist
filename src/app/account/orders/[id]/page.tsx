@@ -68,15 +68,15 @@ export default function OrderDetailPage() {
   }, [orderId, isMounted]); // Only run when orderId or isMounted changes
 
   const handleDeleteOrder = async () => {
-    if (!order) return;
-    
-    if (confirm('Are you sure you want to delete this demo order?')) {
-      const success = await deleteOrderById(order.id);
-      if (success) {
-        router.push('/account/orders');
-      }
-    }
-  };
+  if (!order) return;
+
+  if (confirm('Are you sure you want to delete this demo order?')) {
+    await deleteOrderById(order.id);
+    router.push('/account/orders');
+  }
+};
+
+
 
   if (!isMounted || loading) {
     return (
