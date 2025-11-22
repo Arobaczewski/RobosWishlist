@@ -107,21 +107,36 @@ export default function ShopPage() {
       queryParams.set('limit', viewMode === 'list' ? '10' : '12');
 
       const response = await fetch(`/api/products?${queryParams.toString()}`);
-      
+
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
-      const result = await response.json();
+      const result: ProductsResponse = await response.json();
       setData(result);
 
       // Extract unique categories and brands for filters
       if (result.products && result.products.length > 0) {
-        const categories = [...new Set(result.products.map((p: Product) => p.category))];
-        const brands = [...new Set(result.products.map((p: Product) => p.brand).filter(Boolean))];
+        const categories = Array.from(
+          new Set(
+            result.products
+              .map((p: Product) => p.category)
+              .filter((category): category is string => Boolean(category))
+          )
+        );
+
+        const brands = Array.from(
+          new Set(
+            result.products
+              .map((p: Product) => p.brand)
+              .filter((brand): brand is string => Boolean(brand))
+          )
+        );
+
         setAvailableCategories(categories);
         setAvailableBrands(brands);
       }
+
 
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to fetch products');
