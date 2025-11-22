@@ -314,7 +314,7 @@ export default function CartModal() {
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
-                  className="fixed inset-0 bg-black/70 backdrop-blur-sm z-[60]"
+                  className="fixed inset-0 bg-black/70 backdrop-blur-sm z-[100]"
                   onClick={() => setShowClearConfirm(false)}
                 />
                 <motion.div
@@ -322,7 +322,7 @@ export default function CartModal() {
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.95 }}
                   className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 
-                             w-[90%] sm:w-[400px] max-w-md bg-white dark:bg-gray-800 rounded-2xl shadow-2xl z-[60] 
+                             w-[90%] sm:w-[400px] max-w-md bg-white dark:bg-gray-800 rounded-2xl shadow-2xl z-[100] 
                              p-6 max-h-[90vh] overflow-y-auto"
                 >
                   <div className="flex items-start gap-4 mb-6">
