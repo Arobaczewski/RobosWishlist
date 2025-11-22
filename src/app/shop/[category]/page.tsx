@@ -71,10 +71,10 @@ export default function CategoryPage() {
       setError(null);
 
       const queryParams = new URLSearchParams();
-      
+
       // Always include category
       queryParams.set('category', category);
-      
+
       if (filters.brand) queryParams.set('brand', filters.brand);
       if (filters.minPrice) queryParams.set('minPrice', filters.minPrice);
       if (filters.maxPrice) queryParams.set('maxPrice', filters.maxPrice);
@@ -84,32 +84,42 @@ export default function CategoryPage() {
       if (filters.inStock) queryParams.set('inStock', 'true');
       if (filters.sortBy) queryParams.set('sortBy', filters.sortBy);
       if (filters.sortOrder) queryParams.set('sortOrder', filters.sortOrder);
-      
+
       queryParams.set('page', currentPage.toString());
       queryParams.set('limit', viewMode === 'list' ? '10' : '12');
 
       const response = await fetch(`/api/products?${queryParams.toString()}`);
-      
+
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
-      const result = await response.json();
+      const result: ProductsResponse = await response.json();
       setData(result);
 
       // Extract unique brands for filters
       if (result.products && result.products.length > 0) {
-        const brands = [...new Set(result.products.map((p: Product) => p.brand).filter(Boolean))];
+        const brands = Array.from(
+          new Set(
+            result.products
+              .map((p: Product) => p.brand)
+              .filter((brand): brand is string => Boolean(brand))
+          )
+        );
         setAvailableBrands(brands);
       }
-
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to fetch products');
       console.error('Error fetching products:', err);
+      setError('Failed to load products. Please try again.');
     } finally {
       setLoading(false);
     }
   }, [category, filters, currentPage, viewMode]);
+
+  useEffect(() => {
+    fetchProducts();
+  }, [fetchProducts]);
+
 
   useEffect(() => {
     fetchProducts();
