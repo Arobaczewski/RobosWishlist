@@ -1,13 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { Product } from "@/app/types/product";
-import { products } from "@/app/data/products";
-import { select } from "framer-motion/client";
-
-interface RouteParams {
-    params: {
-        id: string,
-    };
-}
+import { products } from "@/app/data/products"
 
 interface ProductResponse {
     product: Product,
@@ -21,20 +14,20 @@ interface ProductResponse {
 }
 
 export async function GET(
-    request: NextRequest,
-    { params }: RouteParams
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
 ) {
-    try {
-        const { id } = params;
-        const { searchParams } = new URL(request.url);
+  try {
+    const { id } = await params; // 👈 await the params in Next 15
+    const { searchParams } = new URL(request.url);
 
-        const selectedVariants: { [key: string]: string} = {};
+    const selectedVariants: { [key: string]: string } = {};
 
-        searchParams.forEach((value, key) => {
-            if (['color', 'size', 'storage', 'material', 'style'].includes(key)){
-                selectedVariants[key] = value;
-            }
-        });
+    searchParams.forEach((value, key) => {
+      if (["color", "size", "storage", "material", "style"].includes(key)) {
+        selectedVariants[key] = value;
+      }
+    });
 
         const product = products.find(p => p.id === id);
 
@@ -132,23 +125,23 @@ export async function GET(
     }
 }
 
-export async function POST (
-    request: NextRequest,
-    { params }: RouteParams
+export async function POST(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
 ) {
-    try {
-        const { id } = params;
-        const body = await request.json();
-        const { variants } = body;
+  try {
+    const { id } = await params; // 👈 await again
+    const body = await request.json();
+    const { variants } = body;
 
-        const product = products.find(p => p.id === id);
+    const product = products.find((p) => p.id === id);
 
-        if(!product) {
-            return NextResponse.json (
-                { error: 'Product not found' },
-                { status: 404 }
-            );
-        }
+    if (!product) {
+      return NextResponse.json(
+        { error: "Product not found" },
+        { status: 404 }
+      );
+    }
 
         let finalPrice = product.basePrice;
         let isAvailable = true;
