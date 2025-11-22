@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Mail, Lock, User, Loader2 } from 'lucide-react';
 import { useAppDispatch } from '@/app/store/hooks/hooks';
-import { setCredentials } from '@/app/store/slices/authSlice';
+import { loginUser, registerUser } from '@/app/store/slices/authSlice';
 
 interface AuthModalProps {
   isOpen: boolean;
@@ -22,42 +22,53 @@ export default function AuthModal({ isOpen, onClose, initialMode = 'login' }: Au
   const dispatch = useAppDispatch();
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError('');
-    setLoading(true);
+  e.preventDefault();
+  setError('');
+  setLoading(true);
 
-    try {
-      const endpoint = mode === 'login' ? '/api/auth/login' : '/api/auth/register';
-      const body = mode === 'login' 
-        ? { email, password }
-        : { email, password, name };
+  try {
+    if (mode === 'login') {
+      const resultAction = await dispatch(
+        loginUser({ email, password })
+      );
 
-      const response = await fetch(endpoint, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body)
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error || 'Something went wrong');
+      if (loginUser.rejected.match(resultAction)) {
+        const msg =
+          resultAction.payload ?? 'Failed to log in. Please check your credentials.';
+        setError(msg);
+      } else {
+        // success: user is now in authSlice + localStorage
+        setEmail('');
+        setPassword('');
+        setName('');
+        onClose();
       }
+    } else {
+      // signup
+      const resultAction = await dispatch(
+        registerUser({ email, password, name })
+      );
 
-      // Save to Redux store
-      dispatch(setCredentials({ user: data.user, token: data.token }));
-
-      // Reset form and close modal
-      setEmail('');
-      setPassword('');
-      setName('');
-      onClose();
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'An error occurred');
-    } finally {
-      setLoading(false);
+      if (registerUser.rejected.match(resultAction)) {
+        const msg =
+          resultAction.payload ?? 'Failed to create account. Please try again.';
+        setError(msg);
+      } else {
+        // success: user is now in authSlice + localStorage
+        setEmail('');
+        setPassword('');
+        setName('');
+        onClose();
+      }
     }
-  };
+  } catch (err) {
+    console.error('Auth error:', err);
+    setError('An unexpected error occurred. Please try again.');
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   const switchMode = () => {
     setMode(mode === 'login' ? 'signup' : 'login');

@@ -26,7 +26,7 @@ function OrderConfirmationContent() {
   const [loading, setLoading] = useState(true);
   const [isGuest, setIsGuest] = useState(false);
 
-  useEffect(() => {
+    useEffect(() => {
     if (!orderId) {
       router.push('/');
       return;
@@ -34,32 +34,14 @@ function OrderConfirmationContent() {
 
     const loadOrder = async () => {
       try {
-        let fetchedOrder: Order | null = null;
-
-        // Check for guest checkout via query param
-        if (isGuestParam) {
-          setIsGuest(true);
-          // Retrieve the orderToken from sessionStorage
-          const orderToken = sessionStorage.getItem(`guestOrder_${orderId}`);
-          
-          if (orderToken) {
-            // Fetch with token for guest access
-            fetchedOrder = await fetchOrderById(orderId, orderToken);
-            // Clean up the token after successful fetch
-            sessionStorage.removeItem(`guestOrder_${orderId}`);
-          } else {
-            console.error('Guest order token not found');
-            router.push('/');
-            return;
-          }
-        } else {
-          // Fetch with authentication for logged-in users
-          fetchedOrder = await fetchOrderById(orderId);
-        }
+        // In demo mode, orders are stored in localStorage
+        // and fetched by ID via useOrders
+        const fetchedOrder = await fetchOrderById(orderId);
 
         if (fetchedOrder) {
           setOrder(fetchedOrder);
         } else {
+          console.error('Order not found');
           router.push('/');
         }
       } catch (error) {
@@ -70,9 +52,16 @@ function OrderConfirmationContent() {
       }
     };
 
+    // Set guest flag purely for UI (yellow banner, button text, etc.)
+    if (isGuestParam) {
+      setIsGuest(true);
+    } else {
+      setIsGuest(false);
+    }
+
     loadOrder();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [orderId, isGuestParam]); // Re-run when orderId or guest param changes
+  }, [orderId, isGuestParam, fetchOrderById, router]);
 
   if (loading) {
     return (

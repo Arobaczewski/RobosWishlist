@@ -248,9 +248,11 @@ export default function CheckoutPage() {
       await emptyCart();
       
       // For guest orders, store the orderToken in sessionStorage (if it exists in your type)
-      if (order.orderToken) {
-        sessionStorage.setItem(`guestOrder_${order.id}`, order.orderToken);
+      if (order) {
+        await emptyCart();
+        router.push(`/checkout/confirmation?orderId=${order.id}&guest=${!isAuthenticated}`);
       }
+
       
       // Redirect to confirmation
       router.push(`/checkout/confirmation?orderId=${order.id}&guest=${!isAuthenticated}`);
