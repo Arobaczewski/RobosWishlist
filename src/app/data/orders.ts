@@ -41,7 +41,8 @@ export interface Order {
   status: 'pending' | 'processing' | 'completed' | 'cancelled';
   createdAt: string;
   updatedAt: string;
-  orderNumber: string; // Human-readable order number like "ORD-2024-001234"
+  orderNumber: string; // Human-readable order number like "ORD-2024-001234
+  orderToken?: string;
 }
 
 const DATA_FILE = path.join(process.cwd(), 'data', 'orders.json');
