@@ -86,7 +86,6 @@ const ShopPageWithToggle = () => {
               key={product.id}
               product={product}
               size="medium"
-              showQuickAdd={true}
               index={index}
             />
           ))}
