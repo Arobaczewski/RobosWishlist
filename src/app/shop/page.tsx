@@ -84,6 +84,42 @@ function ShopPageContent() {
     fetchFeaturedProducts();
   }, []);
 
+  // Fetch all categories and brands once on mount (for filter options)
+  useEffect(() => {
+    const fetchFilterOptions = async () => {
+      try {
+        // Fetch ALL products without pagination to get all categories/brands
+        const response = await fetch('/api/products?limit=1000');
+        const result: ProductsResponse = await response.json();
+        
+        if (result.products && result.products.length > 0) {
+          const categories = Array.from(
+            new Set(
+              result.products
+                .map((p: Product) => p.category)
+                .filter((category): category is string => Boolean(category))
+            )
+          );
+
+          const brands = Array.from(
+            new Set(
+              result.products
+                .map((p: Product) => p.brand)
+                .filter((brand): brand is string => Boolean(brand))
+            )
+          );
+
+          setAvailableCategories(categories);
+          setAvailableBrands(brands);
+        }
+      } catch (err) {
+        console.error('Error fetching filter options:', err);
+      }
+    };
+
+    fetchFilterOptions();
+  }, []); // Only run once on mount
+
   // Fetch products
   const fetchProducts = useCallback(async () => {
     try {
@@ -114,28 +150,6 @@ function ShopPageContent() {
 
       const result: ProductsResponse = await response.json();
       setData(result);
-
-      // Extract unique categories and brands for filters
-      if (result.products && result.products.length > 0) {
-        const categories = Array.from(
-          new Set(
-            result.products
-              .map((p: Product) => p.category)
-              .filter((category): category is string => Boolean(category))
-          )
-        );
-
-        const brands = Array.from(
-          new Set(
-            result.products
-              .map((p: Product) => p.brand)
-              .filter((brand): brand is string => Boolean(brand))
-          )
-        );
-
-        setAvailableCategories(categories);
-        setAvailableBrands(brands);
-      }
 
 
     } catch (err) {
