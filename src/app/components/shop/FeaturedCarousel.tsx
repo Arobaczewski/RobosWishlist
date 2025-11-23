@@ -86,9 +86,24 @@ export default function FeaturedCarousel({ products }: FeaturedCarouselProps) {
             className="absolute inset-0"
           >
             <Link href={`/product/${currentProduct.id}`} className="block h-full">
-              <div className="grid lg:grid-cols-2 gap-8 h-full p-8 lg:p-12">
+              {/* Background Image for Mobile */}
+              <div className="absolute inset-0 lg:hidden">
+                <Image
+                  src={currentProduct.images[0]}
+                  alt={currentProduct.name}
+                  fill
+                  className="object-cover"
+                  priority
+                  sizes="100vw"
+                  unoptimized={currentProduct.images[0].endsWith('.png')}
+                />
+                {/* Dark overlay for text readability */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-black/30" />
+              </div>
+
+              <div className="relative grid lg:grid-cols-2 gap-8 h-full p-8 lg:p-12">
                 {/* Left Side - Product Info */}
-                <div className="flex flex-col justify-center space-y-6">
+                <div className="flex flex-col justify-center space-y-4 lg:space-y-6 z-10">
                   {/* Featured Badge */}
                   <motion.div
                     initial={{ opacity: 0, y: 20 }}
@@ -106,7 +121,7 @@ export default function FeaturedCarousel({ products }: FeaturedCarouselProps) {
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: 0.4, duration: 0.4 }}
-                      className="text-sm font-medium text-purple-600 dark:text-purple-400 uppercase tracking-wider"
+                      className="text-sm font-medium text-purple-300 lg:text-purple-600 dark:lg:text-purple-400 uppercase tracking-wider"
                     >
                       {currentProduct.brand}
                     </motion.p>
@@ -117,7 +132,7 @@ export default function FeaturedCarousel({ products }: FeaturedCarouselProps) {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.5, duration: 0.4 }}
-                    className="text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white leading-tight"
+                    className="text-3xl lg:text-4xl font-bold text-white lg:text-gray-900 dark:lg:text-white leading-tight"
                   >
                     {currentProduct.name}
                   </motion.h2>
@@ -127,7 +142,7 @@ export default function FeaturedCarousel({ products }: FeaturedCarouselProps) {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.6, duration: 0.4 }}
-                    className="text-base lg:text-lg text-gray-600 dark:text-gray-300 line-clamp-3"
+                    className="text-base lg:text-lg text-gray-100 lg:text-gray-600 dark:lg:text-gray-300 line-clamp-3"
                   >
                     {currentProduct.description}
                   </motion.p>
@@ -140,8 +155,8 @@ export default function FeaturedCarousel({ products }: FeaturedCarouselProps) {
                     className="flex items-center gap-6"
                   >
                     <div>
-                      <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">Starting at</p>
-                      <p className="text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white">
+                      <p className="text-sm text-gray-300 lg:text-gray-500 dark:lg:text-gray-400 mb-1">Starting at</p>
+                      <p className="text-3xl lg:text-4xl font-bold text-white lg:text-gray-900 dark:lg:text-white">
                         ${currentProduct.basePrice.toLocaleString()}
                       </p>
                     </div>
@@ -156,8 +171,8 @@ export default function FeaturedCarousel({ products }: FeaturedCarouselProps) {
                   </motion.div>
                 </div>
 
-                {/* Right Side - Product Image */}
-                <div className="relative flex items-center justify-center">
+                {/* Right Side - Product Image (Desktop Only) */}
+                <div className="relative hidden lg:flex items-center justify-center">
                   <motion.div
                     initial={{ opacity: 0, scale: 0.9 }}
                     animate={{ opacity: 1, scale: 1 }}
@@ -170,7 +185,7 @@ export default function FeaturedCarousel({ products }: FeaturedCarouselProps) {
                       fill
                       className="object-contain priority drop-shadow-2xl"
                       priority
-                      sizes="(max-width: 1024px) 100vw, 50vw"
+                      sizes="50vw"
                       unoptimized={currentProduct.images[0].endsWith('.png')}
                     />
                   </motion.div>

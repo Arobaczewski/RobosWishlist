@@ -232,9 +232,9 @@ export default function ProductPage() {
                 Shop
               </Link></li>
               <li className='text-purple-500 dark:text-purple-400'>/</li>
-              <li className='text-purple-500 dark:text-purple-400 capitalize'>
+              <li><Link href={`/shop/${product.category}`} className='text-purple-400 dark:text-purple-300 hover:text-purple-600 dark:hover:text-purple-100 transition-colors capitalize'>
                 {product.category}
-              </li>
+              </Link></li>
               <li className='text-purple-500 dark:text-purple-400'>/</li>
               <li className='text-purple-900 dark:text-purple-100 font-medium truncate'>{product.name}</li>
             </ol>
