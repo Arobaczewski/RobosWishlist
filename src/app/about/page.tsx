@@ -57,7 +57,7 @@ export default function AboutPage() {
               </div>
               <div className="space-y-4 text-lg text-gray-700 dark:text-gray-300">
                 <p>
-                  As a developer, I wanted to create a portfolio project that showed off my full-stack skills while being something I'd actually use. Building a wishlist site let me work with modern technologies like Next.js, TypeScript, Zustand, and Redux while keeping it personal and fun.
+                  As a developer, I wanted to create a portfolio project that showed off my full-stack skills while being something I'd actually use. Building a wishlist site let me work with modern technologies like Next.js, TypeScript, Tailwind, and Redux while keeping it personal and fun.
                 </p>
                 <p>
                   But beyond the tech stack, I wanted potential employers to see who I am. The products I choose tell a story. My love for technology, my focus on building a comfortable home workspace, my dream of owning that ridiculously expensive mansion someday (can you blame me?).
