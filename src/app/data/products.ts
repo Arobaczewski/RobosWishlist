@@ -1884,8 +1884,7 @@ export const products: Product[] = [
                         images: [
                             '/images/products/kitchen/mixer/blue/mixerblue1.png',
                             '/images/products/kitchen/mixer/blue/mixerblue2.png',
-                            '/images/products/kitchen/mixer/blue/mixerblue3.png',
-                            '/images/products/kitchen/mixer/blue/mixerblue4.png'
+                            '/images/products/kitchen/mixer/blue/mixerblue3.png'
                         ],
                         inStock: true,
                         stockQuantity: 10
