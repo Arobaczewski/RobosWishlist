@@ -57,7 +57,8 @@ export function useFavorites() {
       return;
     }
 
-    const isAlreadyFavorited = favorites.includes(productId);
+    const id = String(productId);
+    const isAlreadyFavorited = favorites.includes(id);
     let updated: string[];
 
     if (isAlreadyFavorited) {

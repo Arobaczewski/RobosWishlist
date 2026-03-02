@@ -15,6 +15,9 @@ export default function FavoritesPage(){
     const { favorites } = useFavorites();
     const { isAuthenticated } = useAppSelector((state) => state.auth);
     const previousFavoritesRef = useRef<string>('');
+    const [mounted, setMounted] = useState(false);
+
+    
 
     useEffect(() => {
         const fetchFavoriteProducts = async () => {
@@ -44,11 +47,12 @@ export default function FavoritesPage(){
 
             try {
                 setLoading(true);
-                const response = await fetch('/api/products');
+                const idParams = favorites.map(id => `ids=${id}`).join('&');
+                const response = await fetch(`/api/products?${idParams}&limit=100`);
                 if(response.ok){
                     const data = await response.json();
                     const favoriteProducts = data.products.filter((product: Product) => 
-                        favorites.includes(product.id)
+                        favorites.includes(String(product.id))
                     );
                     setProducts(favoriteProducts);
                 }
@@ -61,6 +65,12 @@ export default function FavoritesPage(){
 
         fetchFavoriteProducts();
     }, [favorites, isAuthenticated]);
+
+    useEffect(() => {
+        setMounted(true);
+        }, []);
+
+        if (!mounted) return null; 
 
     if(!isAuthenticated){
         return (
